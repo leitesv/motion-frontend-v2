@@ -87,6 +87,15 @@ const LogInModule = ({ navigation }) => {
 					localStorage.setItem("accessToken", res.accessToken);
 					toast.success(res.message);
 
+					let res2 = await userService.get();
+
+					//console.log(res);
+
+					if (res2.status === true) {
+						store.dispatch( updateStore({ key: 'user', value: res2.user }) );
+						setState(store.getState());
+					}
+            
 					history.push('/dashboard/');
 
 				}
@@ -107,12 +116,9 @@ const LogInModule = ({ navigation }) => {
 
 	return (
 		<section className="zl_login_section">
-			<div className="container center-center mb-5"><img src="/assets/img/qredit-wide3.png" /></div>
-
 			<div className="zl_login_content container">
-
 				<div className="zl_login_heading_text">
-
+					<img src="./assets/img/qredit-wide.png" />
 					<h3 className="zl_login_heading">Login</h3>
 					<p className="zl_login_peregraph">Enter your email, password, and two-factor pin (if enabled) to login.</p>
 				</div>

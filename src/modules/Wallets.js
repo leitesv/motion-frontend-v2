@@ -840,22 +840,23 @@ const WalletsModule = ({ props }) => {
 
     return (
         <>
+            <ReactTooltip />
             <section className="zl_wallets_page">
                 <HeadingModule name={'Wallets'} />
                 <Tab.Container id="left-tabs-example">
                     <div className="zl_add_currency_content">
 
-                        <h3 className="zl_bottom_content_heading">bank accounts</h3>
+                        <h3 className="zl_bottom_content_heading" data-tip="Manage your bank accounts">bank accounts</h3>
                         <Nav className="zl_add_currency_row row">
 
                         </Nav>
 
-                        <h3 className="zl_bottom_content_heading">debit cards</h3>
+                        <h3 className="zl_bottom_content_heading" data-tip="Manage your debit cards">debit cards</h3>
                         <Nav className="zl_add_currency_row row">
 
                         </Nav>
 
-                        <h3 className="zl_bottom_content_heading">crypto currencies</h3>
+                        <h3 className="zl_bottom_content_heading" data-tip="Manage your crypto wallets">crypto currencies</h3>
                         <Nav className="zl_add_currency_row row">
                             <div className="zl_currency_column_sub_row">
 

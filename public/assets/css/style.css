@@ -3072,5 +3072,79 @@ table td {
 }
 
 .primary-color {
-	color: #FFF;
+  color: #fff;
+}
+
+.pricing-item {
+  text-align: center;
+  padding: 5px;
+  font-weight: 600;
+  border: 1px solid #344675;
+  border-radius: 25px;
+}
+
+.card.card-coin {
+  border: 2px solid #ec250d14;
+  border-radius: 50px;
+}
+
+.card.card-plain {
+  background: transparent;
+  box-shadow: none;
+}
+
+.card.card-coin .card-header {
+  background: #3a5190;
+  border-top-left-radius: 25px;
+  border-top-right-radius: 25px;
+}
+.card .card-header {
+  padding: 15px 15px 0;
+  border: 0;
+  color: rgba(255, 255, 255, 0.8);
+}
+.card-header:first-child {
+  border-radius: calc(0.2857rem - 0.0625rem) calc(0.2857rem - 0.0625rem) 0 0;
+}
+.card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  word-wrap: break-word;
+  background-color: #ffffff;
+  background-clip: border-box;
+  border: 0.0625rem solid rgba(34, 42, 66, 0.05);
+  border-radius: 0.2857rem;
+}
+
+.card-body {
+  flex: 1 1 auto;
+  min-height: 1px;
+  padding: 1.25rem;
+  background: white;
+}
+
+.button-priceplan {
+  margin: 0 auto;
+  background: #828cae;
+  border-radius: 10px;
+  display: block;
+  max-width: 180px;
+  width: 100%;
+  border: 0;
+  padding: 18px 10px;
+  font-weight: 600;
+  font-size: 20px;
+  line-height: 24px;
+  color: #252f47;
+  text-align: center;
+  text-decoration: none;
+  outline: 0;
+  order: 5;
+  margin: 10px;
+}
+
+.mt-15 {
+  margin-top: 15px !important;
 }

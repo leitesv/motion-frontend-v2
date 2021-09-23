@@ -12,7 +12,6 @@ import Currency from './Currency';
 import AccountSupport from './AccountSupport';
 import Placeholder from './Placeholder';
 import PrivacyPolicy from './PrivacyPolicy';
-import CloseAccount from './CloseAccount';
 import GetBIP39 from './GetBIP39';
 import Language from './Language';
 import LoginHistory from './LoginHistory';
@@ -51,7 +50,6 @@ export default {
 	[routes.accountsupportpage]: AccountSupport,
 
 	[routes.transactions]: Transactions,
-	[routes.closeaccount]: CloseAccount,
 	[routes.getbip39]: GetBIP39,
 	[routes.language]: Language,
 	[routes.loginhistory]: LoginHistory,

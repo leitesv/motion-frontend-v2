@@ -21,7 +21,6 @@ export const routes = {
     transactions: "/transactions",
     placeholder: "/placeholder",
     privacypolicy: "/privacypolicy",
-    closeaccount: "/closeaccount",
     getbip39: "/getbip39",
     language: "/language",
     loginhistory: "/loginhistory",

@@ -73,17 +73,6 @@ const SettingModule = ({ themHandler, props }) => {
 
 
                     <h3 className="zl_bottom_content_heading">Qredit Motion</h3>
-                    <Link to={'/accountsupport'} className="zl_setting_list_items">
-                        <div className="zl_setting_items_heading_peregraph">
-                            <h3>Support</h3>
-                            <p>Contact Customer Support</p>
-                        </div>
-                        <div className="zl_setting_items_right_text">
-                            <svg width="8" height="12" viewBox="0 0 8 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M1 1L6.08833 6L1 11" stroke="#828CAE" strokeWidth="2.4" />
-                            </svg>
-                        </div>
-                    </Link>
                     <Link to={'/currency'} className="zl_setting_list_items">
                         <div className="zl_setting_items_heading_peregraph">
                             <h3>Currency</h3>
@@ -150,17 +139,6 @@ const SettingModule = ({ themHandler, props }) => {
 
 
                     <h3 className="zl_bottom_content_heading">Personal</h3>
-                    <Link to={'/notificationsettings'} className="zl_setting_list_items">
-                        <div className="zl_setting_items_heading_peregraph">
-                            <h3>Notification Settings </h3>
-                            <p>Manage Notifications</p>
-                        </div>
-                        <div className="zl_setting_items_right_text">
-                            <svg width="8" height="12" viewBox="0 0 8 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M1 1L6.08833 6L1 11" stroke="#828CAE" strokeWidth="2.4" />
-                            </svg>
-                        </div>
-                    </Link>
                     <Link to={'/myaddresses'} className="zl_setting_list_items">
                         <div className="zl_setting_items_heading_peregraph">
                             <h3>My Addresses</h3>
@@ -269,7 +247,7 @@ const SettingModule = ({ themHandler, props }) => {
                             </svg>
                         </div>
                     </Link>
-                    <Link to={'/closeaccount'} className="zl_setting_list_items">
+                    <Link to={'/accountsupport'} className="zl_setting_list_items">
                         <div className="zl_setting_items_heading_peregraph">
                             <h3 style={{ color: 'red' }}>Close Account</h3>
                             <p>Close your Account</p>

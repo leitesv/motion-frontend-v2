@@ -80,8 +80,7 @@ class WelcomeModule extends React.Component {
                             <li className="zl_welcome_slide_indicator_items" title={this.state.currentStep}></li>
                             <li className="zl_welcome_slide_indicator_items" title={this.state.currentStep}></li>
                         </ul>
-                        <h2 className="zl_welcome_slide_heading">Welcome to Qredit Motion</h2>
-                        <p className="zl_welcome_slide_peregraph">The all-in-one crypto and banking platform.</p>
+
                         {this.nextButton()}
                     </React.Fragment>
                 </div>
@@ -98,6 +97,8 @@ function Step1(props) {
         <div className="zl_welcome_slide_img center-center">
             <img src="./assets/img/home-1.png" alt="wizard-img" className="img-fluid zl_dark_theme_slide_img welcomeimage" />
             <img src="./assets/img/home-1.png" alt="wizard-img" className="img-fluid zl_light_theme_slide_img" />
+            <h2 className="zl_welcome_slide_heading">Title 1</h2>
+            <p className="zl_welcome_slide_peregraph">text 1</p>
         </div>
     );
 }
@@ -110,6 +111,8 @@ function Step2(props) {
         <div className="zl_welcome_slide_img center-center">
             <img src="./assets/img/home-2.png" alt="wizard-img" className="img-fluid zl_dark_theme_slide_img" />
             <img src="./assets/img/home-2.png" alt="wizard-img" className="img-fluid zl_light_theme_slide_img" />
+            <h2 className="zl_welcome_slide_heading">Title 2</h2>
+            <p className="zl_welcome_slide_peregraph">text 2</p>
         </div>
     );
 }
@@ -123,9 +126,11 @@ function Step3(props) {
             <div className="zl_welcome_slide_img center-center">
                 <img src="./assets/img/home-3.png" alt="wizard-img" className="img-fluid zl_dark_theme_slide_img" />
                 <img src="./assets/img/home-3.png" alt="wizard-img" className="img-fluid zl_light_theme_slide_img" />
+                <h2 className="zl_welcome_slide_heading">Title 3</h2>
+                <p className="zl_welcome_slide_peregraph">text 3</p>
             </div>
-            <Link to={'/dashboard'} className="zl_welcome_slide_step_btns">Get Started</Link>
-            <Link to={'/login'} className="zl_welcome_slide_already_wallet">I already have wallet</Link>
+            <Link to={'/register'} className="zl_welcome_slide_step_btns">Signup</Link>
+            <Link to={'/login'} className="zl_welcome_slide_already_wallet">I already have an account</Link>
         </React.Fragment>
     );
 }

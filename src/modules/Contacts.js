@@ -384,13 +384,15 @@ const ContactsModule = (props) => {
 
         e.preventDefault();
         
+        props.history.push('/viewcontact?contact=' + id);
+        
         /* 
         TODO:  Redirect to contact info page
         */
 
-        store.dispatch(updateStore({ key: 'requestedPage', value: 'viewcontact' }));
-        store.dispatch(updateStore({ key: 'pageTitle', value: 'View Contact' }));
-        store.dispatch(updateStore({ key: 'requestedPageExtra', value: id }));
+        //store.dispatch(updateStore({ key: 'requestedPage', value: 'viewcontact' }));
+        //store.dispatch(updateStore({ key: 'pageTitle', value: 'View Contact' }));
+        //store.dispatch(updateStore({ key: 'requestedPageExtra', value: id }));
 
     }
 
@@ -485,15 +487,15 @@ const ContactsModule = (props) => {
 										<div className="row align-items-center">
 											<div className="col-auto pr-0">
 												<div className="avatar avatar-40 rounded">
-													<div className="background" style={{ backgroundImage: 'url(api/profileimage/' + (state.userid === contactitem.userid_b._id ? contactitem.userid_a._id : contactitem.userid_b._id) + ')' }}>
+													<div className="background" style={{ backgroundImage: 'url(api/profileimage/' + (state.user._id === contactitem.userid_b._id ? contactitem.userid_a._id : contactitem.userid_b._id) + ')' }}>
 
 													</div>
 												</div>
 											</div>
 
 											<div className="col align-self-center pr-0">
-												<h6 className="font-weight-normal mb-1">{(state.userid === contactitem.userid_b._id ? contactitem.userid_a.givenname : contactitem.userid_b.givenname)} {(state.userid === contactitem.userid_b._id ? contactitem.userid_a.familyname : contactitem.userid_b.familyname)}</h6>
-												<p className="small text-secondary">{(state.userid === contactitem.userid_b._id ? contactitem.userid_a.email : contactitem.userid_b.email)}</p>
+												<h6 className="font-weight-normal mb-1">{(state.user._id === contactitem.userid_b._id ? contactitem.userid_a.givenname : contactitem.userid_b.givenname)} {(state.user._id === contactitem.userid_b._id ? contactitem.userid_a.familyname : contactitem.userid_b.familyname)}</h6>
+												<p className="small text-secondary">{(state.user._id === contactitem.userid_b._id ? contactitem.userid_a.email : contactitem.userid_b.email)}</p>
 											</div>
 											<div className="col-auto">
 												<div className="avatar avatar-40 text-default">

@@ -32,10 +32,8 @@ import QSLP1 from './QSLP1';
 import CreateTokens from './CreateTokens';
 import Tokenoftrust from './Tokenoftrust';
 import Viewcontact from './Viewcontact';
-import Viewcontactheader from './Viewcontactheader';
 import Register from './Register';
 import LoginHelp from './LoginHelp';
-import Contacthistory from './Contacthistory';
 import TwoFactor from './TwoFactor';
 import Security from './Security';
 import Phone from './Phone';
@@ -75,10 +73,8 @@ export default {
 	[routes.createtokens]: CreateTokens,
 	[routes.tokenoftrust]: Tokenoftrust,
 	[routes.viewcontact]: Viewcontact,
-	[routes.viewcontactheader]: Viewcontactheader,
 	[routes.register]: Register,
 	[routes.loginhelp]: LoginHelp,
-	[routes.contacthistory]: Contacthistory,
 	[routes.twofactor]: TwoFactor,
 	[routes.security]: Security,
 	[routes.phone]: Phone,

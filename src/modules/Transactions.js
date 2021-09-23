@@ -50,11 +50,11 @@ const TransactionsModule = ({ props }) => {
         (async () => {
 
             setState({ isFetching: true, shownItems: 20 });
-
-            let res = await userService.getcontacts(0, 20);
+            
+            let res = await userService.getalltransactions(0, 20);
 
             if (res.status === true) {
-                setState({ 'contactlist': res.contactlist });
+            	setState({ 'transactionlist': res.transactionlist });
                 setState({ 'hasMore': res.hasmore });
             }
 

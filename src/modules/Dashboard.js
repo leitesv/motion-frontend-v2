@@ -71,11 +71,12 @@ const DashboardModule = (props) => {
     // I have no idea what im doing here
 
     const dateString = state.user.lastlogin_date;
-    const formatDate = (dateString) => {
-        const options = { year: "numeric", month: "long", day: "numeric" }
-        return new Date(dateString).toLocaleDateString(undefined, options)
-    }
+	const options = { year: "numeric", month: "long", day: "numeric" };
+	var formatDate = new Date(dateString).toLocaleDateString('us', options);
 
+	var formatDateBill = new Date(state.user.nextbillingdate).toLocaleDateString('us', options);
+
+	var plan = state.user.pricingplan?state.user.pricingplan.toUpperCase():'';
 
 
     return (
@@ -85,7 +86,7 @@ const DashboardModule = (props) => {
                 <HeadingModule name={'Dashboard'} />
                 <div className="row">
                     <div className="col text-center">
-                        <h5 className="subtitle">Hi {state.user ? state.user.givenname : ''}!</h5>
+                        <h5 className="subtitle primary-color">Hi {state.user ? state.user.givenname : ''}!</h5>
                         <p className="text-secondary">How are you doing today?</p>
                     </div>
                 </div>
@@ -118,7 +119,7 @@ const DashboardModule = (props) => {
                                         <div className="zl_add_currency_price text-center cardblock">
                                             <div className="text-center">
                                                 <h3 className="cardtitle fixcolor">Your Next Billing Date</h3>
-                                                <p className="cardsub">{state.user ? (state.user.nextbillingdate) : ''}</p>
+                                                <p className="cardsub">{formatDateBill}</p>
                                             </div>
                                         </div>
                                     </Nav.Link>
@@ -128,7 +129,7 @@ const DashboardModule = (props) => {
                                         <div className="zl_add_currency_price text-center cardblock">
                                             <div className="text-center">
                                                 <h3 className="cardtitle fixcolor">Your Current Subscription</h3>
-                                                <p className="cardsub">{state.user ? (state.user.pricingplan) : ''}</p>
+                                                <p className="cardsub">{plan}</p>
                                             </div>
                                         </div>
                                     </Nav.Link>

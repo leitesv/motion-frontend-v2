@@ -3070,3 +3070,7 @@ table td {
 .mb-5 {
   margin-bottom: 5px;
 }
+
+.primary-color {
+	color: #FFF;
+}

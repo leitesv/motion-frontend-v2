@@ -51,7 +51,7 @@ const Header = (props) => {
                     {send == false ? (
                         <div className="row mb-4 no-gutters">
                             <div className="col-auto ml-1">
-                                <div className="avatar avatar-40 rounded-circle position-relative">
+                                <div style={{marginLeft: '10px'}} className="avatar avatar-40 rounded-circle position-relative">
                                     <figure className="background" style={{ backgroundImage: (state.userImages && state.userImages.profilepic ? 'url(' + state.userImages.profilepic + ')' : 'url("./assets/img/user1.png")') }}></figure>
                                 </div>
                             </div>
@@ -62,7 +62,7 @@ const Header = (props) => {
                     ) : (
                         <div className="row mb-4">
                             <div className="col text-center">
-                                <div className="avatar avatar-40 rounded-circle position-relative">
+                                <div style={{marginLeft: '10px'}} className="avatar avatar-40 rounded-circle position-relative">
                                     <figure className="background" style={{ backgroundImage: (state.userImages && state.userImages.profilepic ? 'url(' + state.userImages.profilepic + ')' : 'url("./assets/img/user1.png")') }}></figure>
                                 </div>
                             </div>

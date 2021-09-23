@@ -707,17 +707,17 @@ const ContactsModule = (props) => {
 										<div className="row align-items-center">
 											<div className="col-auto pr-0">
 												<div className="avatar avatar-40 rounded">
-													<div className="background" style={{ backgroundImage: 'url(api/profileimage/' + (state.userid === contactitem.userid_b._id ? contactitem.userid_a._id : contactitem.userid_b._id) + ')' }}>
+													<div className="background" style={{ backgroundImage: 'url(api/profileimage/' + (state.user._id === contactitem.userid_b._id ? contactitem.userid_a._id : contactitem.userid_b._id) + ')' }}>
 
 													</div>
 												</div>
 											</div>
 											<div className="col align-self-center pr-0">
-												<h6 className="font-weight-normal mb-1">{(state.userid === contactitem.userid_b._id ? contactitem.userid_a.givenname : contactitem.userid_b.givenname)} {(state.userid === contactitem.userid_b._id ? contactitem.userid_a.familyname : contactitem.userid_b.familyname)}</h6>
-												<p className="small text-secondary">{(state.userid === contactitem.userid_b._id ? contactitem.userid_a.email : contactitem.userid_b.email)}</p>
+												<h6 className="font-weight-normal mb-1">{(state.user._id === contactitem.userid_b._id ? contactitem.userid_a.givenname : contactitem.userid_b.givenname)} {(state.userid === contactitem.userid_b._id ? contactitem.userid_a.familyname : contactitem.userid_b.familyname)}</h6>
+												<p className="small text-secondary">{(state.user._id === contactitem.userid_b._id ? contactitem.userid_a.email : contactitem.userid_b.email)}</p>
 											</div>
 											<div className="col-auto mt-2 mb-2">
-												{(state.userid === contactitem.userid_b._id ? <><button onClick={e => approveContact(e, contactitem._id)} className="btn btn-sm btn-success rounded mr-1" type="button" id="button-addon2">Approve</button><button onClick={e => declineContact(e, contactitem._id)} className="btn btn-sm btn-danger rounded" type="button" id="button-addon2">Decline</button></> : 'Pending')}
+												{(state.user._id === contactitem.userid_b._id ? <><button onClick={e => approveContact(e, contactitem._id)} className="btn btn-sm btn-success rounded mr-1" type="button" id="button-addon2">Approve</button><button onClick={e => declineContact(e, contactitem._id)} className="btn btn-sm btn-danger rounded" type="button" id="button-addon2">Decline</button></> : 'Pending')}
 											</div>
 											<div className="hr-thin"></div>
 										</div>

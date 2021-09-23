@@ -15,6 +15,9 @@ import userService from '../services/userService';
 import InfiniteScroll from "react-infinite-scroll-component";
 import BarcodeScannerComponent from "react-webcam-barcode-scanner";
 import QRCode from "react-qr-code";
+import { Modal, Button } from 'react-bootstrap';
+import parse from "html-react-parser";
+
 
 // import { mapStateToProps } from './mappers';
 
@@ -34,7 +37,6 @@ const ContactsModule = (props) => {
 	const [pendingContactList, setPendingContactList] = useState([]);
 	const [pHasMore, setPHasMore] = useState(false);
 
-	const [scanProcessing, setScanProcessing] = useState(false);
 	const [modalType, setModalType] = useState('');
 
 	const [showFinder, setShowFinder] = useState(false);
@@ -43,6 +45,12 @@ const ContactsModule = (props) => {
 	const [searchEmail, setSearchEmail] = useState(false);
 	const [foundContact, setFoundContact] = useState([]);
 
+    const [modalData, setModalData] = useState(null);
+    const [modalButton, setModalButton] = useState(null);
+    const [modalTitle, setModalTitle] = useState(null);
+    const [modalCode, setModalCode] = useState(null);;
+    const [showModal, setShowModal] = useState(false);
+    const [modalButtonClick, setModalButtonClick] = useState(false);
 
     React.useEffect(() => {
         // Runs after the first render() lifecycle
@@ -57,6 +65,17 @@ const ContactsModule = (props) => {
             if (res.status === true) {
             	store.dispatch( updateStore({ key: 'user', value: res.user }) );
                 setState(store.getState());
+                
+                if (!state.userImages.userid) {
+
+                    let resi = await userService.getimages();
+
+                    if (resi.status === true) {
+                        store.dispatch(updateStore({ key: 'userImages', value: resi.userimages }));
+                    }
+
+                }
+                
             }
 
             if (res.status === false) {
@@ -71,6 +90,37 @@ const ContactsModule = (props) => {
 
 
     }, []);
+
+
+
+
+
+    const closeModal = () => {
+    
+    	setModalData(null);
+    	setModalCode(null);
+    	setModalButton(null);
+    	setModalTitle(null);
+
+    	setModalButtonClick(false);
+    	
+    	setShowModal(false);
+    	
+    };
+
+    const buttonModal = () => {
+
+    	setModalData(null);
+    	setModalCode(null);
+    	setModalButton(null);
+    	setModalTitle(null);
+
+    	setModalButtonClick(true);
+
+		setShowModal(false);
+		
+    };
+
 
     const doCopyThis = (e, crypto_balance) => {
 
@@ -173,27 +223,21 @@ const ContactsModule = (props) => {
     const scanQR = (e) => {
 
         e.preventDefault();
+                
+        let processing = false;
 
-		// TODO: Fix modals
-		
-        //setState({ modalType: 'scancontactqr' });
-        
-        setModalType('scancontactqr');
-        
-        setScanProcessing(false);
-
-        let modalData = (
+        let htmlData = (
             <BarcodeScannerComponent
                 width={'100%'}
                 height={400}
                 onUpdate={(err, result) => {
                     if (result) {
 
-                        if (scanProcessing === false) {
-                            
-                            setScanProcessing(false);
+                        if (processing === false) {
 
                             (async () => {
+                            
+                            	processing = true;
 
                                 let res = await userService.newcontact(result.text);
 
@@ -209,13 +253,7 @@ const ContactsModule = (props) => {
 
                                 }
                                 
-                                setScanProcessing(false);
-
-                                store.dispatch(updateStore({ key: 'modalCode', value: null }));
-                                store.dispatch(updateStore({ key: 'modalData', value: null }));
-                                store.dispatch(updateStore({ key: 'modalButton', value: null }));
-                                store.dispatch(updateStore({ key: 'modalTitle', value: null }));
-                                store.dispatch(updateStore({ key: 'modalButtonClick', value: false }));
+                                closeModal();
 
                             })();
 
@@ -226,11 +264,12 @@ const ContactsModule = (props) => {
             />
         );
 
-        store.dispatch(updateStore({ key: 'modalCode', value: modalData }));
-        store.dispatch(updateStore({ key: 'modalData', value: null }));
-        store.dispatch(updateStore({ key: 'modalButton', value: null }));
-        store.dispatch(updateStore({ key: 'modalTitle', value: 'Scan QR Contact' }));
-        store.dispatch(updateStore({ key: 'modalButtonClick', value: false }));
+		setModalData(null);
+    	setModalCode(htmlData);
+    	setModalButton(null);
+    	setModalTitle('Scan QR Contact');
+    	setModalButtonClick(false);
+    	setShowModal(true);
 
     };
 
@@ -386,14 +425,6 @@ const ContactsModule = (props) => {
         
         props.history.push('/viewcontact?contact=' + id);
         
-        /* 
-        TODO:  Redirect to contact info page
-        */
-
-        //store.dispatch(updateStore({ key: 'requestedPage', value: 'viewcontact' }));
-        //store.dispatch(updateStore({ key: 'pageTitle', value: 'View Contact' }));
-        //store.dispatch(updateStore({ key: 'requestedPageExtra', value: id }));
-
     }
 
     const setCurrentItem = (e, item) => {
@@ -524,7 +555,7 @@ const ContactsModule = (props) => {
                     </Link>
 					<div className="row align-items-center" style={(contactsItem === 'viewqr' ? {background: '#ddd', marginTop: '-20px', borderRadius: '5px'} : { display: 'none' })}>
 						<div className="hr-thin mb-2"></div>
-							<div className="col-auto" style={{margin:'auto'}}><QRCode value={state.user._id || ''} /></div>
+							<div className="col-auto" style={{margin:'auto', marginTop:'20px', marginBottom:'20px'}}><QRCode value={state.user._id || ''} /></div>
 						<div className="hr-thin mt-2"></div>
 					</div>
 
@@ -559,10 +590,8 @@ const ContactsModule = (props) => {
 						<div className="hr-thin mt-2 mb-2"></div>
 						<div className="input-group col-auto pl-1 pr-1">
 							<input type="text" className="form-control" placeholder="Email/Phone" onChange={handleEmailFormChange} />
-							<div className="col-auto button">
-								<div className="avatar avatar-40 text-default input-group-append">
-									<figure className="m-0 background icon icon-30 mb-2" type="button" id="button-addon2" onClick={e => findContact(e)} style={{ backgroundImage: 'url("/img/icons/essential/svg/031-search.svg")' }} />
-								</div>
+							<div className="col-auto button" onClick={e => findContact(e)}>
+								<span className="btn">Search</span>
 							</div>
 						</div>
 
@@ -584,7 +613,7 @@ const ContactsModule = (props) => {
 											<p className="small text-secondary">{contactitem.email}</p>
 										</div>
 										<div className="col-auto">
-											<figure onClick={e => addContact(e, contactitem._id)} className="m-0 background icon icon-30 mb-2" style={{ backgroundImage: 'url("/img/icons/essential/svg/009-plus.svg")' }} />
+											<span onClick={e => addContact(e, contactitem._id)} className="btn">Add</span>
 										</div>
 									</div>
 								</li>
@@ -612,9 +641,7 @@ const ContactsModule = (props) => {
 						<div className="input-group col-auto pl-1 pr-1">
 							<input type="text" className="form-control" placeholder="Email/Phone" onChange={handleInviteFormChange} />
 							<div className="col-auto button">
-								<div className="avatar avatar-40 text-default input-group-append">
-									<figure className="m-0 background icon icon-30 mb-2" type="button" id="button-addon2" onClick={e => inviteContact(e)} style={{ backgroundImage: 'url("/img/icons/essential/svg/030-send.svg")' }} />
-								</div>
+								<span onClick={e => inviteContact(e)} className="btn">Send Invite</span>									
 							</div>
 						</div>
 						<div className="hr-thin mt-2 mb-2"></div>
@@ -705,6 +732,21 @@ const ContactsModule = (props) => {
 				</div>
             </section>   
 
+        <Modal centered show={showModal} onHide={closeModal} backdrop="static" keyboard={false}>
+            <Modal.Header closeButton>
+                <Modal.Title>{modalTitle || ''}</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>{modalData !== null ? parse(modalData) : modalCode}</Modal.Body>
+            <Modal.Footer>
+                <Button variant="secondary" onClick={closeModal}>
+                    Close
+                </Button>
+                <Button variant="primary" onClick={buttonModal} style={(modalButton === null ? { display: 'none' } : {})}>
+                    {modalButton || ''}
+                </Button>
+            </Modal.Footer>
+        </Modal>
+        
         </>
     );
 }

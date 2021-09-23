@@ -6,14 +6,12 @@ import { toast } from 'react-toastify';
 
 import store from "../store/index";
 import { updateStore } from "../store/updateStore";
-import { Popover, OverlayTrigger, Dropdown } from 'react-bootstrap';
 // SERVICES
 import userService from '../services/userService';
 
 // import Swiper core and required components
-import SwiperCore, { Pagination, Navigation, EffectCoverflow, Virtual } from 'swiper';
+import SwiperCore, { Navigation, EffectCoverflow, Virtual } from 'swiper';
 import ReactTooltip from 'react-tooltip';
-import { Swiper, SwiperSlide } from 'swiper/react';
 
 
 SwiperCore.use([EffectCoverflow, Navigation, Virtual]);
@@ -262,7 +260,7 @@ const PricePlanModule = ({ props }) => {
                                     </div>
             */
 
-    var initialslide = 0;
+
     var plans = state.plans || [];
     var defaultActiveKey = state.user.pricingplan || [];
 

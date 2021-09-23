@@ -1726,7 +1726,8 @@ table td {
   );
 }
 .zl_history_page
-  .zl_add_currency_inner_content.zl_add_bitcoin_currency.active
+  .zl_add_currency_inner_content.
+  .active
   .zl_add_currency_icon_chart
   .zl_currency_icon
   svg
@@ -3147,4 +3148,31 @@ table td {
 
 .mt-15 {
   margin-top: 15px !important;
+}
+.mb-15 {
+  margin-bottom: 15px !important;
+}
+
+.bg-lightblue {
+  background-color: #86b0e6 !important;
+}
+
+.tokens-card-qredit {
+  background: #9e1523;
+}
+
+.tokens-card-qredit:hover {
+  background: #c15761;
+}
+
+.tokens-card-ark {
+  background: #242861;
+}
+
+.tokens-card-ark:hover {
+  background: #6663bb;
+}
+
+.white {
+  color: #fff !important;
 }

@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import { Link } from 'react-router-dom';
 import { useHistory } from "react-router-dom"
 import { toast } from 'react-toastify';
-
+import countryList from 'react-select-country-list'
 // import { mapStateToProps } from './mappers';
 import store from "../store/index";
 import { updateStore } from "../store/actions/index";
@@ -13,7 +13,7 @@ import userService from '../services/userService';
 
 
 const RegisterModule = ({ navigation }) => {
-
+	const countrylist = countryList().getData();
 	let history = useHistory()
 
 	const [state, setState] = React.useState({
@@ -183,44 +183,123 @@ const RegisterModule = ({ navigation }) => {
 
 	};
 
-	/*var countriesList = countrylist.length > 0
+	var countriesList = countrylist.length > 0
 		&& countrylist.map((item, i) => {
 			return (
 				<option key={i} value={item.value}>{item.label}</option>
 			)
-		}, this);*/
+		}, this);
+
+
 
 	return (
 		<section className="zl_login_section">
-			<div className="zl_login_content container">
-				<div className="zl_login_heading_text">
-					<h3 className="zl_login_heading">Login</h3>
-					<p className="zl_login_peregraph">Enter your email, password, and two-factor pin (if enabled) to login.</p>
-				</div>
-				<div className="zl_login_row row">
+			<div className="container h-100 text-white">
+				<div className="row h-100">
+					<div className="col-12 align-self-center mb-4">
+						<div className="row justify-content-center">
+							<div className="col-11 col-sm-7 col-md-6 col-lg-5 col-xl-4">
 
-					<div className="zl_login_col_12 col-12">
-						<div className="zl_login_input_content position-relative">
-							<p className="zl_login_input_text">Email</p>
-							<input type="text" className="zl_login_input" id="login_email" onChange={state.handleLoginFormChange} />
-						</div>
-					</div>
-					<div className="zl_login_col_12 col-12">
-						<div className="zl_login_input_content position-relative">
-							<p className="zl_login_input_text">Password</p>
-							<input type="password" className="zl_login_input" id="login_password" onChange={state.handleLoginFormChange} />
-						</div>
-					</div>
-					<div className="zl_login_col_12 col-12">
-						<div className="zl_login_input_content position-relative">
-							<p className="zl_login_input_text">Two Factor PIN</p>
-							<input type="text" className="zl_login_input" id="login_tfapin" onChange={state.handleLoginFormChange} />
+								<div className="row no-gutters text-center justify-content-center mb-4">
+									<li className="navbar-brand">
+										<img alt='' className="center" src="/img/qredit-wide2.png" style={{ height: '30px', textAlign: 'center' }} />
+									</li>
+								</div>
+
+								<h2 className="font-weight-normal mb-5">Register New Account</h2>
+								{/*<form className="was-validated">
+
+									 <div className={"form-group float-label position-relative " + (state.registerForm.register_entity ? 'active' : '')}>
+
+										<select defaultValue={state.registerForm.register_entity} required id="register_entity" className="form-control text-white" onChange={handleRegisterFormChange} style={{ backgroundColor: 'transparent' }}>
+											<option value=''></option>
+											<option value='individual'>Personal</option>
+											<option value='corporation'>Business</option>
+										</select>
+
+										<label className="form-control-label text-white">Account Type</label>
+										<div id="register_entity_feedback" className="invalid-feedback" style={!state.registerFormFeedback.entityinvalid ? {} : { marginBottom: '-18px' }}>{state.registerFormFeedback.entityinvalid || ''}</div>
+									</div>
+
+									<div className={"form-group float-label position-relative " + (state.registerForm.register_email ? 'active' : '')}>
+										<input required id="register_email" type="text" className="form-control text-white" onChange={handleRegisterFormChange} autoComplete="new-password" value={state.registerForm.register_email || ''} />
+										<label className="form-control-label text-white">Email</label>
+										<div id="register_email_feedback" className="invalid-feedback" style={!state.registerFormFeedback.emailinvalid ? {} : { marginBottom: '-18px' }}>{state.registerFormFeedback.emailinvalid || ''}</div>
+									</div>
+
+									{state.registerForm.register_entity !== 'corporation' ? (
+										<>
+											<div className={"form-group float-label position-relative " + (state.registerForm.register_givenname ? 'active' : '')}>
+												<input required id="register_givenname" type="text" className="form-control text-white" onChange={handleRegisterFormChange} autoComplete="new-password" value={state.registerForm.register_givenname || ''} />
+												<label className="form-control-label text-white">First (Given) Name</label>
+												<div id="register_givenname_feedback" className="invalid-feedback" style={!state.registerFormFeedback.givennameinvalid ? {} : { marginBottom: '-18px' }}>{state.registerFormFeedback.givennameinvalid || ''}</div>
+											</div>
+											<div className={"form-group float-label position-relative " + (state.registerForm.register_familyname ? 'active' : '')}>
+												<input required id="register_familyname" type="text" className="form-control text-white" onChange={handleRegisterFormChange} autoComplete="new-password" value={state.registerForm.register_familyname || ''} />
+												<label className="form-control-label text-white">Last (Family) Name</label>
+												<div id="register_familyname_feedback" className="invalid-feedback" style={!state.registerFormFeedback.familynameinvalid ? {} : { marginBottom: '-18px' }}>{state.registerFormFeedback.familynameinvalid || ''}</div>
+											</div>
+										</>
+									) : (
+										<>
+											<div className={"form-group float-label position-relative " + (state.registerForm.register_companyname ? 'active' : '')}>
+												<input required id="register_companyname" type="text" className="form-control text-white" onChange={handleRegisterFormChange} autoComplete="new-password" value={state.registerForm.register_companyname || ''} />
+												<label className="form-control-label text-white">Company Name</label>
+												<div id="register_companyname_feedback" className="invalid-feedback" style={!state.registerFormFeedback.companynameinvalid ? {} : { marginBottom: '-18px' }}>{state.registerFormFeedback.companynameinvalid || ''}</div>
+											</div>
+											<div className={"form-group float-label position-relative " + (state.registerForm.register_givenname ? 'active' : '')}>
+												<input required id="register_givenname" type="text" className="form-control text-white" onChange={handleRegisterFormChange} autoComplete="new-password" value={state.registerForm.register_givenname || ''} />
+												<label className="form-control-label text-white">Contact First (Given) Name</label>
+												<div id="register_givenname_feedback" className="invalid-feedback" style={!state.registerFormFeedback.givennameinvalid ? {} : { marginBottom: '-18px' }}>{state.registerFormFeedback.givennameinvalid || ''}</div>
+											</div>
+											<div className={"form-group float-label position-relative " + (state.registerForm.register_familyname ? 'active' : '')}>
+												<input required id="register_familyname" type="text" className="form-control text-white" onChange={handleRegisterFormChange} autoComplete="new-password" value={state.registerForm.register_familyname || ''} />
+												<label className="form-control-label text-white">Contact Last (Family) Name</label>
+												<div id="register_familyname_feedback" className="invalid-feedback" style={!state.registerFormFeedback.familynameinvalid ? {} : { marginBottom: '-18px' }}>{state.registerFormFeedback.familynameinvalid || ''}</div>
+											</div>
+										</>
+									)}
+
+									
+									<div className={"form-group float-label position-relative " + (state.registerForm.register_country ? 'active' : '')}>
+
+										<select defaultValue={state.registerForm.register_country} required id="register_country" className="form-control text-white" onChange={handleRegisterFormChange} style={{ backgroundColor: 'transparent' }}>
+											<option value=''></option>
+											{countriesList}
+										</select>
+
+										<label className="form-control-label text-white">Country of Residence</label>
+										<div id="register_country_feedback" className="invalid-feedback" style={!state.registerFormFeedback.countryinvalid ? {} : { marginBottom: '-18px' }}>{state.registerFormFeedback.countryinvalid || ''}</div>
+									</div>
+									<div className={"form-group float-label position-relative " + (state.registerForm.register_password ? 'active' : '')}>
+										<input required id="register_password" type="password" className="form-control text-white" onChange={handleRegisterFormChange} autoComplete="new-password" value={state.registerForm.register_password || ''} />
+										<label className="form-control-label text-white">Password</label>
+										<div id="register_password_feedback" className="invalid-feedback" style={!state.registerFormFeedback.passwordinvalid ? {} : { marginBottom: '-18px' }}>{state.registerFormFeedback.passwordinvalid || ''}</div>
+									</div>
+									<div className={"form-group float-label position-relative " + (state.registerForm.register_passwordconfirm ? 'active' : '')}>
+										<input required id="register_passwordconfirm" type="password" className="form-control text-white" onChange={handleRegisterFormChange} autoComplete="new-password" value={state.registerForm.register_passwordconfirm || ''} />
+										<label className="form-control-label text-white">Confirm Password</label>
+										<div id="register_passwordconfirm_feedback" className="invalid-feedback" style={!state.registerFormFeedback.passwordconfirminvalid ? {} : { marginBottom: '-18px' }}>{state.registerFormFeedback.passwordconfirminvalid || ''}</div>
+									</div>
+									<div className="form-group float-label position-relative">
+										<div className="custom-control custom-switch">
+											<input checked={state.registerForm.register_terms === "true"} required id="register_terms" type="checkbox" className="custom-control-input" onChange={handleRegisterFormChange} />
+											<label className="custom-control-label" htmlFor="register_terms">Agree to terms and conditions</label>
+											<div id="register_terms_feedback" className="invalid-feedback" >{state.registerFormFeedback.termsinvalid || ''}</div>
+										</div>
+									</div>
+									
+								</form>
+								*/}
+							</div>
 						</div>
 					</div>
 
 				</div>
-				<div className="zl_login_btn">
-					<Link onClick={state.doLogin} to={'/login'} className="mx-auto">Login</Link>
+			</div>
+			<div className="row justify-content-center">
+				<div className="col-6">
+					<li onClick={e => doRegister(e)} className="btn btn-default rounded btn-block lilink">Sign up</li>
 				</div>
 			</div>
 		</section>

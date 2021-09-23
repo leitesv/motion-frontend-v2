@@ -92,10 +92,10 @@ const LogInModule = ({ navigation }) => {
 					//console.log(res);
 
 					if (res2.status === true) {
-						store.dispatch( updateStore({ key: 'user', value: res2.user }) );
+						store.dispatch(updateStore({ key: 'user', value: res2.user }));
 						setState(store.getState());
 					}
-            
+
 					history.push('/dashboard/');
 
 				}
@@ -118,7 +118,7 @@ const LogInModule = ({ navigation }) => {
 		<section className="zl_login_section">
 			<div className="zl_login_content container">
 				<div className="zl_login_heading_text">
-					<img src="./assets/img/qredit-wide.png" />
+					<img className="mb-15" src="/assets/img/qredit-wide3.png" />
 					<h3 className="zl_login_heading">Login</h3>
 					<p className="zl_login_peregraph">Enter your email, password, and two-factor pin (if enabled) to login.</p>
 				</div>

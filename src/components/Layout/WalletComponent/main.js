@@ -3,11 +3,16 @@ import { connect } from "react-redux";
 import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
 import Chart from "react-apexcharts";
-import { Button, FormControl } from 'react-bootstrap'
+import { Modal, Button, FormControl } from 'react-bootstrap'
 import QRCode from 'qrcode.react';
 import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import copy from "copy-to-clipboard";
+
+import Select, { components } from 'react-select';
+
+import BarcodeScannerComponent from "react-webcam-barcode-scanner";
+import parse from "html-react-parser";
 
 import AllTransactionList from "../TransactionListComponent/AllTransactionList";
 
@@ -24,6 +29,8 @@ const MainComponent = (props) => {
     //const [dateRange, setDateRange] = useState([null, null]);
     //const [startDate, endDate] = dateRange;
 
+    const [state, setState] = React.useState(store.getState());
+
     // send btn
     const [sendForm, setSendForm] = useState({});
 
@@ -31,9 +38,19 @@ const MainComponent = (props) => {
     //    setSend(!send);
     //};
 
+    const [modalData, setModalData] = useState(null);
+    const [modalButton, setModalButton] = useState(null);
+    const [modalTitle, setModalTitle] = useState(null);
+    const [modalCode, setModalCode] = useState(null);;
+    const [showModal, setShowModal] = useState(false);
+    const [modalButtonClick, setModalButtonClick] = useState(false);
+    
 
     const [walletaddress, setWalletaddress] = useState('');
     const [walletbalance, setWalletbalance] = useState(0);
+
+    const [colorOptions, setColorOptions] = useState([]);
+    const [colorStyles, setColorStyles] = useState({});
 
 
     React.useEffect(() => {
@@ -56,15 +73,161 @@ const MainComponent = (props) => {
                 setWalletbalance(resbal.balance);
             }
 
+            
+			const userid = state.user._id || '';
+
+            var colourOptions = [];
+
+            let contacts = await userService.getcontacts(0, 100);
+
+            if (contacts.status === true) {
+
+                for (let i = 0; i < contacts.contactlist.length; i++) {
+
+                    let thiscontact = contacts.contactlist[i];
+
+                    let cvalue = userid === thiscontact.userid_b._id ? thiscontact.userid_a._id : thiscontact.userid_b._id;
+                    let ccolor = "/api/profileimage/" + (userid === thiscontact.userid_b._id ? thiscontact.userid_a._id : thiscontact.userid_b._id);
+                    let clabel = (userid === thiscontact.userid_b._id ? thiscontact.userid_a.givenname : thiscontact.userid_b.givenname) + ' ' + (userid === thiscontact.userid_b._id ? thiscontact.userid_a.familyname : thiscontact.userid_b.familyname) + ' (' + (userid === thiscontact.userid_b._id ? thiscontact.userid_a.email : thiscontact.userid_b.email) + ')';
+
+                    let cdetails = { value: cvalue, color: ccolor, label: clabel };
+
+                    colourOptions.push(cdetails);
+
+                }
+
+            }
+
+
+            const dot = (color) => ({
+                alignItems: 'center',
+                display: 'flex',
+                ':before': {
+                    background: 'url(' + color + ')',
+                    backgroundSize: 'contain',
+                    borderRadius: 5,
+                    content: '" "',
+                    display: 'block',
+                    marginRight: 8,
+                    height: 30,
+                    width: 30,
+                    minWidth: 30
+                },
+            });
+
+            const colourStyles = {
+                control: styles => ({ ...styles }),
+
+                option: (styles, { data, isDisabled, isFocused, isSelected }) => {
+
+                    return {
+                        ...styles,
+                        ...dot(data.color),
+                        backgroundColor: isDisabled
+                            ? null
+                            : isSelected
+                                ? '#BBF'
+                                : isFocused
+                                    ? '#DDF'
+                                    : null,
+                        cursor: isDisabled ? 'not-allowed' : 'default',
+
+                        ':active': {
+                            ...styles[':active'],
+                            backgroundColor:
+                                !isDisabled && (isSelected ? '#FFF' : '#DDF'),
+                        },
+                    };
+                },
+
+                input: styles => ({ ...styles }),
+                placeholder: styles => ({ ...styles }),
+                singleValue: (styles, { data }) => ({ ...styles, ...dot(data.color) }),
+            };
+
+			setColorOptions(colourOptions);
+			setColorStyles(colourStyles);
+
         })();
 
 
     }, [props]);
 
-    const handleReset = () => {
-        Array.from(document.querySelectorAll("input")).forEach(
-            input => (input.value = "")
+    const closeModal = () => {
+    
+    	setModalData(null);
+    	setModalCode(null);
+    	setModalButton(null);
+    	setModalTitle(null);
+
+    	setModalButtonClick(false);
+    	
+    	setShowModal(false);
+    	
+    };
+
+    const buttonModal = () => {
+
+    	setModalData(null);
+    	setModalCode(null);
+    	setModalButton(null);
+    	setModalTitle(null);
+
+    	setModalButtonClick(true);
+
+		setShowModal(false);
+		
+    };
+
+    const scanQR = (e) => {
+
+        e.preventDefault();
+                
+        let processing = false;
+
+        let htmlData = (
+            <BarcodeScannerComponent
+                width={'100%'}
+                height={400}
+                onUpdate={(err, result) => {
+                    if (result) {
+
+                        if (processing === false) {
+
+                            (async () => {
+                            
+                            	processing = true;
+
+								var currentform = sendForm;
+								
+								currentform.send_address = result;
+								
+								setSendForm(currentform);
+                                
+                                closeModal();
+
+                            })();
+
+                        }
+
+                    }
+                }}
+            />
         );
+
+		setModalData(null);
+    	setModalCode(htmlData);
+    	setModalButton(null);
+    	setModalTitle('Scan QR Contact');
+    	setModalButtonClick(false);
+    	setShowModal(true);
+
+    };
+    
+    const handleReset = () => {
+        //Array.from(document.querySelectorAll("input")).forEach(
+        //    input => (input.value = "")
+        //);
         setSendForm({});
     };
 
@@ -147,15 +310,148 @@ const MainComponent = (props) => {
         if (event.target.type === 'checkbox') {
             event.target.value = event.target.checked;
         }
-
-        var currentSendForm = sendForm;
-
+        
+        var currentSendForm = {};
+            
+        Object.assign(currentSendForm, sendForm);
+            
         currentSendForm[event.target.id] = event.target.value;
 
         setSendForm(currentSendForm);
 
     };
 
+    const handleContactSendFormChange = (selectedOption) => {
+
+        if (selectedOption !== null) {
+
+            var currentSendForm = {};
+            
+            Object.assign(currentSendForm, sendForm);
+
+            currentSendForm['send_contactid'] = selectedOption.value;
+
+			currentSendForm['send_address'] = '';
+			
+            setSendForm(currentSendForm);
+
+            document.querySelector('#send_address').disabled = true;;
+
+        }
+        else {
+
+            var currentSendForm = sendForm;
+
+            currentSendForm['send_contactid'] = null;
+
+            setSendForm(currentSendForm);
+
+            document.querySelector('#send_address').disabled = false;;
+
+        }
+
+    };
+
+    const handleSendPercent10 = (e) => {
+
+		e.preventDefault();
+		
+		try {
+			var amount = (walletbalance * 0.10).toFixed(8);
+		} catch (e) {
+			var amount = 0;
+		}	
+
+		var currentSendForm = {};
+		
+		Object.assign(currentSendForm, sendForm);
+
+		currentSendForm['send_amount'] = amount;
+		
+		setSendForm(currentSendForm);
+            
+    };
+
+    const handleSendPercent25 = (e) => {
+
+		e.preventDefault();
+		
+		try {
+			var amount = (walletbalance * 0.25).toFixed(8);
+		} catch (e) {
+			var amount = 0;
+		}	
+
+		var currentSendForm = {};
+		
+		Object.assign(currentSendForm, sendForm);
+
+		currentSendForm['send_amount'] = amount;
+		
+		setSendForm(currentSendForm);
+            
+    };
+    
+    const handleSendPercent50 = (e) => {
+
+		e.preventDefault();
+		
+		try {
+			var amount = (walletbalance * 0.50).toFixed(8);
+		} catch (e) {
+			var amount = 0;
+		}	
+
+		var currentSendForm = {};
+		
+		Object.assign(currentSendForm, sendForm);
+
+		currentSendForm['send_amount'] = amount;
+		
+		setSendForm(currentSendForm);
+            
+    };
+
+    const handleSendPercent75 = (e) => {
+
+		e.preventDefault();
+		
+		try {
+			var amount = (walletbalance * 0.75).toFixed(8);
+		} catch (e) {
+			var amount = 0;
+		}	
+
+		var currentSendForm = {};
+		
+		Object.assign(currentSendForm, sendForm);
+
+		currentSendForm['send_amount'] = amount;
+		
+		setSendForm(currentSendForm);
+            
+    };
+
+    const handleSendPercent100 = (e) => {
+
+		e.preventDefault();
+		
+		try {
+			var amount = walletbalance;
+		} catch (e) {
+			var amount = 0;
+		}	
+
+		var currentSendForm = {};
+		
+		Object.assign(currentSendForm, sendForm);
+
+		currentSendForm['send_amount'] = amount;
+		
+		setSendForm(currentSendForm);
+            
+    };
+    
     let transactions = [];
 
 
@@ -175,15 +471,17 @@ const MainComponent = (props) => {
 
 
 
-                                <div className="zl_send_currency_input_content zl_send_qr_addressxx">
+                                <div className="zl_send_currency_input_content" style={{ borderBottom: '0px'}}>
 
                                     <FormControl
                                         placeholder="To Address"
-                                        style={{ width: "calc(100% - 72px)", marginRight: "2px" }}
+                                        style={{ width: "calc(100% - 36px)", marginRight: "2px" }}
                                         id="send_address"
+                                        value={sendForm.send_address || ''}
                                         onChange={handleSendFormChange}
                                     />
                                     <QRCode
+                                    	onClick={e => scanQR(e)}
                                         value="EYdNhC7hGgHuL2sF20p2dLv"
                                         bgColor={"#3D476A"}
                                         fgColor={"#CAD3F2"}
@@ -191,6 +489,7 @@ const MainComponent = (props) => {
                                         className="zl_dark_theme_qrcode"
                                     />
                                     <QRCode
+                                    	onClick={e => scanQR(e)}
                                         value="EYdNhC7hGgHuL2sF20p2dLv"
                                         bgColor={"#EFF0F2"}
                                         fgColor={"#3D476A"}
@@ -198,10 +497,24 @@ const MainComponent = (props) => {
                                         className="zl_light_theme_qrcode"
                                     />
 
-                                    <svg width="32" height="32" style={{ marginLeft: "2px" }} viewBox="0 0 13 13" fill="none" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" clipRule="evenodd" d="M2 0C0.895431 0 0 0.89543 0 2V11C0 12.1046 0.89543 13 2 13H11C12.1046 13 13 12.1046 13 11V2C13 0.895431 12.1046 0 11 0H2ZM7.5 5C6.67157 5 6 5.67157 6 6.5C6 7.32843 6.67157 8 7.5 8H9.5C10.3284 8 11 7.32843 11 6.5C11 5.67157 10.3284 5 9.5 5H7.5Z" fill="#828CAE"></path></svg>
+                                </div>
+                                
+                                <div className="zl_send_currency_input_content">
 
+									<div style={{width: '100%'}}>
+									<Select
+										placeholder={'Select Contact...'}
+										options={colorOptions}
+										styles={colorStyles}
+										isClearable={true}
+										isSearchable={true}
+										id="send_contact"
+										onChange={handleContactSendFormChange}
+									/>
+									</div>
 
                                 </div>
+                                
                                 <div className="zl_send_currency_input_content">
                                     <div className="zl_send_currency_btn_text">
                                         <div className="zl_send_currency_text">
@@ -212,14 +525,15 @@ const MainComponent = (props) => {
                                         type="number"
                                         placeholder="Amount to Send"
                                         id="send_amount"
+										value={sendForm.send_amount || ''}
                                         onChange={handleSendFormChange}
                                     />
                                     <div className="zl_send_currency_input_btns">
-                                        <Button>10%</Button>
-                                        <Button>25%</Button>
-                                        <Button>50%</Button>
-                                        <Button>75%</Button>
-                                        <Button>All</Button>
+                                        <Button onClick={handleSendPercent10}>10%</Button>
+                                        <Button onClick={handleSendPercent25}>25%</Button>
+                                        <Button onClick={handleSendPercent50}>50%</Button>
+                                        <Button onClick={handleSendPercent75}>75%</Button>
+                                        <Button onClick={handleSendPercent100}>All</Button>
                                     </div>
                                 </div>
                                 <div className="zl_send_currency_input_content">
@@ -265,6 +579,7 @@ const MainComponent = (props) => {
                                     </div>
                                     <div className="zl_recive_address_qr_code">
                                         <QRCode
+                                        	onClick={e => scanQR(e)}
                                             value={walletaddress}
                                             bgColor={"transparent"}
                                             fgColor={"#CAD3F2"}
@@ -272,6 +587,7 @@ const MainComponent = (props) => {
                                             className="zl_dark_theme_qrcode"
                                         />
                                         <QRCode
+                                        	onClick={e => scanQR(e)}
                                             value={walletaddress}
                                             bgColor={"transparent"}
                                             fgColor={"#3D476A"}
@@ -295,6 +611,22 @@ const MainComponent = (props) => {
                     <AllTransactionList value={props} />
                 </div>*/}
             </div>
+            
+        <Modal centered show={showModal} onHide={closeModal} backdrop="static" keyboard={false}>
+            <Modal.Header closeButton>
+                <Modal.Title>{modalTitle || ''}</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>{modalData !== null ? parse(modalData) : modalCode}</Modal.Body>
+            <Modal.Footer>
+                <Button variant="secondary" onClick={closeModal}>
+                    Close
+                </Button>
+                <Button variant="primary" onClick={buttonModal} style={(modalButton === null ? { display: 'none' } : {})}>
+                    {modalButton || ''}
+                </Button>
+            </Modal.Footer>
+        </Modal>
+            
         </>
     );
 }

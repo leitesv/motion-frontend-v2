@@ -29,10 +29,22 @@ const WalletsModule = ({ props }) => {
 
             let res = await userService.get();
 
-            console.log(res);
+            //console.log(res);
 
             if (res.status === true) {
-                setState({ user: res.user });
+            	store.dispatch( updateStore({ key: 'user', value: res.user }) );
+                setState(store.getState());
+                
+                if (!state.userImages.userid) {
+
+                    let resi = await userService.getimages();
+
+                    if (resi.status === true) {
+                        store.dispatch(updateStore({ key: 'userImages', value: resi.userimages }));
+                    }
+
+                }
+                
             }
 
             if (res.status === false) {
@@ -47,6 +59,7 @@ const WalletsModule = ({ props }) => {
 
     }, []);
 
+/*
     const doModalSend = () => {
 
         //console.log('model button click');
@@ -135,20 +148,9 @@ const WalletsModule = ({ props }) => {
 
         toast.success('request');
 
-        /*
-                (async () => {
-    	
-                    let res = await userService.bip39recorded();
-    	
-                    if (res.status === true)
-                    {
-                        store.dispatch( updateStore({ key: 'user', value: res.user }) );
-                    }
-    	
-                })();
-        */
 
     };
+
 
     const goToWallet = (e) => {
 
@@ -187,6 +189,7 @@ const WalletsModule = ({ props }) => {
         setState({ loadingwallet: false, walletid: null, walletcolor: null, walletname: null, walletticker: null, walletbalance: null, walletaddresses: [] });
 
     };
+*/
 
     const refresh = () => {
 
@@ -245,6 +248,7 @@ const WalletsModule = ({ props }) => {
         })();
     };
 
+/*
     const viewTransaction = (e, id) => {
 
         e.preventDefault();
@@ -795,6 +799,7 @@ const WalletsModule = ({ props }) => {
         }
 
     };
+*/
 
     const createBankAccount = (e) => {
 
@@ -812,6 +817,7 @@ const WalletsModule = ({ props }) => {
 
     };
 
+/*
     const getType = (type) => {
 
         var typetext = '';
@@ -832,7 +838,7 @@ const WalletsModule = ({ props }) => {
         return typetext;
 
     };
-
+*/
 
     var wallets = state.user.wallets || [];
     var crypto = state.crypto || [];

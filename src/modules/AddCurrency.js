@@ -1,42 +1,27 @@
 import React, { useState } from "react";
 import { connect } from "react-redux";
 import HeadingModule from '../components/Layout/HeadingComponent/Heading';
-import { InputGroup, FormControl, Form } from 'react-bootstrap'
+import { InputGroup, FormControl, Form, Button } from 'react-bootstrap'
 import { toast } from 'react-toastify';
-
+import store from "../store/index";
+import { updateStore } from "../store/actions/index";
 
 // SERVICES
 import userService from '../services/userService';
 
 // import { mapStateToProps } from './mappers';
 
-const addCurrency = [
-    {
-        id: 1,
-        image: 'assets/image/Bitcoin.svg',
-        heading: 'BTC',
-        peregraph: 'Bitcoin',
-        checkboxId: 'checkbox1',
-        isChecked: 'true'
-    },
-    {
-        id: 2,
-        image: 'assets/image/ETH.svg',
-        heading: 'ETH',
-        peregraph: 'Ethereum',
-        checkboxId: 'checkbox2',
-        isChecked: 'true'
-    },
-    {
-        id: 3,
-        image: 'assets/image/Litecoin.svg',
-        heading: 'LTC',
-        peregraph: 'Litecoin',
-        checkboxId: 'checkbox3'
-    }
-];
+
 
 const AddCurrencyModule = (props) => {
+
+    const [state, setState] = React.useState(store.getState());
+    
+    const [addCurrency, setAddCurrency] = useState([]);
+
+    const [addForm, setAddForm] = useState({});
+
+    const [filterData, setFilterData] = useState(addCurrency);
 
 
     React.useEffect(() => {
@@ -45,21 +30,73 @@ const AddCurrencyModule = (props) => {
 
             let res = await userService.get();
 
-            console.log(res);
+            if (res.status === true) {
+                store.dispatch(updateStore({ key: 'user', value: res.user }));
+                setState(store.getState());
+
+                if (!state.userImages || !state.userImages.userid) {
+
+                    let resi = await userService.getimages();
+
+                    if (resi.status === true) {
+                        store.dispatch(updateStore({ key: 'userImages', value: resi.userimages }));
+                    }
+
+                }
+
+            }
 
             if (res.status === false) {
+                // redirect
 
                 toast.error('Authentication Session Has Expired');
                 props.history.push('/login/');
 
             }
+            
+            try {
+            
+				let cres = await userService.getavailcryptocurr();
+
+				var cList = [];
+			
+				for (let i = 0; i < cres.currencies.length; i++)
+				{
+			
+					let thiscurrency = cres.currencies[i];
+			
+					let item = 
+							{
+								id: thiscurrency._id,
+								image: thiscurrency.logo,
+								heading: thiscurrency.ticker,
+								peregraph: thiscurrency.name,
+								_id: thiscurrency.ticker
+							};
+
+					cList.push(item);
+			
+				}
+				
+				setAddCurrency(cList);
+				
+				setFilterData(cList);
+				            
+            } catch (e) {
+            
+            	console.log(e);
+            
+            }
+            
+            
+            
 
         })();
 
 
-    });
+    }, []);
 
-    const [filterData, setFilterData] = useState(addCurrency);
+
 
     const search = (event) => {
         event.preventDefault();
@@ -72,6 +109,110 @@ const AddCurrencyModule = (props) => {
         setFilterData(filtered);
     }
 
+    const handleFormChange = event => {
+
+        if (event.target.type === 'checkbox') {
+            event.target.value = event.target.checked;
+        }
+        
+        var currentAddForm = {};
+            
+        Object.assign(currentAddForm, addForm);
+            
+        currentAddForm[event.target.id] = event.target.value;
+
+        setAddForm(currentAddForm);
+
+    };
+
+    const doAdd = (e, walletid) => {
+        e.preventDefault();
+
+        console.log(walletid);
+        console.log(addForm[walletid]);
+
+		var ticker = walletid || null;
+		var password = addForm[walletid] || null;
+	
+		var error = false;
+		
+		if (ticker === null || ticker == '' || password === null || password == '')
+		{
+			error = true;
+		}
+		
+		if (error === true)
+		{
+		
+			toast.error('Missing password');
+		
+		}
+		else
+		{
+
+			(async () => {
+
+				let res = await userService.createcryptowallet(ticker, password);
+
+				if (res.status === true)
+				{
+				
+					
+					let res2 = await userService.get();
+					
+					store.dispatch( updateStore({ key: 'user', value: res2.user }) );
+				
+					toast.success(res.message);
+
+					try {
+			
+						let cres = await userService.getavailcryptocurr();
+
+						var cList = [];
+			
+						for (let i = 0; i < cres.currencies.length; i++)
+						{
+			
+							let thiscurrency = cres.currencies[i];
+			
+							let item = 
+									{
+										id: thiscurrency._id,
+										image: thiscurrency.logo,
+										heading: thiscurrency.ticker,
+										peregraph: thiscurrency.name,
+										_id: thiscurrency.ticker
+									};
+
+							cList.push(item);
+			
+						}
+				
+						setAddCurrency(cList);
+				
+						setFilterData(cList);
+							
+					} catch (e) {
+			
+						console.log(e);
+			
+					}
+
+
+				}
+				else
+				{
+			
+					toast.error(res.message);
+
+				}
+
+			})();
+		
+		}
+
+    };
+    
     return (
         <>
             <section className="zl_add_currency_page">
@@ -93,22 +234,46 @@ const AddCurrencyModule = (props) => {
                     <div className="zl_add_currency_row row">
                         {filterData.map((currencyValue, i) => (
                             <div className="zl_add_currency_column col" key={currencyValue.id}>
-                                <div className="zl_add_currency_inner_content">
-                                    <div className="zl_add_currency_img">
-                                        <img src={currencyValue.image} alt="currency-img" />
-                                    </div>
-                                    <div className="zl_add_currency_text">
-                                        <h3>{currencyValue.heading}</h3>
-                                        <p>{currencyValue.peregraph}</p>
-                                    </div>
-                                    <Form.Check
-                                        type="switch"
-                                        id={currencyValue.checkboxId}
-                                        label=""
-                                        className="zl_custom_currency_checkbox"
-                                        defaultChecked={currencyValue.isChecked}
-                                    />
+
+								<div className="zl_add_currency_inner_content" style={{display: 'flex', flexDirection: 'column'}}>
+
+                                	<div style={{display: 'flex', flexDirection: 'row'}}>
+                                
+                                		<div style={{flex:'0'}}>
+											<div className="zl_add_currency_img">
+												<img src={currencyValue.image} alt="currency-img" style={{height: '50px', marginRight:'5px'}}/>
+											</div>
+										</div>
+									
+                                		<div style={{flex:'1'}}>
+
+											<div style={{display: 'flex', flexDirection: 'row'}}>
+
+												<div className="zl_add_currency_text" style={{padding: '0px'}}>
+													<h3>{currencyValue.peregraph} ({currencyValue.heading})</h3>
+												</div>
+											</div>
+											<div className="input-group" style={{display: 'flex', flexDirection: 'row'}}>
+												<FormControl
+													type="password"
+													placeholder="Your Password"
+													id={currencyValue._id}
+													onChange={handleFormChange}
+													className="form-control-sm"
+												/>
+												<div className="input-group-append">
+												<Button onClick={e => doAdd(e, currencyValue._id)} className="btn-sm btn-success">
+													add
+												</Button>
+												</div>
+											</div>
+										</div>
+
+									</div>
+									
                                 </div>
+                                
+                                
                             </div>
                         ))}
                     </div>

@@ -33,7 +33,7 @@ const DashboardModule = (props) => {
 
                 store.dispatch(updateStore({ key: 'user', value: res.user }));
 
-                if (!state.userImages.userid) {
+                if (!state.userImages || !state.userImages.userid) {
 
                     let resi = await userService.getimages();
 

@@ -66,7 +66,7 @@ const ContactsModule = (props) => {
                 store.dispatch(updateStore({ key: 'user', value: res.user }));
                 setState(store.getState());
 
-                if (!state.userImages.userid) {
+                if (!state.userImages || !state.userImages.userid) {
 
                     let resi = await userService.getimages();
 

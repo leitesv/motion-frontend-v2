@@ -191,6 +191,7 @@ const WalletsModule = ({ props }) => {
     };
 */
 
+/*
     const refresh = () => {
 
         (async () => {
@@ -247,7 +248,7 @@ const WalletsModule = ({ props }) => {
 
         })();
     };
-
+*/
 /*
     const viewTransaction = (e, id) => {
 

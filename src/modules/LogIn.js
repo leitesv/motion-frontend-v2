@@ -148,6 +148,13 @@ const LogInModule = ({ navigation }) => {
 					<Link onClick={doLogin} to={'/login'} className="mx-auto">Login</Link>
 				</div>
 			</div>
+			
+			<div className="">
+				<div className="col-12" style={{textAlign: 'center'}}>
+					<p className="primary-color">Don't have an account? <Link to={'/register'} className="mx-auto">Register Now</Link></p>
+				</div>
+			</div>
+			
 		</section>
 	);
 }

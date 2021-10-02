@@ -8,7 +8,7 @@ import modules from './modules';
 import Page404 from './components/Page404';
 import Layout from './components/Layout';
 
-import 'bootstrap/dist/css/bootstrap.min.css';
+//import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
 
 export default class App extends Component {

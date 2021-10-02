@@ -14,7 +14,7 @@ export const routes = {
 
     loginpage: "/login",
     //login2fa: "/account/login/2fa/",
-    signup: "/signup",
+    //signup: "/signup",
     forgotten: "/forgotten",
     logout: "/logout",
 

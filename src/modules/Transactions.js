@@ -26,10 +26,22 @@ const TransactionsModule = ({ props }) => {
 
             let res = await userService.get();
 
-            console.log(res);
+            //console.log(res);
 
             if (res.status === true) {
-                setState({ user: res.user });
+                store.dispatch(updateStore({ key: 'user', value: res.user }));
+                setState(store.getState());
+
+                if (!state.userImages || !state.userImages.userid) {
+
+                    let resi = await userService.getimages();
+
+                    if (resi.status === true) {
+                        store.dispatch(updateStore({ key: 'userImages', value: resi.userimages }));
+                    }
+
+                }
+
             }
 
             if (res.status === false) {
@@ -45,6 +57,7 @@ const TransactionsModule = ({ props }) => {
 
     }, []);
 
+/*
     const refresh = () => {
 
         (async () => {
@@ -191,10 +204,13 @@ const TransactionsModule = ({ props }) => {
         })();
 
     };
+    
+    */
     var wallets = state.user.wallets || [];
+    
     return (
         <>
-            <section className="zl_history_page">
+            <section className="zl_wallets_page zl_history_pagexx">
 
                 <HeadingModule name={'Transactions'} />
                 <Tab.Container id="left-tabs-example" defaultActiveKey="tab1">

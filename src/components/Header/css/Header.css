@@ -399,6 +399,13 @@
   display: none;
 }
 
+.zl_all_pages_content
+  .zl_page_sidebar[title="register"]
+  ~ .zl_page_sidebar_toggle_btn,
+.zl_all_pages_content .zl_page_sidebar[title=""] ~ .zl_page_sidebar_toggle_btn {
+  display: none;
+}
+
 @media (min-width: 992px) {
   /* hide show sidebar */
   .zl_page_sidebar.zl_hide_sidebar {

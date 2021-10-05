@@ -8,12 +8,12 @@ import AddCurrency from './AddCurrency';
 import Wallets from './Wallets';
 import Transactions from './Transactions';
 import Setting from './Settings';
-import Currency from './Currency';
+//import Currency from './Currency';
 import AccountSupport from './AccountSupport';
 import Placeholder from './Placeholder';
 import PrivacyPolicy from './PrivacyPolicy';
 import GetBIP39 from './GetBIP39';
-import Language from './Language';
+//import Language from './Language';
 import LoginHistory from './LoginHistory';
 import MyAddresses from './MyAddresses';
 import MyPhonenumbers from './MyPhonenumbers';
@@ -46,12 +46,12 @@ export default {
 	[routes.walletspage]: Wallets,
 
 	[routes.settingspage]: Setting,
-	[routes.currencypage]: Currency,
+	//[routes.currencypage]: Currency,
 	[routes.accountsupportpage]: AccountSupport,
 
 	[routes.transactions]: Transactions,
 	[routes.getbip39]: GetBIP39,
-	[routes.language]: Language,
+	//[routes.language]: Language,
 	[routes.loginhistory]: LoginHistory,
 	[routes.myaddresses]: MyAddresses,
 	[routes.myphonenumbers]: MyPhonenumbers,

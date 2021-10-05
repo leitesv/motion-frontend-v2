@@ -5,6 +5,10 @@ import Form from 'react-bootstrap/Form';
 import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
+import SelectCurrency from 'react-select-currency';
+
+import ReactLanguageSelect from 'react-languages-select';
+
 // modals
 import Loginhistory from './LoginHistory';
 
@@ -17,9 +21,10 @@ import userService from '../services/userService';
 
 const SettingModule = ({ themHandler, props }) => {
 
-    const [state, setState] = React.useState({ user: {} });
+    const [state, setState] = React.useState(store.getState());
 
     React.useEffect(() => {
+        // Runs after the first render() lifecycle
 
         (async () => {
 
@@ -29,9 +34,23 @@ const SettingModule = ({ themHandler, props }) => {
 
             if (res.status === true) {
                 setState({ user: res.user });
+
+                store.dispatch(updateStore({ key: 'user', value: res.user }));
+
+                if (!state.userImages || !state.userImages.userid) {
+
+                    let resi = await userService.getimages();
+
+                    if (resi.status === true) {
+                        store.dispatch(updateStore({ key: 'userImages', value: resi.userimages }));
+                    }
+
+                }
+
             }
 
             if (res.status === false) {
+                // redirect
 
                 toast.error('Authentication Session Has Expired');
                 props.history.push('/login/');
@@ -65,6 +84,52 @@ const SettingModule = ({ themHandler, props }) => {
 
     };
 
+    const onSelectedCurrency = currencyAbbrev => {
+
+		(async () => {
+
+/*
+			let res = await userService.setlanguage(language);
+
+			if (res.status === true)
+			{
+			
+				toast.success('Language Setting Updated: ' + language);
+				store.dispatch( updateStore({ key: 'user', value: res.user }) );
+
+			}
+			else
+			{
+				toast.error(res.message);
+			}
+*/
+
+		})();
+
+    }
+
+    const onSelectLanguage = language => {
+
+		(async () => {
+
+			let res = await userService.setlanguage(language);
+
+			if (res.status === true)
+			{
+			
+				toast.success('Language Setting Updated: ' + language);
+				store.dispatch( updateStore({ key: 'user', value: res.user }) );
+
+			}
+			else
+			{
+				toast.error(res.message);
+			}
+
+		})();
+
+    }
+    
     return (
         <>
             <section className="zl_settings_page">
@@ -73,30 +138,33 @@ const SettingModule = ({ themHandler, props }) => {
 
 
                     <h3 className="zl_bottom_content_heading">Qredit Motion</h3>
-                    <Link to={'/currency'} className="zl_setting_list_items">
+                    <div className="zl_setting_list_items">
                         <div className="zl_setting_items_heading_peregraph">
                             <h3>Currency</h3>
                             <p>Set your preferred local currency.</p>
                         </div>
                         <div className="zl_setting_items_right_text">
-                            <h3>AUD</h3>
-                            <svg width="8" height="12" viewBox="0 0 8 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M1 1L6.08833 6L1 11" stroke="#828CAE" strokeWidth="2.4" />
-                            </svg>
+                        
+                			<SelectCurrency value={'EUR'} onCurrencySelected={onSelectedCurrency} />
+
                         </div>
-                    </Link>
-                    <Link to={'/language'} className="zl_setting_list_items">
+                    </div>
+                    <div className="zl_setting_list_items">
                         <div className="zl_setting_items_heading_peregraph">
                             <h3>Language</h3>
                             <p>Set your preferred language</p>
                         </div>
                         <div className="zl_setting_items_right_text">
-                            <h3>EN</h3>
-                            <svg width="8" height="12" viewBox="0 0 8 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M1 1L6.08833 6L1 11" stroke="#828CAE" strokeWidth="2.4" />
-                            </svg>
+                        
+							<ReactLanguageSelect
+								defaultLanguage={state.user.preferred_language}
+								searchable={true}
+								searchPlaceholder="Search for a language"
+								onSelect={onSelectLanguage}
+							 />
+
                         </div>
-                    </Link>
+                    </div>
                     <Link to={'/priceplan'} className="zl_setting_list_items">
                         <div className="zl_setting_items_heading_peregraph">
                             <h3>Priceplan</h3>

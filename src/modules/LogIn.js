@@ -127,19 +127,19 @@ const LogInModule = ({ navigation }) => {
 					<div className="zl_login_col_12 col-12">
 						<div className="zl_login_input_content position-relative">
 							<p className="zl_login_input_text">Email</p>
-							<input type="text" className="zl_login_input" id="login_email" onChange={handleLoginFormChange} />
+							<input type="text" className="form-control primary-color" id="login_email" onChange={handleLoginFormChange} style={{ backgroundColor: 'transparent' }} />
 						</div>
 					</div>
 					<div className="zl_login_col_12 col-12">
 						<div className="zl_login_input_content position-relative">
 							<p className="zl_login_input_text">Password</p>
-							<input type="password" className="zl_login_input" id="login_password" onChange={handleLoginFormChange} />
+							<input type="password" className="form-control primary-color" id="login_password" onChange={handleLoginFormChange} style={{ backgroundColor: 'transparent' }} />
 						</div>
 					</div>
 					<div className="zl_login_col_12 col-12">
 						<div className="zl_login_input_content position-relative">
 							<p className="zl_login_input_text">Two Factor PIN</p>
-							<input type="text" className="zl_login_input" id="login_tfapin" onChange={handleLoginFormChange} />
+							<input type="text" className="form-control primary-color" id="login_tfapin" onChange={handleLoginFormChange} style={{ backgroundColor: 'transparent' }} />
 						</div>
 					</div>
 

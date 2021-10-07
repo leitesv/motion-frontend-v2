@@ -4,13 +4,21 @@ import HeadingModule from '../components/Layout/HeadingComponent/Heading';
 import Form from 'react-bootstrap/Form';
 import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { useHistory } from "react-router-dom"
+import InfiniteScroll from "react-infinite-scroll-component";
+import Select, { components } from 'react-select';
+import { CSSTransition } from 'react-transition-group';
+import countryList from 'react-select-country-list'
 
-import SelectCurrency from 'react-select-currency';
+// SubItems
+//import AppservicesSecurity from './AppservicesSecurity';
+//import AppservicesBip from './AppservicesBip';
+//import Loginhistory from './Loginhistory';
+//import AppservicesPhone from './AppservicesPhone';
+//import AppservicesAddress from './AppservicesAddress';
+//import AppservicesNotifications from './AppservicesNotifications';
+//import AppservicesTwoFactor from './AppservicesTwoFactor';
 
-import ReactLanguageSelect from 'react-languages-select';
-
-// modals
-import Loginhistory from './LoginHistory';
 
 import store from "../store/index";
 import { updateStore } from "../store/actions/index";
@@ -21,13 +29,55 @@ import userService from '../services/userService';
 
 const SettingModule = ({ themHandler, props }) => {
 
+	const countrylist = countryList().getData();
+
     const [state, setState] = React.useState(store.getState());
+
+    const [currOptions, setCurrOptions] = useState([]);
+    const [langOptions, setLangOptions] = useState([]);
+
+    const [addressForm, setAddressForm] = useState({});
+
+	const [addressList, setAddressList] = useState([]);
+	const [addressInitial, setAddressInitial] = useState(true);
+
+	const [phoneList, setPhoneList] = useState([]);
+	const [phoneInitial, setPhoneInitial] = useState(true);
+	
+    const [defaultLang, setDefaultLang] = useState({value: 'en', label: 'English'});
+    const [defaultCurr, setDefaultCurr] = useState({value: 'EUR', label: 'EUR'});
+
+    const [appItem, setAppItem] = useState(null);
+
+	let history = useHistory();
+
+	const countriesList = countrylist.length > 0
+		&& countrylist.map((item, i) => {
+			return {value: item.value, label: item.label}
+		}, this);
 
     React.useEffect(() => {
         // Runs after the first render() lifecycle
 
         (async () => {
 
+			const currencyOptions = [
+			 {value: 'EUR', label: 'EUR'},
+			 {value: 'USD', label: 'USD'},
+			 {value: 'AUD', label: 'AUD'},
+			 {value: 'CNY', label: 'CNY'},
+			 {value: 'HKD', label: 'HKD'},
+			];
+            
+            setCurrOptions(currencyOptions);
+
+			const languageOptions = [
+			 {value: 'en', label: 'English'},
+			 {value: 'zh', label: 'Chinese (Mandarin)'},
+			];
+            
+            setLangOptions(languageOptions);
+			
             let res = await userService.get();
 
             console.log(res);
@@ -44,7 +94,27 @@ const SettingModule = ({ themHandler, props }) => {
                     if (resi.status === true) {
                         store.dispatch(updateStore({ key: 'userImages', value: resi.userimages }));
                     }
+                    
+                    for (let i = 0; i < currencyOptions.length; i++)
+                    {
+                    	let thisitem = currencyOptions[i];
+                    	if (thisitem.value == res.user.preferred_currency)
+                    	{
+                    		setDefaultCurr(thisitem);
+                    	}
+                    
+                    }
 
+                    for (let i = 0; i < languageOptions.length; i++)
+                    {
+                    	let thisitem = languageOptions[i];
+                    	if (thisitem.value == res.user.preferred_language)
+                    	{
+                    		setDefaultLang(thisitem);
+                    	}
+                    
+                    }
+                    
                 }
 
             }
@@ -53,7 +123,7 @@ const SettingModule = ({ themHandler, props }) => {
                 // redirect
 
                 toast.error('Authentication Session Has Expired');
-                props.history.push('/login/');
+                history.push('/login/');
 
             }
 
@@ -66,11 +136,12 @@ const SettingModule = ({ themHandler, props }) => {
 
         e.preventDefault();
 
-        if (state.appservicesItem === item) {
-            store.dispatch(updateStore({ key: 'appservicesItem', value: null }));
+        if (appItem === item) {
+        	setAppItem(null);
         }
-        else {
-            store.dispatch(updateStore({ key: 'appservicesItem', value: item }));
+        else 
+        {
+        	setAppItem(item);
         }
 
     };
@@ -84,17 +155,19 @@ const SettingModule = ({ themHandler, props }) => {
 
     };
 
-    const onSelectedCurrency = currencyAbbrev => {
+    const handleCurrencyChange = currencyAbbrev => {
+
+		toast.success('Currency Setting Updated: ' + currencyAbbrev.value);
 
 		(async () => {
 
 /*
-			let res = await userService.setlanguage(language);
+			let res = await userService.setcurrency(currencyAbbrev.value);
 
 			if (res.status === true)
 			{
 			
-				toast.success('Language Setting Updated: ' + language);
+				toast.success('Currency Setting Updated: ' + currencyAbbrev);
 				store.dispatch( updateStore({ key: 'user', value: res.user }) );
 
 			}
@@ -112,12 +185,12 @@ const SettingModule = ({ themHandler, props }) => {
 
 		(async () => {
 
-			let res = await userService.setlanguage(language);
+			let res = await userService.setlanguage(language.value);
 
 			if (res.status === true)
 			{
 			
-				toast.success('Language Setting Updated: ' + language);
+				toast.success('Language Setting Updated: ' + language.value);
 				store.dispatch( updateStore({ key: 'user', value: res.user }) );
 
 			}
@@ -129,7 +202,352 @@ const SettingModule = ({ themHandler, props }) => {
 		})();
 
     }
+
+	// Addresses
+	
+    const handleAddressFormChange = event => {
+
+        var currentAddressForm = {};
+            
+        Object.assign(currentAddressForm, addressForm);
+        
+        currentAddressForm[event.target.id] = event.target.value;
+        
+        setAddressForm(currentAddressForm);
+
+    };
+
+    const handleAddressFormCountry = country => {
+
+        var currentAddressForm = {};
+            
+        Object.assign(currentAddressForm, addressForm);
+        
+        currentAddressForm['country'] = country.value;
+        
+        setAddressForm(currentAddressForm);
+        
+        //setState({ addressFormCountry: {value: country.value, label: country.label} });
+
+    	var currentState = {};
+    	
+    	Object.assign(currentState, state);
+    	
+    	currentState.addressFormCountry = {value: country.value, label: country.label};
+
+        setState(currentState);
+        
+    }
     
+    const addAddress = (e) => {
+
+        e.preventDefault();
+
+        (async () => {
+
+            let res = await userService.addnewaddress(addressForm);
+
+            if (res.status === true) {
+
+                toast.success(res.message);
+                                
+                setAddressForm({});
+
+                setAddressInitial(true);
+
+                let res2 = await userService.getuseraddresses();
+
+                if (res2.status === true) {
+
+					setAddressList(res2.addresslist);
+                	setAddressInitial(false);
+
+                }
+                else {
+
+	                setAddressInitial(false);
+
+                }
+
+            }
+            else {
+                toast.error(res.message);
+            }
+
+        })();
+
+    };
+
+    const loadAddresses = () => {
+
+
+		(async () => {
+
+            setAddressInitial(true);
+
+			let res = await userService.getuseraddresses();
+
+			if (res.status === true) {
+
+				setAddressList(res.addresslist);
+                setAddressInitial(false);
+                
+			}
+			else {
+
+				setAddressInitial(false);
+
+			}
+
+		})();
+
+
+    };
+
+    const showAddAddress = () => {
+    
+    	var currentState = {};
+    	
+    	Object.assign(currentState, state);
+    	
+    	currentState.showAddNew = true;
+
+        setState(currentState);
+
+    };
+
+    const hideAddAddress = () => {
+
+    	var currentState = {};
+    	
+    	Object.assign(currentState, state);
+    	
+    	currentState.showAddNew = false;
+
+        setState(currentState);
+        
+    };
+
+    const setPrimaryAddress = (id) => {
+
+        (async () => {
+
+            let res = await userService.setprimaryaddress(id);
+
+            if (res.status === true) {
+            
+                setAddressInitial(true);
+
+                let restwo = await userService.getuseraddresses();
+
+                if (restwo.status === true) {
+
+					setAddressList(restwo.addresslist);
+                	setAddressInitial(false);
+                
+                }
+                else {
+
+                    setAddressInitial(false);
+
+                }
+
+            }
+
+        })();
+
+    };
+    
+    // End Addresses
+    
+    // Phones
+    
+	const handlePhoneFormChange = event => {
+
+    	var currentState = {};
+    	
+    	Object.assign(currentState, state);
+    	
+    	currentState.phoneForm = event.target.value;
+
+        setState(currentState);
+        		
+	};
+
+	const handlePinFormChange = event => {
+
+    	var currentState = {};
+    	
+    	Object.assign(currentState, state);
+    	
+    	currentState.pinForm = event.target.value;
+
+        setState(currentState);
+        		
+	};
+
+	const getPinCode = (e) => {
+	
+		e.preventDefault();
+		
+		(async () => {
+		
+			let res = await userService.getpincode(state.phoneForm);
+			
+			if (res.status === true)
+			{
+			
+				toast.success(res.message);				
+
+				var currentState = {};
+		
+				Object.assign(currentState, state);
+		
+				currentState.phoneForm = res.phone;
+
+				setState(currentState);
+        
+			}
+			else
+			{
+				toast.error(res.message);
+			}
+		
+		})();
+		
+	};
+
+	const submitPinCode = (e) => {
+	
+		e.preventDefault();
+
+		(async () => {
+		
+			let res = await userService.submitpincode(state.phoneForm, state.pinForm);
+			
+			if (res.status === true)
+			{
+				toast.success(res.message);
+
+				var currentState = {};
+		
+				Object.assign(currentState, state);
+		
+				currentState.phoneForm = null;
+				currentState.pinForm = null;
+
+				setState(currentState);
+
+				setPhoneInitial(true);
+
+				let res2 = await userService.getuserphones();
+			
+				if (res2.status === true)
+				{
+
+					setPhoneList(res2.phonelist);
+					setPhoneInitial(false);
+
+				}
+				else
+				{
+				
+					setPhoneInitial(false);
+
+				}
+				
+			}
+			else
+			{
+				toast.error(res.message);
+			}
+		
+		})();
+		
+	};
+
+	const loadPhones = () => {
+
+		(async () => {
+		
+			setPhoneInitial(true);
+	
+			let res = await userService.getuserphones();
+		
+			if (res.status === true)
+			{
+
+				setPhoneList(res.phonelist);
+				setPhoneInitial(false);
+
+			}
+			else
+			{
+			
+				setPhoneInitial(false);
+
+			}
+	
+		})();
+
+	};
+
+	const setPrimaryPhone = (id) => {
+	
+        (async () => {
+
+            let res = await userService.setprimaryphone(id);
+
+            if (res.status === true) {
+            
+                setPhoneInitial(true);
+
+                let restwo = await userService.getuserphones();
+
+                if (restwo.status === true) {
+
+					setPhoneList(restwo.addresslist);
+                	setPhoneInitial(false);
+                
+                }
+                else {
+
+                    setPhoneInitial(false);
+
+                }
+
+            }
+
+        })();
+	
+	};
+
+	const showAddPhone = () => {
+	
+    	var currentState = {};
+    	
+    	Object.assign(currentState, state);
+    	
+    	currentState.showAddNewPhone = true;
+
+        setState(currentState);
+        	
+	};
+
+	const hideAddPhone = () => {
+	
+    	var currentState = {};
+    	
+    	Object.assign(currentState, state);
+    	
+    	currentState.showAddNewPhone = false;
+
+        setState(currentState);
+        	
+	};
+	
+    // End Phones
+	
     return (
         <>
             <section className="zl_settings_page">
@@ -143,9 +561,17 @@ const SettingModule = ({ themHandler, props }) => {
                             <h3>Currency</h3>
                             <p>Set your preferred local currency.</p>
                         </div>
-                        <div className="zl_setting_items_right_text">
-                        
-                			<SelectCurrency value={'EUR'} onCurrencySelected={onSelectedCurrency} />
+                        <div className="zl_setting_items_right_text" style={{width: '280px'}}>
+							<div style={{width: '100%'}}>
+							<Select
+								value={defaultCurr}
+								options={currOptions}
+								isClearable={false}
+								isSearchable={true}
+								id="setting_currency"
+								onChange={handleCurrencyChange}
+							/>
+							</div>	
 
                         </div>
                     </div>
@@ -154,16 +580,21 @@ const SettingModule = ({ themHandler, props }) => {
                             <h3>Language</h3>
                             <p>Set your preferred language</p>
                         </div>
-                        <div className="zl_setting_items_right_text">
                         
-							<ReactLanguageSelect
-								defaultLanguage={state.user.preferred_language}
-								searchable={true}
-								searchPlaceholder="Search for a language"
-								onSelect={onSelectLanguage}
-							 />
+                        <div className="zl_setting_items_right_text" style={{width: '280px'}}>
+							<div style={{width: '100%'}}>
+							<Select
+								value={defaultLang}
+								options={langOptions}
+								isClearable={false}
+								isSearchable={true}
+								id="setting_language"
+								onChange={onSelectLanguage}
+							/>
+							</div>	
 
                         </div>
+
                     </div>
                     <Link to={'/priceplan'} className="zl_setting_list_items">
                         <div className="zl_setting_items_heading_peregraph">
@@ -207,7 +638,7 @@ const SettingModule = ({ themHandler, props }) => {
 
 
                     <h3 className="zl_bottom_content_heading">Personal</h3>
-                    <Link to={'/myaddresses'} className="zl_setting_list_items">
+                    <div onClick={ e => setCurrentItem(e, 'addresses') } className="zl_setting_list_items" style={{cursor: 'pointer'}}>
                         <div className="zl_setting_items_heading_peregraph">
                             <h3>My Addresses</h3>
                             <p>Change Addresses</p>
@@ -217,8 +648,111 @@ const SettingModule = ({ themHandler, props }) => {
                                 <path d="M1 1L6.08833 6L1 11" stroke="#828CAE" strokeWidth="2.4" />
                             </svg>
                         </div>
-                    </Link>
-                    <Link to={'/myphonernumbers'} className="zl_setting_list_items">
+                        
+                    </div>
+                        
+                        
+					<CSSTransition in={appItem === 'addresses'} timeout={500} classNames="transitionitem" onEnter={() => loadAddresses()}  >
+
+						<div className="card-body pt-0 px-0 mb-4" style={appItem === 'addresses' ? {borderRadius: '5px'} : { display: 'none' }}>
+
+							<button className="btn btn-block btn-success rounded" onClick={e => showAddAddress(e)} style={state.showAddNew === true ? { display: 'none' } : {}}>Add New Address</button>
+
+							<div className="card-body" style={state.showAddNew === true ? {} : { display: 'none' }}>
+								<div className={"form-group float-label " + (addressForm.line1 ? 'active' : '')}>
+									<input type="text" className={"form-control"} autoComplete="new-password" id="line1" onChange={handleAddressFormChange} value={addressForm.line1 || ''} />
+									<label className="form-control-label">Address Line 1</label>
+								</div>
+								<div className={"form-group float-label " + (addressForm.line2 ? 'active' : '')}>
+									<input type="text" className={"form-control"} autoComplete="new-password" id="line2" onChange={handleAddressFormChange} value={addressForm.line2 || ''} />
+									<label className="form-control-label">Address Line 2</label>
+								</div>
+								<div className={"form-group float-label " + (addressForm.city ? 'active' : '')}>
+									<input type="text" className={"form-control"} autoComplete="new-password" id="city" onChange={handleAddressFormChange} value={addressForm.city || ''} />
+									<label className="form-control-label">City</label>
+								</div>
+								<div className={"form-group float-label " + (addressForm.province ? 'active' : '')}>
+									<input type="text" className={"form-control"} autoComplete="new-password" id="province" onChange={handleAddressFormChange} value={addressForm.province || ''} />
+									<label className="form-control-label">State/Province</label>
+								</div>
+								<div className={"form-group float-label " + (addressForm.postalcode ? 'active' : '')}>
+									<input type="text" className={"form-control"} autoComplete="new-password" id="postalcode" onChange={handleAddressFormChange} value={addressForm.postalcode || ''} />
+									<label className="form-control-label">Postal Code</label>
+								</div>
+								<div className={"form-group float-label " + (addressForm.country ? 'active' : '')}>
+
+									<Select
+										value={state.addressFormCountry}
+										options={countriesList}
+										isClearable={false}
+										isSearchable={true}
+										id="country"
+										onChange={handleAddressFormCountry}
+									/>
+							
+
+								
+									<label className="form-control-label">Country</label>
+									<button className="btn btn-block btn-success rounded" onClick={e => addAddress(e)}>Add Address</button>
+									<button className="btn btn-block btn-danger rounded" onClick={e => hideAddAddress(e)} >Cancel</button>
+
+								</div>
+							</div>
+
+
+							<div className="card-header pb-0">
+								<h6 className="mb-0">Your Addresses</h6>
+								<div className="hr-thin"></div>
+							</div>
+							<ul className="list-group list-group-flush">
+
+								<InfiniteScroll
+									dataLength={addressList.length}
+									hasMore={false}
+									loader={
+										<p style={{ textAlign: "center" }}>
+											<b>Loading...</b>
+										</p>
+									}
+									endMessage={
+										addressInitial === true ? (
+											<p style={{ textAlign: "center" }}>
+												<b>Loading...</b>
+											</p>
+										) : (
+											<p style={{ textAlign: "center" }}>
+												<b>No More Records</b>
+											</p>
+										)
+									}
+								>
+
+									{addressList.map((addressitem, index) => (
+
+										<li key={index} className="list-group-item">
+											<div>
+												{addressitem.line1}<br />
+												{addressitem.line2}<br />
+												{addressitem.city} {addressitem.province} {addressitem.postalcode}<br />
+												{addressitem.country}&nbsp;&nbsp;&nbsp;{addressitem.isprimary === true ? (<span style={{ color: 'green' }}>Primary</span>) : (<span onClick={setPrimaryAddress(addressitem._id)}>Set Primary</span>)}
+											</div>
+											<div className="hr-thin"></div>
+										</li>
+
+									))}
+
+								</InfiniteScroll>
+
+							</ul>
+
+						</div>
+
+					</CSSTransition>
+
+
+
+
+                    <div onClick={ e => setCurrentItem(e, 'phones') } className="zl_setting_list_items" style={{cursor: 'pointer'}}>
                         <div className="zl_setting_items_heading_peregraph">
                             <h3>My Phone Numbers</h3>
                             <p>Manage Phone Numbers</p>
@@ -228,7 +762,77 @@ const SettingModule = ({ themHandler, props }) => {
                                 <path d="M1 1L6.08833 6L1 11" stroke="#828CAE" strokeWidth="2.4" />
                             </svg>
                         </div>
-                    </Link>
+                    </div>
+					<CSSTransition in={appItem === 'phones'} timeout={500} classNames="transitionitem" onEnter={() => loadPhones()} >
+
+
+						<div className="card-body pt-0 px-0 mb-4" style={appItem === 'phones'?{borderRadius: '5px'}:{display:'none'}}>
+				
+							<button className="btn btn-block btn-success rounded" onClick={ e => showAddPhone(e) } style={state.showAddNewPhone===true?{display:'none'}:{}}>Add New Phone</button>
+
+				
+							<div className="card-body" style={state.showAddNewPhone===true?{}:{display:'none'}}>
+								<div className={"form-group float-label " + (state.phoneForm?'active':'')}>
+									<input type="text" className={"form-control"} autoComplete="new-password" id="phone" onChange={handlePhoneFormChange} value={state.phoneForm || ''}/>
+									<label className="form-control-label">Add Phone</label>
+									<button className="btn btn-block btn-success rounded" disabled={!state.phoneForm} onClick={ e => getPinCode(e) }>Get Pin Code</button>
+								</div>
+								<div className={"form-group float-label " + (state.pinForm?'active':'')}>
+									<input type="text" className={"form-control"} autoComplete="new-password" id="pin" onChange={handlePinFormChange} value={state.pinForm || ''}/>
+									<label className="form-control-label">Enter Pin</label>
+									<button className="btn btn-block btn-success rounded" disabled={!state.pinForm} onClick={ e => submitPinCode(e) }>Submit Pin Code</button>
+									<button className="btn btn-block btn-danger rounded" onClick={ e => hideAddPhone(e) } >Cancel</button>
+								</div>
+							</div>
+					
+
+							<div className="card-header pb-0">
+								<h6 className="mb-0">Your Phones</h6>
+								<div className="hr-thin"></div>
+							</div>
+							<ul className="list-group list-group-flush">
+					
+								<InfiniteScroll
+									dataLength={phoneList.length}
+									hasMore={false}
+									loader={
+										<p style={{ textAlign: "center" }}>
+										  <b>Loading...</b>
+										</p>
+									}
+									endMessage={
+										phoneInitial === true?(
+										<p style={{ textAlign: "center" }}>
+										  <b>Loading...</b>
+										</p>
+										):(
+										<p style={{ textAlign: "center" }}>
+										  <b>No More Records</b>
+										</p>
+										)
+									}
+								>
+					
+								{phoneList.map((phoneitem, index) => (
+						
+									<li className="list-group-item">
+										<div key={index}>
+											{phoneitem.phone} ({phoneitem.country}) - <span style={{color: 'green'}}>Verified</span> {phoneitem.isprimary === true?(<span style={{color: 'green'}}>Primary</span>):(<span onClick={this.setPrimary(phoneitem._id)}>Set Primary</span>)}
+										</div>
+
+										<div className="hr-thin"></div>
+									</li>
+							
+								))}
+						
+								</InfiniteScroll>
+
+							</ul>
+					
+						</div>
+
+					</CSSTransition>
+					
 
                     <h3 className="zl_bottom_content_heading">Advanced Features</h3>
                     <Link to={'/swapoldxqr'} className="zl_setting_list_items">
@@ -302,7 +906,6 @@ const SettingModule = ({ themHandler, props }) => {
                             </svg>
                         </div>
                     </a>
-                    <Loginhistory />
 
                     <Link to={'/getbip39'} className="zl_setting_list_items">
                         <div className="zl_setting_items_heading_peregraph">

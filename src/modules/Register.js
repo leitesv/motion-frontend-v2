@@ -359,7 +359,7 @@ const RegisterModule = ({ navigation }) => {
 					</div>
 
 					<div className="zl_login_col_12 col-12">
-						<div className="zl_login_input_content position-relative" style={{textAlign: 'center'}}>
+						<div className="zl_login_input_contentx position-relative" style={{marginTop: '20px', marginBottom: '-20px', textAlign: 'center'}}>
 						
 						
 							<div className="custom-control custom-checkbox mb-3">

@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import { Link } from 'react-router-dom';
 import HeadingModule from '../components/Layout/HeadingComponent/Heading';
 import { toast } from 'react-toastify';
+import { useHistory } from "react-router-dom"
 
 import { CSSTransition } from 'react-transition-group';
 
@@ -13,6 +14,8 @@ import userService from '../services/userService';
 const LoginHistoryModule = ({ props }) => {
 
     const [state, setState] = React.useState({ user: {} });
+    
+    let history = useHistory();
 
     React.useEffect(() => {
 
@@ -29,7 +32,7 @@ const LoginHistoryModule = ({ props }) => {
             if (res.status === false) {
 
                 toast.error('Authentication Session Has Expired');
-                props.history.push('/login/');
+                history.push('/login/');
 
             }
 

@@ -15,8 +15,8 @@ import PrivacyPolicy from './PrivacyPolicy';
 import GetBIP39 from './GetBIP39';
 //import Language from './Language';
 import LoginHistory from './LoginHistory';
-import MyAddresses from './MyAddresses';
-import MyPhonenumbers from './MyPhonenumbers';
+///import MyAddresses from './MyAddresses';
+//import MyPhonenumbers from './MyPhonenumbers';
 import NotificationSettings from './NotificationSettings';
 import Persona from './Persona';
 import Priceplan from './Priceplan';
@@ -53,8 +53,8 @@ export default {
 	[routes.getbip39]: GetBIP39,
 	//[routes.language]: Language,
 	[routes.loginhistory]: LoginHistory,
-	[routes.myaddresses]: MyAddresses,
-	[routes.myphonenumbers]: MyPhonenumbers,
+	//[routes.myaddresses]: MyAddresses,
+	//[routes.myphonenumbers]: MyPhonenumbers,
 	[routes.notificationsettings]: NotificationSettings,
 	[routes.persona]: Persona,
 	[routes.priceplan]: Priceplan,

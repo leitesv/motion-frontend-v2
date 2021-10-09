@@ -349,7 +349,16 @@ var userService = {
         let res = await axios.post(`/api/usersetlanguage`, data);
         return res.data || [];
     },
-
+    
+    setcurrency: async (currency) => {
+        let data = {
+            serviceid: "60ead773c06b18e7e103d873",
+            currency: currency
+        };
+        let res = await axios.post(`/api/usersetcurrency`, data);
+        return res.data || [];
+    },
+    
     getnotificationcount: async () => {
         let data = {
             serviceid: "60ead773c06b18e7e103d873",

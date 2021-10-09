@@ -80,8 +80,6 @@ const SettingModule = ({ themHandler, props }) => {
 			
             let res = await userService.get();
 
-            console.log(res);
-
             if (res.status === true) {
                 setState({ user: res.user });
 
@@ -95,28 +93,28 @@ const SettingModule = ({ themHandler, props }) => {
                         store.dispatch(updateStore({ key: 'userImages', value: resi.userimages }));
                     }
                     
-                    for (let i = 0; i < currencyOptions.length; i++)
-                    {
-                    	let thisitem = currencyOptions[i];
-                    	if (thisitem.value == res.user.preferred_currency)
-                    	{
-                    		setDefaultCurr(thisitem);
-                    	}
-                    
-                    }
-
-                    for (let i = 0; i < languageOptions.length; i++)
-                    {
-                    	let thisitem = languageOptions[i];
-                    	if (thisitem.value == res.user.preferred_language)
-                    	{
-                    		setDefaultLang(thisitem);
-                    	}
-                    
-                    }
-                    
                 }
 
+				for (let i = 0; i < currencyOptions.length; i++)
+				{
+					let thisitem = currencyOptions[i];
+					if (thisitem.value == res.user.preferred_currency)
+					{
+						setDefaultCurr(thisitem);
+					}
+				
+				}
+
+				for (let i = 0; i < languageOptions.length; i++)
+				{
+					let thisitem = languageOptions[i];
+					if (thisitem.value == res.user.preferred_language)
+					{
+						setDefaultLang(thisitem);
+					}
+				
+				}
+                    
             }
 
             if (res.status === false) {

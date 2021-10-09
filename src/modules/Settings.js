@@ -53,6 +53,11 @@ const SettingModule = ({ themHandler, props }) => {
 
     const [tfaForm, setTfaForm] = useState({});
 
+	const [loginHistory, setLoginHistory] = useState([]);
+    const [loginShownItems, setLoginShownItems] = useState(10);
+    const [loginHasMore, setLoginHasMore] = useState(true);
+
+
 	let history = useHistory();
 
 	const countriesList = countrylist.length > 0
@@ -766,6 +771,58 @@ const SettingModule = ({ themHandler, props }) => {
 	
 	// End Two Factor
 	
+	// Login History
+	
+	const parseJsonRegion = (jsonstring) => {
+		let data = JSON.parse(jsonstring);
+		return data.city + ', ' + data.regionName + ', ' + data.country;
+	};
+	
+	const loginRefresh = () => {
+	
+		(async () => {
+					
+			setLoginShownItems(10);
+		
+			let res = await userService.getloginhistory(0, 10);
+
+			if (res.status === true)
+			{
+				setLoginHistory(res.loginhistory);
+				setLoginHasMore(res.hasmore);
+			}
+		
+		})();
+	};
+	
+	const loginFetchMoreData = () => {
+	
+		(async () => {
+		
+			var currentCount = loginShownItems
+			var newCount = currentCount + 10;
+			var skip = newCount - 10;
+			var limit = 10;
+					
+			setLoginShownItems(newCount);
+		
+			let res = await userService.getloginhistory(skip, limit);
+
+			if (res.status === true)
+			{
+			
+				let newhistory = loginHistory.concat(res.loginhistory);
+
+				setLoginHistory(newhistory);
+				setLoginHasMore(res.hasmore);
+
+			}
+		
+		})();
+	};
+	
+	// End Login History
+	
     return (
         <>
             <section className="zl_settings_page">
@@ -1203,8 +1260,8 @@ const SettingModule = ({ themHandler, props }) => {
 					</CSSTransition>
 
 
+                    <div onClick={ e => setCurrentItem(e, 'loginhistory') } className="zl_setting_list_items" style={{cursor: 'pointer'}}>
 
-                    <a onClick={e => setCurrentItem(e, 'loginhistory')} href="/" className="zl_setting_list_items">
                         <div className="zl_setting_items_heading_peregraph">
                             <h3>Login History</h3>
                             <p>Account Login History</p>
@@ -1214,8 +1271,72 @@ const SettingModule = ({ themHandler, props }) => {
                                 <path d="M1 1L6.08833 6L1 11" stroke="#828CAE" strokeWidth="2.4" />
                             </svg>
                         </div>
-                    </a>
+                    </div>
+					<CSSTransition in={appItem === 'loginhistory'} timeout={500} classNames="transitionitem" onEnter={() => loginRefresh(true)}>
 
+						<div className="card mt-2" style={appItem === 'loginhistory'?{}:{display:'none'}}>
+							<div className="card-header">
+								<h5 style={{color: '#000'}} className="mb-1">
+									Recent Logins
+								</h5>
+							</div>
+							<div className="card-body px-0 pt-0">
+								<div className="list-group list-group-flush border-top border-color">
+
+
+									<InfiniteScroll
+										dataLength={loginHistory.length}
+										next={loginFetchMoreData}
+										hasMore={loginHasMore}
+										loader={
+											<p style={{ textAlign: "center" }}>
+											  <b>Loading...</b>
+											</p>
+										}
+										height={400}
+										endMessage={
+											<p style={{ textAlign: "center" }}>
+											  <b>No More Records</b>
+											</p>
+										}
+									>
+										{loginHistory.map((historyitem, index) => (
+							
+										<li key={index} className="list-group-item border-color">
+											<div className="row">
+												<div className="col">
+													<div className="row mb-0">
+														<div className="col mb-0">
+															<p className="mb-0">{historyitem.ip_address}</p>
+														</div>
+														<div className="col-auto pl-0 mb-0">
+															<p className="small text-secondary mb-0">{historyitem.created_date}</p>
+														</div>
+													</div>
+													<div className="row mb-0">
+														<div className="col mb-0">
+															<p className="small text-secondary mb-0" style={{marginBottom:'0px',textOverflow: 'ellipsis', whiteSpace: 'nowrap', overflow: 'hidden'}}>{parseJsonRegion(historyitem.ip_region)}</p>
+														</div>
+														<div className="col-auto pl-0 mb-0">
+															<p className="small mb-0" style={(historyitem.invalidated===true?{color:'red'}:{color:'green'})}>{(historyitem.invalidated===true?'Expired':'Active')}</p>
+														</div>
+													</div>
+													<p className="small text-secondary mb-0" style={{textOverflow: 'ellipsis', whiteSpace: 'nowrap', overflow: 'hidden'}}>{historyitem.useragent}</p>
+												</div>
+											</div>
+										</li>
+							
+										))}
+									</InfiniteScroll>
+
+
+								</div>
+							</div>
+						</div>
+				
+					</CSSTransition>
+                
+                
                     <Link to={'/getbip39'} className="zl_setting_list_items">
                         <div className="zl_setting_items_heading_peregraph">
                             <h3>Get BIP39 Passphrase</h3>

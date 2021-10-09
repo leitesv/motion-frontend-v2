@@ -14,7 +14,7 @@ import Placeholder from './Placeholder';
 import PrivacyPolicy from './PrivacyPolicy';
 import GetBIP39 from './GetBIP39';
 //import Language from './Language';
-import LoginHistory from './LoginHistory';
+//import LoginHistory from './LoginHistory';
 ///import MyAddresses from './MyAddresses';
 //import MyPhonenumbers from './MyPhonenumbers';
 import NotificationSettings from './NotificationSettings';
@@ -52,7 +52,7 @@ export default {
 	[routes.transactions]: Transactions,
 	[routes.getbip39]: GetBIP39,
 	//[routes.language]: Language,
-	[routes.loginhistory]: LoginHistory,
+	//[routes.loginhistory]: LoginHistory,
 	//[routes.myaddresses]: MyAddresses,
 	//[routes.myphonenumbers]: MyPhonenumbers,
 	[routes.notificationsettings]: NotificationSettings,

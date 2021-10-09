@@ -47,6 +47,8 @@ const SettingModule = ({ themHandler, props }) => {
     const [defaultLang, setDefaultLang] = useState({value: 'en', label: 'English'});
     const [defaultCurr, setDefaultCurr] = useState({value: 'EUR', label: 'EUR'});
 
+    const [passForm, setPassForm] = useState({});
+
     const [appItem, setAppItem] = useState(null);
 
 	let history = useHistory();
@@ -545,6 +547,90 @@ const SettingModule = ({ themHandler, props }) => {
 	};
 	
     // End Phones
+    
+    // Security / password
+
+	const loadSecurity = () => {
+	
+		setPassForm({});
+	
+	};
+	
+	const updatePassword = (e) => {
+	
+		e.preventDefault();
+		
+		if (passForm.new_password !== passForm.confirm_password)
+		{
+		
+			toast.error("Error:  New passwords do not match");
+		
+		}
+		else
+		{
+					
+			(async () => {
+
+				let data = {
+				  password: passForm.current_password,
+				  newpass: passForm.new_password
+				};
+	
+				let res = await userService.changepassword(data);
+
+				if (res.status === true)
+				{
+					setPassForm({});
+					toast.success(res.message);
+				}
+				else
+				{
+					toast.error(res.message);
+				}
+
+			})();
+		
+		}
+		
+	};
+
+	const logoutAllDevices = (e) => {
+	
+		e.preventDefault();
+		
+		(async () => {
+
+			let res = await userService.invalidatesessions();
+
+			if (res.status === true)
+			{
+			
+				localStorage.removeItem("accessToken");
+                toast.success(res.message);
+                history.push('/login/');
+				
+			}
+			else
+			{
+				toast.error(res.message);
+			}
+
+		})();		
+	};
+
+	const handlePassFormChange = event => {
+
+    	var currentState = {};
+    	
+    	Object.assign(currentState, state);
+    	
+    	currentState[event.target.id] = event.target.value;
+
+		setPassForm(currentState);
+		        		
+	};
+	
+    // End Security
 	
     return (
         <>
@@ -870,7 +956,9 @@ const SettingModule = ({ themHandler, props }) => {
                     </Link>
 
                     <h3 className="zl_bottom_content_heading">Security</h3>
-                    <Link to={'/securitysettings'} className="zl_setting_list_items">
+                    
+                    <div onClick={ e => setCurrentItem(e, 'security') } className="zl_setting_list_items" style={{cursor: 'pointer'}}>
+
                         <div className="zl_setting_items_heading_peregraph">
                             <h3>Security Settings</h3>
                             <p>Password and Devices</p>
@@ -880,7 +968,45 @@ const SettingModule = ({ themHandler, props }) => {
                                 <path d="M1 1L6.08833 6L1 11" stroke="#828CAE" strokeWidth="2.4" />
                             </svg>
                         </div>
-                    </Link>
+                    
+                    </div>
+					<CSSTransition in={appItem === 'security'} timeout={500} classNames="transitionitem" onEnter={() => loadSecurity(true)} >
+
+						<div className="card mb-4" style={appItem === 'security'?{}:{display:'none'}}>
+							<div className="card-header">
+								<h5 style={{color: '#000'}} className="mb-1">Change Password</h5>
+							</div>
+							<div className="card-body">
+								<div className="form-group float-label">
+									<input type="password" className={"form-control " + (passForm.current_password?'active':'')} autoComplete="new-password" id="current_password" onChange={handlePassFormChange} value={passForm.current_password || ''}/>
+									<label className="form-control-label">Current Password</label>
+								</div>
+								<div className="form-group float-label">
+									<input type="password" className={"form-control " + (passForm.current_password?'active':'')} autoComplete="new-password" id="new_password" onChange={handlePassFormChange} value={passForm.new_password || ''}/>
+									<label className="form-control-label">New Password</label>
+								</div>
+								<div className="form-group float-label">
+									<input type="password" className={"form-control " + (passForm.current_password?'active':'')} autoComplete="new-password" id="confirm_password" onChange={handlePassFormChange} value={passForm.confirm_password || ''}/>
+									<label className="form-control-label">Confirm New Password</label>
+								</div>
+							</div>
+							<div className="card-footer">
+								<button className="btn btn-block btn-success rounded" onClick={ e => updatePassword(e) }>Update Password</button>
+								<p className="text-center text-secondary mb-3">Changing password requires decryption and re-encryption of your BIP39 passphrase.  Please ensure you have stored your passphrase in a secure location prior to this action.</p>
+<hr />
+								<p className="text-center text-secondary mb-0 mt-3">X devices and Apps runing on this account. We suggest to logout
+									from any other devices to avoid unrevokable situations.</p>
+								<button className="btn btn-block btn-danger rounded mb-3" onClick={ e => logoutAllDevices(e) }>Logout from all devices</button>
+
+							
+							</div>
+
+
+						</div>
+				
+					</CSSTransition>
+                    
+                    
                     <Link to={'/twofactorauthentication'} className="zl_setting_list_items">
                         <div className="zl_setting_items_heading_peregraph">
                             <h3>Two Factor Authentication</h3>

@@ -20,7 +20,7 @@ import LoginHistory from './LoginHistory';
 import NotificationSettings from './NotificationSettings';
 import Persona from './Persona';
 import Priceplan from './Priceplan';
-import SecuritySettings from './SecuritySettings';
+//import SecuritySettings from './SecuritySettings';
 import SwapOldXQR from './SwapOldXQR';
 import TermsAndConditions from './TermsAndConditions';
 import TwoFactorAuthentication from './TwoFactorAuthentication';
@@ -58,7 +58,7 @@ export default {
 	[routes.notificationsettings]: NotificationSettings,
 	[routes.persona]: Persona,
 	[routes.priceplan]: Priceplan,
-	[routes.securitysettings]: SecuritySettings,
+	//[routes.securitysettings]: SecuritySettings,
 	[routes.swapoldxqr]: SwapOldXQR,
 	[routes.termsandconditions]: TermsAndConditions,
 	[routes.twofactorauthentication]: TwoFactorAuthentication,

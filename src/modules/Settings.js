@@ -57,6 +57,9 @@ const SettingModule = ({ themHandler, props }) => {
     const [loginShownItems, setLoginShownItems] = useState(10);
     const [loginHasMore, setLoginHasMore] = useState(true);
 
+    const [bipForm, setBipForm] = useState(null);
+    const [bipHtml, setBipHtml] = useState('');
+
 
 	let history = useHistory();
 
@@ -823,6 +826,72 @@ const SettingModule = ({ themHandler, props }) => {
 	
 	// End Login History
 	
+	// BIP
+
+	const loadBip = () => {
+	
+		setBipForm(null);
+		
+	};
+	
+	const handleBipFormChange = event => {
+
+		setBipForm(event.target.value);
+		        		
+	};
+
+	const doGetPassphrase = (e) => {
+
+		e.preventDefault();
+
+		(async () => {
+
+			if (bipForm && bipForm != '')
+			{
+				let res = await userService.getpassphrase({password: bipForm});
+
+				if (res.status === true)
+				{
+
+					let passphrase = res.message;
+
+					let phrasearray = passphrase.split(' ');
+
+					if (phrasearray.length === 12)
+					{
+					
+						let modaldata = '';
+
+						for (let i = 0; i < phrasearray.length; i++)
+						{
+							modaldata += "Word #" + (i+1) + ":  " + phrasearray[i] + "\n";
+						}
+						
+						setBipHtml(modaldata);
+
+					}
+					else
+					{
+
+						toast.error('Error Decrypting Passphrase.  Check Password');
+
+					}
+
+				}
+				else
+				{
+
+					toast.error(res.message);
+
+				}
+			}
+
+		})();
+
+	};
+	
+	// End Bip
+	
     return (
         <>
             <section className="zl_settings_page">
@@ -1336,8 +1405,7 @@ const SettingModule = ({ themHandler, props }) => {
 				
 					</CSSTransition>
                 
-                
-                    <Link to={'/getbip39'} className="zl_setting_list_items">
+                    <div onClick={ e => setCurrentItem(e, 'bip') } className="zl_setting_list_items" style={{cursor: 'pointer'}}>
                         <div className="zl_setting_items_heading_peregraph">
                             <h3>Get BIP39 Passphrase</h3>
                             <p>Unlock & View Passphrase</p>
@@ -1347,7 +1415,37 @@ const SettingModule = ({ themHandler, props }) => {
                                 <path d="M1 1L6.08833 6L1 11" stroke="#828CAE" strokeWidth="2.4" />
                             </svg>
                         </div>
-                    </Link>
+                    </div>
+					<CSSTransition in={appItem === 'bip'} timeout={500} classNames="transitionitem" onEnter={() => loadBip(true)} >
+
+						<div className="card text-left mt-2" style={appItem === 'bip'?{}:{display:'none'}}>
+							<div className="card-header">
+								<h5 style={{color: '#000'}} className="mb-1">Unlock and View BIP39 Passphrase</h5>
+							</div>
+
+							<div className="card-body ">
+								By design, Qredit Motion <strong>DOES NOT</strong> have access to your ecrypted private keys stored on our system.  All keys are strongly encrypted using your login password.  We only store a Bcrypt hash of your password, which means we can not decrypt your keys without you providing the decryption password.  If you lose your login credentials, the <strong>ONLY</strong> way to restore access to your account is using your BIP39 passphrase.  Therefore, you should <strong>WRITE DOWN AND SAFELY STORE</strong> your passphrase before doing any activity on Qredit Motion.
+								<br /><br />
+
+								<div className="input-group mb-3">
+									<input onChange={handleBipFormChange} type="password" autoComplete="new-password" className="form-control" placeholder="Password" aria-label="Password" value={bipForm} />
+									<div className="input-group-append">
+										<button onClick={ e => doGetPassphrase(e) } className="btn btn-success" type="button">Get Phrase</button>
+									</div>
+								</div>
+					
+								<pre>
+								
+									{bipHtml}
+								
+								</pre>
+					
+							</div>
+						</div>
+				
+					</CSSTransition>
+                    
+                    
                     <Link to={'/accountsupport'} className="zl_setting_list_items">
                         <div className="zl_setting_items_heading_peregraph">
                             <h3 style={{ color: 'red' }}>Close Account</h3>

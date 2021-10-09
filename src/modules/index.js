@@ -12,7 +12,7 @@ import Setting from './Settings';
 import AccountSupport from './AccountSupport';
 import Placeholder from './Placeholder';
 import PrivacyPolicy from './PrivacyPolicy';
-import GetBIP39 from './GetBIP39';
+//import GetBIP39 from './GetBIP39';
 //import Language from './Language';
 //import LoginHistory from './LoginHistory';
 ///import MyAddresses from './MyAddresses';
@@ -50,7 +50,7 @@ export default {
 	[routes.accountsupportpage]: AccountSupport,
 
 	[routes.transactions]: Transactions,
-	[routes.getbip39]: GetBIP39,
+	//[routes.getbip39]: GetBIP39,
 	//[routes.language]: Language,
 	//[routes.loginhistory]: LoginHistory,
 	//[routes.myaddresses]: MyAddresses,

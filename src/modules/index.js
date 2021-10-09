@@ -23,7 +23,7 @@ import Priceplan from './Priceplan';
 //import SecuritySettings from './SecuritySettings';
 import SwapOldXQR from './SwapOldXQR';
 import TermsAndConditions from './TermsAndConditions';
-import TwoFactorAuthentication from './TwoFactorAuthentication';
+//import TwoFactorAuthentication from './TwoFactorAuthentication';
 import ReferralProgram from './ReferralProgram';
 import Contacts from './Contacts';
 import QreditNFT from './QreditNFT';
@@ -33,7 +33,7 @@ import Tokenoftrust from './Tokenoftrust';
 import Viewcontact from './Viewcontact';
 import Register from './Register';
 import LoginHelp from './LoginHelp';
-import TwoFactor from './TwoFactor';
+//import TwoFactor from './TwoFactor';
 import Security from './Security';
 import Phone from './Phone';
 
@@ -61,7 +61,7 @@ export default {
 	//[routes.securitysettings]: SecuritySettings,
 	[routes.swapoldxqr]: SwapOldXQR,
 	[routes.termsandconditions]: TermsAndConditions,
-	[routes.twofactorauthentication]: TwoFactorAuthentication,
+	//[routes.twofactorauthentication]: TwoFactorAuthentication,
 	[routes.privacypolicy]: PrivacyPolicy,
 	[routes.placeholder]: Placeholder,
 	[routes.referralprogram]: ReferralProgram,
@@ -73,7 +73,7 @@ export default {
 	[routes.viewcontact]: Viewcontact,
 	[routes.register]: Register,
 	[routes.loginhelp]: LoginHelp,
-	[routes.twofactor]: TwoFactor,
+	//[routes.twofactor]: TwoFactor,
 	[routes.security]: Security,
 	[routes.phone]: Phone,
 };

@@ -51,6 +51,8 @@ const SettingModule = ({ themHandler, props }) => {
 
     const [appItem, setAppItem] = useState(null);
 
+    const [tfaForm, setTfaForm] = useState({});
+
 	let history = useHistory();
 
 	const countriesList = countrylist.length > 0
@@ -157,11 +159,8 @@ const SettingModule = ({ themHandler, props }) => {
 
     const handleCurrencyChange = currencyAbbrev => {
 
-		toast.success('Currency Setting Updated: ' + currencyAbbrev.value);
-
 		(async () => {
 
-/*
 			let res = await userService.setcurrency(currencyAbbrev.value);
 
 			if (res.status === true)
@@ -175,7 +174,6 @@ const SettingModule = ({ themHandler, props }) => {
 			{
 				toast.error(res.message);
 			}
-*/
 
 		})();
 
@@ -553,7 +551,7 @@ const SettingModule = ({ themHandler, props }) => {
 	const loadSecurity = () => {
 	
 		setPassForm({});
-	
+
 	};
 	
 	const updatePassword = (e) => {
@@ -622,7 +620,7 @@ const SettingModule = ({ themHandler, props }) => {
 
     	var currentState = {};
     	
-    	Object.assign(currentState, state);
+    	Object.assign(currentState, passForm);
     	
     	currentState[event.target.id] = event.target.value;
 
@@ -631,6 +629,142 @@ const SettingModule = ({ themHandler, props }) => {
 	};
 	
     // End Security
+
+    // Two Factor
+
+	const loadTwoFactor = () => {
+	
+		setTfaForm({});
+
+		(async () => {
+
+			let res = await userService.usertwofactor();
+
+			if (res.status === true)
+			{
+			
+				var currentTfaForm = {};
+				
+				Object.assign(currentTfaForm, tfaForm);
+	
+				currentTfaForm['twofactorstatus'] = res.twofactorstatus;
+				currentTfaForm['qrcodedataurl'] = res.qrcodedataurl;
+				
+				setTfaForm(currentTfaForm);
+			
+			}
+			else
+			{
+				toast.error(res.message);
+			}
+
+		})();
+			
+	};
+
+	const handleTfaFormChange = event => {
+
+    	var currentState = {};
+    	
+    	Object.assign(currentState, tfaForm);
+    	
+    	currentState[event.target.id] = event.target.value;
+
+		setTfaForm(currentState);
+		        		
+	};
+
+	const activateTwoFactor = (e) => {
+	
+		e.preventDefault();
+		
+		(async () => {
+
+			let data = {pincode: tfaForm.tfapin, password: tfaForm.password};
+
+			let res = await userService.usertwofactorsave(data);
+			
+			if (res.status === true)
+			{
+		
+				toast.success(res.message);
+				
+				let currentTfaForm = {};
+				
+				Object.assign(currentTfaForm, tfaForm);
+	
+				currentTfaForm['twofactorstatus'] = res.twofactorstatus;
+				currentTfaForm['qrcodedataurl'] = null;
+				currentTfaForm['tfapin'] = '';
+				
+				setTfaForm(currentTfaForm);
+					
+			}
+			else
+			{
+				toast.error(res.message);
+				
+				let currentTfaForm = {};
+				
+				Object.assign(currentTfaForm, tfaForm);
+
+				currentTfaForm['twofactorstatus'] = res.twofactorstatus;
+				currentTfaForm['tfapin'] = '';
+				
+				setTfaForm(currentTfaForm);
+				
+			}
+
+		})();
+		
+	};
+
+	const deactivateTwoFactor = (e) => {
+	
+		e.preventDefault();
+		
+		(async () => {
+
+			let data = {pincode: tfaForm.tfapin};
+
+			let res = await userService.usertwofactordisable(data);
+			
+			if (res.status === true)
+			{
+		
+				toast.success(res.message);
+				
+				let currentTfaForm = {};
+
+				Object.assign(currentTfaForm, tfaForm);
+	
+				currentTfaForm['twofactorstatus'] = res.twofactorstatus;
+				currentTfaForm['qrcodedataurl'] = res.qrcodedataurl;
+				currentTfaForm['tfapin'] = '';
+				
+				setTfaForm(currentTfaForm);
+					
+			}
+			else
+			{
+				toast.error(res.message);
+				
+				let currentTfaForm = {};
+
+				Object.assign(currentTfaForm, tfaForm);
+	
+				currentTfaForm['twofactorstatus'] = res.twofactorstatus;
+				currentTfaForm['tfapin'] = '';
+				
+				setTfaForm(currentTfaForm);
+
+			}
+
+		})();
+		
+	};
+	
+	// End Two Factor
 	
     return (
         <>
@@ -1006,8 +1140,7 @@ const SettingModule = ({ themHandler, props }) => {
 				
 					</CSSTransition>
                     
-                    
-                    <Link to={'/twofactorauthentication'} className="zl_setting_list_items">
+                    <div onClick={ e => setCurrentItem(e, 'twofactor') } className="zl_setting_list_items" style={{cursor: 'pointer'}}>
                         <div className="zl_setting_items_heading_peregraph">
                             <h3>Two Factor Authentication</h3>
                             <p>Enable or Disable</p>
@@ -1017,7 +1150,59 @@ const SettingModule = ({ themHandler, props }) => {
                                 <path d="M1 1L6.08833 6L1 11" stroke="#828CAE" strokeWidth="2.4" />
                             </svg>
                         </div>
-                    </Link>
+                    </div>
+
+					<CSSTransition in={appItem === 'twofactor'} timeout={500} classNames="transitionitem" onEnter={() => loadTwoFactor(true)}>
+
+						<div className="card mb-4" style={appItem === 'twofactor'?{}:{display:'none'}}>
+							<div className="card-header">
+								<h5 style={{color: '#000'}} className="mb-1">
+									Two Factor Authentication is {tfaForm.twofactorstatus===true?'Active':'Inactive'}
+								</h5>
+							</div>
+							<div className="card-body" style={tfaForm.twofactorstatus!==true && tfaForm.twofactorstatus!==false?{display: 'none'}:{}}>
+						
+								{(tfaForm.qrcodedataurl)?(
+									<div>
+									<div>
+									<img style={{width: '150px', height: '150px'}} src={tfaForm.qrcodedataurl} />
+									<br />
+									Scan barcode with your authenticator app and enter the displayed PIN code to activate.
+									</div>
+
+									<div className="form-group float-label">
+										<input type="password" className={"form-control " + (tfaForm.password?'active':'')} autoComplete="off" id="password" onChange={handleTfaFormChange} value={tfaForm.password}/>
+										<label className="form-control-label">Password</label>
+									</div>
+									</div>
+								):(<div>Enter your authenticator PIN Code to disable Two Factor</div>)}
+						
+								<div className="form-group float-label">
+									<input type="text" className={"form-control " + (tfaForm.tfapin?'active':'')} autoComplete="off" id="tfapin" onChange={handleTfaFormChange} value={tfaForm.tfapin}/>
+									<label className="form-control-label">Two Factor Pin</label>
+								</div>
+						
+							</div>
+							<div className="card-footer">
+
+								{tfaForm.twofactorstatus===false?(
+						
+									<button className="btn btn-block btn-success rounded" onClick={ e => activateTwoFactor(e) }>Activate</button>
+
+								):(
+						
+									<button className="btn btn-block btn-danger rounded mt-3" onClick={ e => deactivateTwoFactor(e) }>Deactivate</button>
+							
+								)}
+							
+							</div>
+
+
+						</div>
+				
+					</CSSTransition>
+
+
 
                     <a onClick={e => setCurrentItem(e, 'loginhistory')} href="/" className="zl_setting_list_items">
                         <div className="zl_setting_items_heading_peregraph">

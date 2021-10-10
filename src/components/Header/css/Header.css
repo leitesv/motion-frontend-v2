@@ -107,6 +107,16 @@
   .zl_page_sidebar_nav
   .zl_page_sidebar_items[title="createtokens"]
   .zl_page_sidebar_link::before,
+.zl_page_sidebar[title="notificationsettings"]
+  .zl_page_sidebar_content
+  .zl_page_sidebar_nav
+  .zl_page_sidebar_items[title="notificationsettings"]
+  .zl_page_sidebar_link::before,
+.zl_page_sidebar[title="accountsupport"]
+  .zl_page_sidebar_content
+  .zl_page_sidebar_nav
+  .zl_page_sidebar_items[title="accountsupport"]
+  .zl_page_sidebar_link::before,
 .zl_page_sidebar[title="referralprograms"]
   .zl_page_sidebar_content
   .zl_page_sidebar_nav
@@ -168,6 +178,16 @@
   .zl_page_sidebar_content
   .zl_page_sidebar_nav
   .zl_page_sidebar_items[title="createtokens"]
+  .zl_page_sidebar_link::after,
+.zl_page_sidebar[title="notificationsettings"]
+  .zl_page_sidebar_content
+  .zl_page_sidebar_nav
+  .zl_page_sidebar_items[title="notificationsettings"]
+  .zl_page_sidebar_link::after,
+.zl_page_sidebar[title="accountsupport"]
+  .zl_page_sidebar_content
+  .zl_page_sidebar_nav
+  .zl_page_sidebar_items[title="accountsupport"]
   .zl_page_sidebar_link::after,
 .zl_page_sidebar[title="referralprograms"]
   .zl_page_sidebar_content
@@ -235,6 +255,16 @@
   .zl_page_sidebar_nav
   .zl_page_sidebar_items[title="createtokens"]
   .zl_page_sidebar_link,
+.zl_page_sidebar[title="notificationsettings"]
+  .zl_page_sidebar_content
+  .zl_page_sidebar_nav
+  .zl_page_sidebar_items[title="notificationsettings"]
+  .zl_page_sidebar_link,
+.zl_page_sidebar[title="accountsupport"]
+  .zl_page_sidebar_content
+  .zl_page_sidebar_nav
+  .zl_page_sidebar_items[title="accountsupport"]
+  .zl_page_sidebar_link,
 .zl_page_sidebar[title="referralprograms"]
   .zl_page_sidebar_content
   .zl_page_sidebar_nav
@@ -301,6 +331,20 @@
   .zl_page_sidebar_content
   .zl_page_sidebar_nav
   .zl_page_sidebar_items[title="createtokens"]
+  .zl_page_sidebar_link
+  svg
+  path,
+.zl_page_sidebar[title="notificationsettings"]
+  .zl_page_sidebar_content
+  .zl_page_sidebar_nav
+  .zl_page_sidebar_items[title="notificationsettings"]
+  .zl_page_sidebar_link
+  svg
+  path,
+.zl_page_sidebar[title="accountsupport"]
+  .zl_page_sidebar_content
+  .zl_page_sidebar_nav
+  .zl_page_sidebar_items[title="accountsupport"]
   .zl_page_sidebar_link
   svg
   path,

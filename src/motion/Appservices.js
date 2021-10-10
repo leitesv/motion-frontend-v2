@@ -150,7 +150,7 @@ class Appservices extends React.Component {
                     </div>
                     <div className="hr-thin"></div>
 
-                    <a onClick={e => this.setCurrentItem(e, 'notifications')} href="/" className="list-group-item list-group-item-action border-color">
+                    <a onClick={e => this.setCurrentItem(e, 'notificationsettings')} href="/" className="list-group-item list-group-item-action border-color">
                         <div className="row">
                             <div className="col-auto">
                                 <div className="avatar avatar-40 text-default">

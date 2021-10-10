@@ -161,6 +161,7 @@ const SettingModule = ({ themHandler, props }) => {
     const handleLogOut = (event) => {
 
         localStorage.removeItem("accessToken");
+        history.push('/login/');
         toast.success("You have been logged out");
 
     };
@@ -1457,7 +1458,7 @@ const SettingModule = ({ themHandler, props }) => {
                             </svg>
                         </div>
                     </Link>
-                    <Link onClick={handleLogOut} to={'/login'} className="zl_setting_list_items">
+                    <div onClick={handleLogOut} className="zl_setting_list_items" style={{cursor: 'pointer'}}>
                         <div className="zl_setting_items_heading_peregraph">
                             <h3>Logout</h3>
                             <p>Logout from the application</p>
@@ -1467,7 +1468,7 @@ const SettingModule = ({ themHandler, props }) => {
                                 <path d="M1 1L6.08833 6L1 11" stroke="#828CAE" strokeWidth="2.4" />
                             </svg>
                         </div>
-                    </Link>
+                    </div>
 
                 </div>
             </section>

@@ -3184,3 +3184,7 @@ table td {
 .white {
   color: #fff !important;
 }
+
+.mr-15 {
+  margin-right: 15px;
+}

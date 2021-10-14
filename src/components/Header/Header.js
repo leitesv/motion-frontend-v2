@@ -13,6 +13,9 @@ const Header = (props) => {
     // hide show header
     const [send, setSend] = useState(false);
 
+    const [notificationFill, setNotificationFill] = useState('#828CAE');
+    const [notificationCount, setNotificationCount] = useState(0);
+
     const handleToggle = () => {
         setSend(!send);
     };
@@ -35,12 +38,30 @@ const Header = (props) => {
         // listen for state change on images and user info
 
         var unsubscribe = store.subscribe(() => {
+        
             setState(store.getState());
+            
+			if (state.user.notifications > 0)
+			{
+			
+				var ncount = state.user.notifications;
+				
+				if (parseInt(state.user.notifications) > 99) ncount = 99;
+			
+				setNotificationFill('red');
+				setNotificationCount(state.user.notifications);
+			}
+			else
+			{
+				setNotificationFill('#828CAE');
+				setNotificationCount('0');
+			}
+            
         });
 
-
-
     }, []) // <-- here put the parameter to listen
+    
+
 
     return (
         <>
@@ -99,14 +120,14 @@ const Header = (props) => {
                                 <span className="zl_pagesidebar_text">Contacts</span>
                             </Link>
                         </li>
-                        {/*<li className="zl_page_sidebar_items" title="persona">
+                        <li className="zl_page_sidebar_items" title="persona">
                             <Link to={'/persona'} className="zl_page_sidebar_link position-relative">
                                 <svg className="svg-icon" width="16" height="16" viewBox="0 0 20 20">
                                     <path fill="#828CAE" fillRule="evenodd" clipRule="evenodd" d="M8.749,9.934c0,0.247-0.202,0.449-0.449,0.449H4.257c-0.247,0-0.449-0.202-0.449-0.449S4.01,9.484,4.257,9.484H8.3C8.547,9.484,8.749,9.687,8.749,9.934 M7.402,12.627H4.257c-0.247,0-0.449,0.202-0.449,0.449s0.202,0.449,0.449,0.449h3.145c0.247,0,0.449-0.202,0.449-0.449S7.648,12.627,7.402,12.627 M8.3,6.339H4.257c-0.247,0-0.449,0.202-0.449,0.449c0,0.247,0.202,0.449,0.449,0.449H8.3c0.247,0,0.449-0.202,0.449-0.449C8.749,6.541,8.547,6.339,8.3,6.339 M18.631,4.543v10.78c0,0.248-0.202,0.45-0.449,0.45H2.011c-0.247,0-0.449-0.202-0.449-0.45V4.543c0-0.247,0.202-0.449,0.449-0.449h16.17C18.429,4.094,18.631,4.296,18.631,4.543 M17.732,4.993H2.46v9.882h15.272V4.993z M16.371,13.078c0,0.247-0.202,0.449-0.449,0.449H9.646c-0.247,0-0.449-0.202-0.449-0.449c0-1.479,0.883-2.747,2.162-3.299c-0.434-0.418-0.714-1.008-0.714-1.642c0-1.197,0.997-2.246,2.133-2.246s2.134,1.049,2.134,2.246c0,0.634-0.28,1.224-0.714,1.642C15.475,10.331,16.371,11.6,16.371,13.078M11.542,8.137c0,0.622,0.539,1.348,1.235,1.348s1.235-0.726,1.235-1.348c0-0.622-0.539-1.348-1.235-1.348S11.542,7.515,11.542,8.137 M15.435,12.629c-0.214-1.273-1.323-2.246-2.657-2.246s-2.431,0.973-2.644,2.246H15.435z"></path>
                                 </svg>
-                                <span className="zl_pagesidebar_text">Persona (KYC)</span>
+                                <span className="zl_pagesidebar_text">Persona Settings</span>
                             </Link>
-                        </li>*/}
+                        </li>
                         <li className="zl_page_sidebar_items" title="wallets">
                             <Link to={'/wallets'} className="zl_page_sidebar_link position-relative">
                                 <svg width="16" height="16" viewBox="0 0 16 16" fill="#828CAE" xmlns="http://www.w3.org/2000/svg">
@@ -161,8 +182,10 @@ const Header = (props) => {
                         </li> */}
                         <li className="zl_page_sidebar_items" title="notifications">
                             <Link to={'/notificationsettings'} className="zl_page_sidebar_link position-relative">
-                                <svg width="10" height="12" viewBox="0 0 10 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M5 0C3.92954 0 2.98173 0.691642 2.65518 1.71108L0 10H10L7.34482 1.71108C7.01827 0.691641 6.07046 0 5 0ZM3.5 11C3.22386 11 3 11.2239 3 11.5C3 11.7761 3.22386 12 3.5 12H6.5C6.77614 12 7 11.7761 7 11.5C7 11.2239 6.77614 11 6.5 11H3.5Z" fill="white"></path></svg>
-                                <span className="zl_pagesidebar_text">Notifications</span>
+                            	<div style={{textAlign: 'center', fontSize: '12px', marginRight: '32px', width:'16px', height: '16px'}}>
+                            		<span style={{color: notificationFill}}>{notificationCount}</span>
+                            	</div>
+                                <span className="zl_pagesidebar_text" style={{color: notificationFill}}>Notifications</span>
                             </Link>
                         </li>
                         <li className="zl_page_sidebar_items" title="accountsupport">

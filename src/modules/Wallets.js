@@ -11,6 +11,7 @@ import copy from "copy-to-clipboard";
 import store from "../store/index";
 import { updateStore } from "../store/actions/index";
 import Select from 'react-select';
+import { useHistory } from "react-router-dom"
 
 // SERVICES
 import userService from '../services/userService';
@@ -21,6 +22,7 @@ const WalletsModule = ({ props }) => {
 
     const [state, setState] = React.useState(store.getState());
 
+	let history = useHistory()
 
     React.useEffect(() => {
 
@@ -50,7 +52,7 @@ const WalletsModule = ({ props }) => {
             if (res.status === false) {
 
                 toast.error('Authentication Session Has Expired');
-                props.history.push('/login/');
+                history.push('/login/');
 
             }
 

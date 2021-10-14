@@ -166,7 +166,7 @@ const Header = (props) => {
                         </li> */}
                         <li className="zl_page_sidebar_items" title="notificationsettings">
                             <Link to={'/notificationsettings'} className="zl_page_sidebar_link position-relative">
-                            	<div style={{textAlign: 'center', fontSize: '12px', marginRight: '32px', width:'16px', height: '16px'}}>
+                            	<div style={{textAlign: 'center', marginRight: '15px', width:'20px', height: '20px'}}>
                             		<span style={{color: notificationFill}}>{notificationCount}</span>
                             	</div>
                                 <span className="zl_pagesidebar_text" style={{color: notificationFill}}>Notifications</span>

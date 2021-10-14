@@ -13,7 +13,7 @@ const Header = (props) => {
     // hide show header
     const [send, setSend] = useState(false);
 
-    const [notificationFill, setNotificationFill] = useState('#828CAE');
+    const [notificationFill, setNotificationFill] = useState('#53b9ea');
     const [notificationCount, setNotificationCount] = useState(0);
 
     const handleToggle = () => {
@@ -53,7 +53,7 @@ const Header = (props) => {
 			}
 			else
 			{
-				setNotificationFill('#828CAE');
+				setNotificationFill('#53b9ea');
 				setNotificationCount('0');
 			}
             
@@ -103,6 +103,16 @@ const Header = (props) => {
 
 
                     <ul className="zl_page_sidebar_nav">
+                    
+                        <li className="zl_page_sidebar_items" title="notificationsettings">
+                            <Link to={'/notificationsettings'} className="zl_page_sidebar_link position-relative">
+                            	<div style={{textAlign: 'center', marginRight: '15px', width:'20px', height: '20px'}}>
+                            		<span style={{fontSize: '16px', color: notificationFill}}>{notificationCount}</span>
+                            	</div>
+                                <span className="zl_pagesidebar_text">Notifications</span>
+                            </Link>
+                        </li>
+                        
                         <li className="zl_page_sidebar_items" title="dashboard">
                             <Link to={'/dashboard'} className="zl_page_sidebar_link position-relative">
                                 <img src="assets/svg-icons/064-home.svg" className="mr-15" width="20" height="20"></img>
@@ -164,14 +174,7 @@ const Header = (props) => {
                                 <span className="zl_pagesidebar_text">Referrals</span>
                             </Link>
                         </li> */}
-                        <li className="zl_page_sidebar_items" title="notificationsettings">
-                            <Link to={'/notificationsettings'} className="zl_page_sidebar_link position-relative">
-                            	<div style={{textAlign: 'center', marginRight: '15px', width:'20px', height: '20px'}}>
-                            		<span style={{color: notificationFill}}>{notificationCount}</span>
-                            	</div>
-                                <span className="zl_pagesidebar_text" style={{color: notificationFill}}>Notifications</span>
-                            </Link>
-                        </li>
+
                         <li className="zl_page_sidebar_items" title="accountsupport">
                             <Link to={'/accountsupport'} className="zl_page_sidebar_link position-relative">
                                 <img src="assets/svg-icons/019-chat.svg" className="mr-15" width="20" height="20"></img>

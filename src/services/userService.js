@@ -34,7 +34,7 @@ var userService = {
     savepersonasettings: async (settings) => {
         let data = {
             serviceid: "60ead773c06b18e7e103d873",
-            settings: settings
+            settings: JSON.stringify(settings)
         };
         let res = await axios.post(`/api/usersavepersonasettings`, data);
         return res.data || [];

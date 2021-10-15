@@ -892,6 +892,79 @@ const SettingModule = ({ themHandler, props }) => {
 	};
 	
 	// End Bip
+
+	// Persona
+
+	const loadPersona = () => {
+
+		(async () => {
+
+			let res = await userService.get();
+
+			if (res.status === true) {
+				setState({ user: res.user });
+			}
+		
+		})();
+                
+	};
+
+    const toggleItem = (e, item) => {
+    
+    	(async () => {
+    	
+			let defaultsettings = {
+				showprofilepicture: false,
+				showlinkedaddresses: false,
+				showaddressiskycverified: false,
+				showaddresshasthisamountofcontacts: false,
+				showalternatealias: false,
+				showaccountcreationdate: false,
+				showkycvalidtill: false,
+				showmotionplan: false,
+				showmotionlastlogin: false,
+				showmotionfiatvalue: false,
+				showmotiontotalcryptovalue: false,
+				showaddressverified: false,
+				showphoneverified: false,
+				showaccounttype: false,
+				showemailverified: false,
+				showhasfacebookconnected: false,
+				showhaslinkedinconnected: false,
+				showprofilecomments: false
+			};
+		
+			let currentsettings = state.user.persona || defaultsettings;
+
+			if (currentsettings[item] === true) {
+
+				currentsettings[item] = false;
+
+			}
+			else 
+			{
+
+				currentsettings[item] = true;
+
+			}
+
+			var currentState = {};
+		
+			Object.assign(currentState, state);
+		
+			currentState.user.persona = currentsettings;
+
+			setState(currentState);
+			
+            await userService.savepersonasettings(currentsettings);
+
+            toast.success('Setting Updated');
+
+        })();
+
+    }
+    
+	// End Persona
 	
     return (
         <>
@@ -952,17 +1025,7 @@ const SettingModule = ({ themHandler, props }) => {
                             </svg>
                         </div>
                     </Link>
-                    {/*<Link to={'/persona'} className="zl_setting_list_items">
-                        <div className="zl_setting_items_heading_peregraph">
-                            <h3>Persona / KYC</h3>
-                            <p>Manage Persona</p>
-                        </div>
-                        <div className="zl_setting_items_right_text">
-                            <svg width="8" height="12" viewBox="0 0 8 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M1 1L6.08833 6L1 11" stroke="#828CAE" strokeWidth="2.4" />
-                            </svg>
-                        </div>
-                     </Link> */}
+
                     <div className="zl_setting_list_items">
                         <div className="zl_setting_items_heading_peregraph">
                             <h3>Change Theme</h3>
@@ -980,6 +1043,424 @@ const SettingModule = ({ themHandler, props }) => {
                             }}
                         />
                     </div>
+                    
+					<div onClick={ e => setCurrentItem(e, 'persona') } className="zl_setting_list_items" style={{cursor: 'pointer'}}>
+                        <div className="zl_setting_items_heading_peregraph">
+                            <h3>Persona Public Settings</h3>
+                            <p>Manage Persona Public Information Settings</p>
+                        </div>
+                        <div className="zl_setting_items_right_text">
+                            <svg width="8" height="12" viewBox="0 0 8 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M1 1L6.08833 6L1 11" stroke="#828CAE" strokeWidth="2.4" />
+                            </svg>
+                        </div>
+                    </div>
+					<CSSTransition in={appItem === 'persona'} timeout={500} classNames="transitionitem" onEnter={() => loadPersona()}  >
+
+						<div className="ml-4 pt-0 px-0 mb-4" style={appItem === 'persona' ? {} : { display: 'none' }}>
+							<div className="zl_setting_list_items" style={{marginBottom: '0px', borderBottom: '1px dotted #828cae26', borderBottomLeftRadius: '0px', borderBottomRightRadius: '0px'}}>
+								{state.user && state.user.persona && state.user.persona.showprofilepicture === true ? (
+									<div style={{width:'20px', height:'20px', borderRadius: '10px', backgroundColor: '#00ff00', display: 'inline', marginRight: '5px'}}></div>
+								) : (
+									<div style={{width:'20px', height:'20px', borderRadius: '10px', backgroundColor: '#ff0000', display: 'inline', marginRight: '5px'}}></div>
+								)}
+								<Form.Check
+									type="switch"
+									id='showprofilepicture'
+									label=""
+									className="zl_custom_currency_checkbox"
+									onClick={e => toggleItem(e, 'showprofilepicture')}
+									readOnly checked={(state.user && state.user.persona && state.user.persona.showprofilepicture === true ? 'checked' : '')}
+									style={{marginRight: '5px'}}
+								/>
+
+								<div className="zl_setting_items_heading_peregraph">
+									<h3>Show Profile Pictures</h3>
+									<p style={{marginLeft: '-55px'}}>The public can see your profile pictures</p>
+								</div>
+
+							</div>
+
+							<div className="zl_setting_list_items" style={{marginBottom: '0px', borderBottom: '1px dotted #828cae26', borderTop: '0px', borderRadius: '0px'}}>
+								{state.user && state.user.persona && state.user.persona.showlinkedaddresses === true ? (
+									<div style={{width:'20px', height:'20px', borderRadius: '10px', backgroundColor: '#00ff00', display: 'inline', marginRight: '5px'}}></div>
+								) : (
+									<div style={{width:'20px', height:'20px', borderRadius: '10px', backgroundColor: '#ff0000', display: 'inline', marginRight: '5px'}}></div>
+								)}
+								<Form.Check
+									type="switch"
+									id='showlinkedaddresses'
+									label=""
+									className="zl_custom_currency_checkbox"
+									onClick={e => toggleItem(e, 'showlinkedaddresses')}
+									readOnly checked={(state.user && state.user.persona && state.user.persona.showlinkedaddresses === true ? 'checked' : '')}
+									style={{marginRight: '5px'}}
+								/>
+								<div className="zl_setting_items_heading_peregraph">
+									<h3>Show Linked Addresses</h3>
+									<p style={{marginLeft: '-55px'}}>The public can see your motion wallet addresses</p>
+								</div>
+
+							</div>
+
+							<div className="zl_setting_list_items" style={{marginBottom: '0px', borderBottom: '1px dotted #828cae26', borderTop: '0px', borderRadius: '0px'}}>
+								{state.user && state.user.persona && state.user.persona.showaddressiskycverified === true ? (
+									<div style={{width:'20px', height:'20px', borderRadius: '10px', backgroundColor: '#00ff00', display: 'inline', marginRight: '5px'}}></div>
+								) : (
+									<div style={{width:'20px', height:'20px', borderRadius: '10px', backgroundColor: '#ff0000', display: 'inline', marginRight: '5px'}}></div>
+								)}
+								<Form.Check
+									type="switch"
+									id='showaddressiskycverified'
+									label=""
+									className="zl_custom_currency_checkbox"
+									onClick={e => toggleItem(e, 'showaddressiskycverified')}
+									readOnly checked={(state.user && state.user.persona && state.user.persona.showaddressiskycverified === true ? 'checked' : '')}
+									style={{marginRight: '5px'}}
+								/>
+								<div className="zl_setting_items_heading_peregraph">
+									<h3>Show KYC Verification</h3>
+									<p style={{marginLeft: '-55px'}}>The public can see your account is KYC verified</p>
+								</div>
+
+							</div>
+
+							<div className="zl_setting_list_items" style={{marginBottom: '0px', borderBottom: '1px dotted #828cae26', borderTop: '0px', borderRadius: '0px'}}>
+								{state.user && state.user.persona && state.user.persona.showkycvalidtill === true ? (
+									<div style={{width:'20px', height:'20px', borderRadius: '10px', backgroundColor: '#00ff00', display: 'inline', marginRight: '5px'}}></div>
+								) : (
+									<div style={{width:'20px', height:'20px', borderRadius: '10px', backgroundColor: '#ff0000', display: 'inline', marginRight: '5px'}}></div>
+								)}
+								<Form.Check
+									type="switch"
+									id='showkycvalidtill'
+									label=""
+									className="zl_custom_currency_checkbox"
+									onClick={e => toggleItem(e, 'showkycvalidtill')}
+									readOnly checked={(state.user && state.user.persona && state.user.persona.showkycvalidtill === true ? 'checked' : '')}
+									style={{marginRight: '5px'}}
+								/>
+								<div className="zl_setting_items_heading_peregraph">
+									<h3>Show KYC Valid Till</h3>
+									<p style={{marginLeft: '-55px'}}>The public can see how long your KYC is valid till</p>
+								</div>
+
+							</div>
+							
+							<div className="zl_setting_list_items" style={{marginBottom: '0px', borderBottom: '1px dotted #828cae26', borderTop: '0px', borderRadius: '0px'}}>
+								{state.user && state.user.persona && state.user.persona.showaddresshasthisamountofcontacts === true ? (
+									<div style={{width:'20px', height:'20px', borderRadius: '10px', backgroundColor: '#00ff00', display: 'inline', marginRight: '5px'}}></div>
+								) : (
+									<div style={{width:'20px', height:'20px', borderRadius: '10px', backgroundColor: '#ff0000', display: 'inline', marginRight: '5px'}}></div>
+								)}
+								<Form.Check
+									type="switch"
+									id='showaddresshasthisamountofcontacts'
+									label=""
+									className="zl_custom_currency_checkbox"
+									onClick={e => toggleItem(e, 'showaddresshasthisamountofcontacts')}
+									readOnly checked={(state.user && state.user.persona && state.user.persona.showaddresshasthisamountofcontacts === true ? 'checked' : '')}
+									style={{marginRight: '5px'}}
+								/>
+								<div className="zl_setting_items_heading_peregraph">
+									<h3>Show Contact Count</h3>
+									<p style={{marginLeft: '-55px'}}>The public can see how many contacts you have</p>
+								</div>
+
+							</div>
+
+							<div className="zl_setting_list_items" style={{marginBottom: '0px', borderBottom: '1px dotted #828cae26', borderTop: '0px', borderRadius: '0px'}}>
+								{state.user && state.user.persona && state.user.persona.showalternatealias === true ? (
+									<div style={{width:'20px', height:'20px', borderRadius: '10px', backgroundColor: '#00ff00', display: 'inline', marginRight: '5px'}}></div>
+								) : (
+									<div style={{width:'20px', height:'20px', borderRadius: '10px', backgroundColor: '#ff0000', display: 'inline', marginRight: '5px'}}></div>
+								)}
+								<Form.Check
+									type="switch"
+									id='showalternatealias'
+									label=""
+									className="zl_custom_currency_checkbox"
+									onClick={e => toggleItem(e, 'showalternatealias')}
+									readOnly checked={(state.user && state.user.persona && state.user.persona.showalternatealias === true ? 'checked' : '')}
+									style={{marginRight: '5px'}}
+								/>
+								<div className="zl_setting_items_heading_peregraph">
+									<h3>Show Alternate Alias</h3>
+									<p style={{marginLeft: '-55px'}}>The public can see your alternate alias (if set)</p>
+								</div>
+
+							</div>
+
+							<div className="zl_setting_list_items" style={{marginBottom: '0px', borderBottom: '1px dotted #828cae26', borderTop: '0px', borderRadius: '0px'}}>
+								{state.user && state.user.persona && state.user.persona.showaccountcreationdate === true ? (
+									<div style={{width:'20px', height:'20px', borderRadius: '10px', backgroundColor: '#00ff00', display: 'inline', marginRight: '5px'}}></div>
+								) : (
+									<div style={{width:'20px', height:'20px', borderRadius: '10px', backgroundColor: '#ff0000', display: 'inline', marginRight: '5px'}}></div>
+								)}
+								<Form.Check
+									type="switch"
+									id='showaccountcreationdate'
+									label=""
+									className="zl_custom_currency_checkbox"
+									onClick={e => toggleItem(e, 'showaccountcreationdate')}
+									readOnly checked={(state.user && state.user.persona && state.user.persona.showaccountcreationdate === true ? 'checked' : '')}
+									style={{marginRight: '5px'}}
+								/>
+								<div className="zl_setting_items_heading_peregraph">
+									<h3>Show Account Creation Date</h3>
+									<p style={{marginLeft: '-55px'}}>The public can see when your account was created</p>
+								</div>
+
+							</div>
+							
+							<div className="zl_setting_list_items" style={{marginBottom: '0px', borderBottom: '1px dotted #828cae26', borderTop: '0px', borderRadius: '0px'}}>
+								{state.user && state.user.persona && state.user.persona.showmotionplan === true ? (
+									<div style={{width:'20px', height:'20px', borderRadius: '10px', backgroundColor: '#00ff00', display: 'inline', marginRight: '5px'}}></div>
+								) : (
+									<div style={{width:'20px', height:'20px', borderRadius: '10px', backgroundColor: '#ff0000', display: 'inline', marginRight: '5px'}}></div>
+								)}
+								<Form.Check
+									type="switch"
+									id='showmotionplan'
+									label=""
+									className="zl_custom_currency_checkbox"
+									onClick={e => toggleItem(e, 'showmotionplan')}
+									readOnly checked={(state.user && state.user.persona && state.user.persona.showmotionplan === true ? 'checked' : '')}
+									style={{marginRight: '5px'}}
+								/>
+								<div className="zl_setting_items_heading_peregraph">
+									<h3>Show Account Plan</h3>
+									<p style={{marginLeft: '-55px'}}>The public can see your account plan type</p>
+								</div>
+
+							</div>
+
+							<div className="zl_setting_list_items" style={{marginBottom: '0px', borderBottom: '1px dotted #828cae26', borderTop: '0px', borderRadius: '0px'}}>
+								{state.user && state.user.persona && state.user.persona.showmotionlastlogin === true ? (
+									<div style={{width:'20px', height:'20px', borderRadius: '10px', backgroundColor: '#00ff00', display: 'inline', marginRight: '5px'}}></div>
+								) : (
+									<div style={{width:'20px', height:'20px', borderRadius: '10px', backgroundColor: '#ff0000', display: 'inline', marginRight: '5px'}}></div>
+								)}
+								<Form.Check
+									type="switch"
+									id='showmotionlastlogin'
+									label=""
+									className="zl_custom_currency_checkbox"
+									onClick={e => toggleItem(e, 'showmotionlastlogin')}
+									readOnly checked={(state.user && state.user.persona && state.user.persona.showmotionlastlogin === true ? 'checked' : '')}
+									style={{marginRight: '5px'}}
+								/>
+								<div className="zl_setting_items_heading_peregraph">
+									<h3>Show Last Login Date</h3>
+									<p style={{marginLeft: '-55px'}}>The public can see your last login date</p>
+								</div>
+
+							</div>
+							
+							<div className="zl_setting_list_items" style={{marginBottom: '0px', borderBottom: '1px dotted #828cae26', borderTop: '0px', borderRadius: '0px'}}>
+								{state.user && state.user.persona && state.user.persona.showmotionfiatvalue === true ? (
+									<div style={{width:'20px', height:'20px', borderRadius: '10px', backgroundColor: '#00ff00', display: 'inline', marginRight: '5px'}}></div>
+								) : (
+									<div style={{width:'20px', height:'20px', borderRadius: '10px', backgroundColor: '#ff0000', display: 'inline', marginRight: '5px'}}></div>
+								)}
+								<Form.Check
+									type="switch"
+									id='showmotionfiatvalue'
+									label=""
+									className="zl_custom_currency_checkbox"
+									onClick={e => toggleItem(e, 'showmotionfiatvalue')}
+									readOnly checked={(state.user && state.user.persona && state.user.persona.showmotionfiatvalue === true ? 'checked' : '')}
+									style={{marginRight: '5px'}}
+								/>
+								<div className="zl_setting_items_heading_peregraph">
+									<h3>Show Value of Fiat Accounts</h3>
+									<p style={{marginLeft: '-55px'}}>The public can see the total value of your Fiat accounts</p>
+								</div>
+
+							</div>
+							
+							<div className="zl_setting_list_items" style={{marginBottom: '0px', borderBottom: '1px dotted #828cae26', borderTop: '0px', borderRadius: '0px'}}>
+								{state.user && state.user.persona && state.user.persona.showmotiontotalcryptovalue === true ? (
+									<div style={{width:'20px', height:'20px', borderRadius: '10px', backgroundColor: '#00ff00', display: 'inline', marginRight: '5px'}}></div>
+								) : (
+									<div style={{width:'20px', height:'20px', borderRadius: '10px', backgroundColor: '#ff0000', display: 'inline', marginRight: '5px'}}></div>
+								)}
+								<Form.Check
+									type="switch"
+									id='showmotiontotalcryptovalue'
+									label=""
+									className="zl_custom_currency_checkbox"
+									onClick={e => toggleItem(e, 'showmotiontotalcryptovalue')}
+									readOnly checked={(state.user && state.user.persona && state.user.persona.showmotiontotalcryptovalue === true ? 'checked' : '')}
+									style={{marginRight: '5px'}}
+								/>
+								<div className="zl_setting_items_heading_peregraph">
+									<h3>Show Value of Crypto Accounts</h3>
+									<p style={{marginLeft: '-55px'}}>The public can see the total value of your crypto accounts</p>
+								</div>
+
+							</div>
+
+							<div className="zl_setting_list_items" style={{marginBottom: '0px', borderBottom: '1px dotted #828cae26', borderTop: '0px', borderRadius: '0px'}}>
+								{state.user && state.user.persona && state.user.persona.showaddressverified === true ? (
+									<div style={{width:'20px', height:'20px', borderRadius: '10px', backgroundColor: '#00ff00', display: 'inline', marginRight: '5px'}}></div>
+								) : (
+									<div style={{width:'20px', height:'20px', borderRadius: '10px', backgroundColor: '#ff0000', display: 'inline', marginRight: '5px'}}></div>
+								)}
+								<Form.Check
+									type="switch"
+									id='showaddressverified'
+									label=""
+									className="zl_custom_currency_checkbox"
+									onClick={e => toggleItem(e, 'showaddressverified')}
+									readOnly checked={(state.user && state.user.persona && state.user.persona.showaddressverified === true ? 'checked' : '')}
+									style={{marginRight: '5px'}}
+								/>
+								<div className="zl_setting_items_heading_peregraph">
+									<h3>Show Address is Verified</h3>
+									<p style={{marginLeft: '-55px'}}>The public can see if your address is verified</p>
+								</div>
+
+							</div>
+							
+							<div className="zl_setting_list_items" style={{marginBottom: '0px', borderBottom: '1px dotted #828cae26', borderTop: '0px', borderRadius: '0px'}}>
+								{state.user && state.user.persona && state.user.persona.showphoneverified === true ? (
+									<div style={{width:'20px', height:'20px', borderRadius: '10px', backgroundColor: '#00ff00', display: 'inline', marginRight: '5px'}}></div>
+								) : (
+									<div style={{width:'20px', height:'20px', borderRadius: '10px', backgroundColor: '#ff0000', display: 'inline', marginRight: '5px'}}></div>
+								)}
+								<Form.Check
+									type="switch"
+									id='showphoneverified'
+									label=""
+									className="zl_custom_currency_checkbox"
+									onClick={e => toggleItem(e, 'showphoneverified')}
+									readOnly checked={(state.user && state.user.persona && state.user.persona.showphoneverified === true ? 'checked' : '')}
+									style={{marginRight: '5px'}}
+								/>
+								<div className="zl_setting_items_heading_peregraph">
+									<h3>Show Phone is Verified</h3>
+									<p style={{marginLeft: '-55px'}}>The public can see if your phone is verified</p>
+								</div>
+
+							</div>
+
+							<div className="zl_setting_list_items" style={{marginBottom: '0px', borderBottom: '1px dotted #828cae26', borderTop: '0px', borderRadius: '0px'}}>
+								{state.user && state.user.persona && state.user.persona.showemailverified === true ? (
+									<div style={{width:'20px', height:'20px', borderRadius: '10px', backgroundColor: '#00ff00', display: 'inline', marginRight: '5px'}}></div>
+								) : (
+									<div style={{width:'20px', height:'20px', borderRadius: '10px', backgroundColor: '#ff0000', display: 'inline', marginRight: '5px'}}></div>
+								)}
+								<Form.Check
+									type="switch"
+									id='showemailverified'
+									label=""
+									className="zl_custom_currency_checkbox"
+									onClick={e => toggleItem(e, 'showemailverified')}
+									readOnly checked={(state.user && state.user.persona && state.user.persona.showemailverified === true ? 'checked' : '')}
+									style={{marginRight: '5px'}}
+								/>
+								<div className="zl_setting_items_heading_peregraph">
+									<h3>Show Email is Verified</h3>
+									<p style={{marginLeft: '-55px'}}>The public can see if your email is verified</p>
+								</div>
+
+							</div>
+							
+							<div className="zl_setting_list_items" style={{marginBottom: '0px', borderBottom: '1px dotted #828cae26', borderTop: '0px', borderRadius: '0px'}}>
+								{state.user && state.user.persona && state.user.persona.showaccounttype === true ? (
+									<div style={{width:'20px', height:'20px', borderRadius: '10px', backgroundColor: '#00ff00', display: 'inline', marginRight: '5px'}}></div>
+								) : (
+									<div style={{width:'20px', height:'20px', borderRadius: '10px', backgroundColor: '#ff0000', display: 'inline', marginRight: '5px'}}></div>
+								)}
+								<Form.Check
+									type="switch"
+									id='showaccounttype'
+									label=""
+									className="zl_custom_currency_checkbox"
+									onClick={e => toggleItem(e, 'showaccounttype')}
+									readOnly checked={(state.user && state.user.persona && state.user.persona.showaccounttype === true ? 'checked' : '')}
+									style={{marginRight: '5px'}}
+								/>
+								<div className="zl_setting_items_heading_peregraph">
+									<h3>Show Account Type</h3>
+									<p style={{marginLeft: '-55px'}}>The public can see your account type (ie, individual/company)</p>
+								</div>
+
+							</div>
+							
+							<div className="zl_setting_list_items" style={{marginBottom: '0px', borderBottom: '1px dotted #828cae26', borderTop: '0px', borderRadius: '0px'}}>
+								{state.user && state.user.persona && state.user.persona.showhasfacebookconnected === true ? (
+									<div style={{width:'20px', height:'20px', borderRadius: '10px', backgroundColor: '#00ff00', display: 'inline', marginRight: '5px'}}></div>
+								) : (
+									<div style={{width:'20px', height:'20px', borderRadius: '10px', backgroundColor: '#ff0000', display: 'inline', marginRight: '5px'}}></div>
+								)}
+								<Form.Check
+									type="switch"
+									id='showhasfacebookconnected'
+									label=""
+									className="zl_custom_currency_checkbox"
+									onClick={e => toggleItem(e, 'showhasfacebookconnected')}
+									readOnly checked={(state.user && state.user.persona && state.user.persona.showhasfacebookconnected === true ? 'checked' : '')}
+									style={{marginRight: '5px'}}
+								/>
+								<div className="zl_setting_items_heading_peregraph">
+									<h3>Show Facebook Connected</h3>
+									<p style={{marginLeft: '-55px'}}>The public can see you have Facebook connected</p>
+								</div>
+
+							</div>
+							
+							<div className="zl_setting_list_items" style={{marginBottom: '0px', borderBottom: '1px dotted #828cae26', borderTop: '0px', borderRadius: '0px'}}>
+								{state.user && state.user.persona && state.user.persona.showhaslinkedinconnected === true ? (
+									<div style={{width:'20px', height:'20px', borderRadius: '10px', backgroundColor: '#00ff00', display: 'inline', marginRight: '5px'}}></div>
+								) : (
+									<div style={{width:'20px', height:'20px', borderRadius: '10px', backgroundColor: '#ff0000', display: 'inline', marginRight: '5px'}}></div>
+								)}
+								<Form.Check
+									type="switch"
+									id='showhaslinkedinconnected'
+									label=""
+									className="zl_custom_currency_checkbox"
+									onClick={e => toggleItem(e, 'showhaslinkedinconnected')}
+									readOnly checked={(state.user && state.user.persona && state.user.persona.showhaslinkedinconnected === true ? 'checked' : '')}
+									style={{marginRight: '5px'}}
+								/>
+								<div className="zl_setting_items_heading_peregraph">
+									<h3>Show LinkedIn Connected</h3>
+									<p style={{marginLeft: '-55px'}}>The public can see you have LinkedIn connected</p>
+								</div>
+
+							</div>
+
+
+							<div className="zl_setting_list_items" style={{ borderTop: '0px', borderTopLeftRadius: '0px', borderTopRightRadius: '0px'}}>
+								{state.user && state.user.persona && state.user.persona.showprofilecomments === true ? (
+									<div style={{width:'20px', height:'20px', borderRadius: '10px', backgroundColor: '#00ff00', display: 'inline', marginRight: '5px'}}></div>
+								) : (
+									<div style={{width:'20px', height:'20px', borderRadius: '10px', backgroundColor: '#ff0000', display: 'inline', marginRight: '5px'}}></div>
+								)}
+								<Form.Check
+									type="switch"
+									id='showprofilecomments'
+									label=""
+									className="zl_custom_currency_checkbox"
+									onClick={e => toggleItem(e, 'showprofilecomments')} style={{ cursor: 'pointer' }}
+									readOnly checked={(state.user && state.user.persona && state.user.persona.showprofilecomments === true ? 'checked' : '')}
+									style={{marginRight: '5px'}}
+								/>
+								<div className="zl_setting_items_heading_peregraph">
+									<h3>Show Profile Comments</h3>
+									<p style={{marginLeft: '-55px'}}>The public can view comments made on your profile</p>
+								</div>
+
+							</div>
+
+						</div>
+
+					</CSSTransition>
+                    
+
 
 
                     <h3 className="zl_bottom_content_heading">Personal</h3>

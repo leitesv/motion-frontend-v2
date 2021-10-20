@@ -45,7 +45,9 @@ const QSLP1Module = ({ props }) => {
     const [modalCode, setModalCode] = useState(null);;
     const [showModal, setShowModal] = useState(false);
     const [modalButtonClick, setModalButtonClick] = useState(false);
-    
+
+    const [selectedToken, setSelectedToken] = useState(null);
+
 
     const [walletaddress, setWalletaddress] = useState('');
     const [walletbalance, setWalletbalance] = useState(0);
@@ -55,7 +57,11 @@ const QSLP1Module = ({ props }) => {
     
     const [colorOptions2, setColorOptions2] = useState([]);
     const [colorStyles2, setColorStyles2] = useState({});
-    
+
+    const [theAction, setTheAction] = useState(null);
+
+    const [theTab, setTheTab] = useState(null);
+
 	let history = useHistory()
 	
     React.useEffect(() => {
@@ -446,8 +452,55 @@ const QSLP1Module = ({ props }) => {
 		setSendForm(currentSendForm);
             
     };
+
+    const doActionSend = (e) => {
+
+       	setTheAction('send');
+
+    };
+
+    const doActionBurn = (e) => {
+
+       	setTheAction('burn');
+
+    };
     
-                
+    const doActionMint = (e) => {
+
+       	setTheAction('mint');
+
+    };
+    
+    const doActionPause = (e) => {
+
+       	setTheAction('pause');
+
+    };
+
+    const doActionResume = (e) => {
+
+       	setTheAction('resume');
+
+    };
+    
+    const doActionNewOwner = (e) => {
+
+       	setTheAction('newowner');
+
+    };
+
+    const setTabQredit = (e) => {
+
+       	setTheTab('qredit');
+
+    };
+
+    const setTabArk = (e) => {
+
+       	setTheTab('ark');
+
+    };
+    
     return (
         <>
         
@@ -458,7 +511,7 @@ const QSLP1Module = ({ props }) => {
                         <h3 className="zl_bottom_content_heading">Select Token Platform</h3>
                         <Nav className="zl_add_currency_row row">
                             <Nav.Item className="zl_add_currency_column col">
-                                <Nav.Link eventKey="tab1" className="zl_add_currency_inner_content zl_add_bitcoin_currencyx">
+                                <Nav.Link eventKey="tab1" onClick={setTabQredit} className="zl_add_currency_inner_content zl_add_bitcoin_currencyx">
                                     <div className="zl_add_currency_price">
                                         <div className="zl_add_currency_left_price">
                                             <h3>
@@ -470,7 +523,7 @@ const QSLP1Module = ({ props }) => {
                                 </Nav.Link>
                             </Nav.Item>
                             <Nav.Item className="zl_add_currency_column col">
-                                <Nav.Link eventKey="tab2" className="zl_add_currency_inner_content zl_add_ethereum_currencyx">
+                                <Nav.Link eventKey="tab2" onClick={setTabArk} className="zl_add_currency_inner_content zl_add_ethereum_currencyx">
                                     <div className="zl_add_currency_price">
                                         <div className="zl_add_currency_left_price">
                                             <h3>
@@ -495,176 +548,844 @@ const QSLP1Module = ({ props }) => {
 
 								<Select
 									placeholder={'Select Token...'}
-									options={colorOptions}
-									styles={colorStyles}
+									options={colorOptions2}
+									styles={colorStyles2}
 									isClearable={true}
 									isSearchable={true}
 									id="select_token"
 									onChange={handleTokenSelectFormChange}
+									value={selectedToken}
 								/>
 
 							</div>
 							
+							{selectedToken === null?(
 							<div style={{textAlign: 'left', marginTop: '3px', marginBottom: '3px'}}>
-							<button className="btn btn-primary">Send / Receive</button> <button className="btn btn-secondary">Burn</button> <button className="btn btn-secondary">Mint</button> <button className="btn btn-secondary">Pause</button> <button className="btn btn-secondary">Resume</button> <button className="btn btn-secondary">New Owner</button>
+							
+								<button onClick={doActionSend} className={"btn" + (theAction==='send'?" btn-primary":" btn-secondary")}>Send / Receive</button> 
+								&nbsp;<button onClick={doActionBurn} className={"btn" + (theAction==='burn'?" btn-primary":" btn-secondary")}>Burn</button> 
+								&nbsp;<button onClick={doActionMint} className={"btn" + (theAction==='mint'?" btn-primary":" btn-secondary")}>Mint</button> 
+								&nbsp;<button onClick={doActionPause} className={"btn" + (theAction==='pause'?" btn-primary":" btn-secondary")}>Pause</button> 
+								&nbsp;<button onClick={doActionResume} className={"btn" + (theAction==='resume'?" btn-primary":" btn-secondary")}>Resume</button> 
+								&nbsp;<button onClick={doActionNewOwner} className={"btn" + (theAction==='newowner'?" btn-primary":" btn-secondary")}>New Owner</button>
+								
 							</div>
+							):''}
 			
-							<div className="zl_chart_component active">
-								<div className="zl_send_recive_content">
-									<div className="zl_send_recive_content_row">
-										<div className="zl_send_recive_content_column">
-											<div className="zl_send_recive_inner_content">
-												<h3 className="zl_send_recive_heading">
-													<svg width="15" height="15" viewBox="0 0 6 6" fill="none" xmlns="http://www.w3.org/2000/svg">
-														<path d="M3.60609 3.60609L2.69695 4.51523C2.36222 4.84996 1.81951 4.84996 1.48477 4.51523C1.15004 4.18049 1.15004 3.63778 1.48477 3.30305L2.39391 2.39391L0 0H6V6L3.60609 3.60609Z" fill="#53B9EA" />
-													</svg>
-													Send xxx
-												</h3>
+							{theAction === 'send'?(
+							
+								<div className="zl_chart_component active">
+									<div className="zl_send_recive_content">
+										<div className="zl_send_recive_content_row">
+											<div className="zl_send_recive_content_column">
+												<div className="zl_send_recive_inner_content">
+													<h3 className="zl_send_recive_heading">
+														<svg width="15" height="15" viewBox="0 0 6 6" fill="none" xmlns="http://www.w3.org/2000/svg">
+															<path d="M3.60609 3.60609L2.69695 4.51523C2.36222 4.84996 1.81951 4.84996 1.48477 4.51523C1.15004 4.18049 1.15004 3.63778 1.48477 3.30305L2.39391 2.39391L0 0H6V6L3.60609 3.60609Z" fill="#53B9EA" />
+														</svg>
+														Send xxx
+													</h3>
 
 
 
-												<div className="zl_send_currency_input_content" style={{ borderBottom: '0px'}}>
+													<div className="zl_send_currency_input_content" style={{ borderBottom: '0px'}}>
 
-													<FormControl
-														placeholder="To Address"
-														style={{ width: "calc(100% - 36px)", marginRight: "2px" }}
-														id="send_address"
-														value={sendForm.send_address || ''}
-														onChange={handleSendFormChange}
-													/>
-													<QRCode
-														onClick={e => scanQR(e)}
-														value="EYdNhC7hGgHuL2sF20p2dLv"
-														bgColor={"#3D476A"}
-														fgColor={"#CAD3F2"}
-														size={32}
-														className="zl_dark_theme_qrcode"
-													/>
-													<QRCode
-														onClick={e => scanQR(e)}
-														value="EYdNhC7hGgHuL2sF20p2dLv"
-														bgColor={"#EFF0F2"}
-														fgColor={"#3D476A"}
-														size={32}
-														className="zl_light_theme_qrcode"
-													/>
-
-												</div>
-								
-												<div className="zl_send_currency_input_content">
-
-													<div style={{width: '100%'}}>
-													<Select
-														placeholder={'Select Contact...'}
-														options={colorOptions}
-														styles={colorStyles}
-														isClearable={true}
-														isSearchable={true}
-														id="send_contact"
-														onChange={handleContactSendFormChange}
-													/>
-													</div>
-
-												</div>
-								
-												<div className="zl_send_currency_input_content">
-													<div className="zl_send_currency_btn_text">
-														<div className="zl_send_currency_text">
-															<p><span>Balance: 0.00 xxx</span></p>
-														</div>
-													</div>
-													<FormControl
-														type="number"
-														placeholder="Amount to Send"
-														id="send_amount"
-														value={sendForm.send_amount || ''}
-														onChange={handleSendFormChange}
-													/>
-													<div className="zl_send_currency_input_btns">
-														<Button onClick={handleSendPercent10}>10%</Button>
-														<Button onClick={handleSendPercent25}>25%</Button>
-														<Button onClick={handleSendPercent50}>50%</Button>
-														<Button onClick={handleSendPercent75}>75%</Button>
-														<Button onClick={handleSendPercent100}>All</Button>
-													</div>
-												</div>
-												<div className="zl_send_currency_input_content">
-													<FormControl
-														type="password"
-														placeholder="Your Password"
-														id="send_password"
-														onChange={handleSendFormChange}
-													/>
-												</div>
-												<div className="zl_send_currency_text_type">
-													<h3 className="zl_send_currency_text">€0.00</h3>
-													<h3 className="zl_send_currency_type">EUR</h3>
-												</div>
-												<div className="zl_send_currency_btn_text">
-													<Button onClick={doSend} className="zl_send_currency_btn">
-														Send
-													</Button>
-													<div className="zl_send_currency_text">
-														<p>Network Fee<span>0.00 xxx</span></p>
-													</div>
-												</div>
-											</div>
-										</div>
-										<div className="zl_send_recive_content_column">
-											<div className="zl_send_recive_inner_content">
-												<h3 className="zl_send_recive_heading zl_recive_heading">
-													<svg width="15" height="15" viewBox="0 0 6 6" fill="none" xmlns="http://www.w3.org/2000/svg">
-														<path d="M3.60609 3.60609L2.69695 4.51523C2.36222 4.84996 1.81951 4.84996 1.48477 4.51523C1.15004 4.18049 1.15004 3.63778 1.48477 3.30305L2.39391 2.39391L0 0H6V6L3.60609 3.60609Z" fill="#53B9EA" />
-													</svg>
-													Receive xxxx
-												</h3>
-												<div className="zl_recive_address_content">
-													<p className="zl_recive_address_heading">Address</p>
-													<div className="zl_recive_copy_address_content">
-														<Button onClick={(e) => doCopyAddress(e, walletaddress)}>
-															<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-																<path d="M1.48116 0H12.5365C13.3244 0 13.9653 0.641 13.9653 1.42887V4.78252H12.661V1.42887C12.661 1.36022 12.6051 1.30435 12.5365 1.30435H1.48116C1.4125 1.30435 1.35663 1.36022 1.35663 1.42887V12.4842C1.35663 12.5529 1.4125 12.6087 1.48116 12.6087H4.73024V13.9131H1.48116C0.693287 13.9131 0.0522861 13.2721 0.0522861 12.4842V1.42887C0.0523291 0.641 0.693287 0 1.48116 0Z" fill="#CAD3F2" />
-																<path d="M7.46358 6.08691H18.5188C19.3068 6.08691 19.9478 6.72791 19.9478 7.51583V18.5711C19.9477 19.3591 19.3068 20.0001 18.5188 20.0001H7.46354C6.67562 20.0001 6.03463 19.3591 6.03463 18.5712V7.51583C6.03458 6.72791 6.67567 6.08691 7.46358 6.08691ZM7.46349 18.6957H18.5188C18.5875 18.6957 18.6434 18.6398 18.6434 18.5712V7.51583C18.6434 7.44713 18.5875 7.39126 18.5188 7.39126H7.46354C7.39484 7.39126 7.33897 7.44713 7.33897 7.51583V18.5712H7.33893C7.33893 18.6398 7.39484 18.6957 7.46349 18.6957Z" fill="#CAD3F2" />
-															</svg>
-														</Button>
-														<p>{walletaddress}</p>
-													</div>
-													<div className="zl_recive_address_qr_code">
+														<FormControl
+															placeholder="To Address"
+															style={{ width: "calc(100% - 36px)", marginRight: "2px" }}
+															id="send_address"
+															value={sendForm.send_address || ''}
+															onChange={handleSendFormChange}
+														/>
 														<QRCode
 															onClick={e => scanQR(e)}
-															value={walletaddress}
-															bgColor={"transparent"}
+															value="EYdNhC7hGgHuL2sF20p2dLv"
+															bgColor={"#3D476A"}
 															fgColor={"#CAD3F2"}
-															size={166}
+															size={32}
 															className="zl_dark_theme_qrcode"
 														/>
 														<QRCode
 															onClick={e => scanQR(e)}
-															value={walletaddress}
-															bgColor={"transparent"}
+															value="EYdNhC7hGgHuL2sF20p2dLv"
+															bgColor={"#EFF0F2"}
 															fgColor={"#3D476A"}
-															size={166}
+															size={32}
 															className="zl_light_theme_qrcode"
 														/>
+
+													</div>
+								
+													<div className="zl_send_currency_input_content">
+
+														<div style={{width: '100%'}}>
+														<Select
+															placeholder={'Select Contact...'}
+															options={colorOptions}
+															styles={colorStyles}
+															isClearable={true}
+															isSearchable={true}
+															id="send_contact"
+															onChange={handleContactSendFormChange}
+														/>
+														</div>
+
+													</div>
+								
+													<div className="zl_send_currency_input_content">
+														<div className="zl_send_currency_btn_text">
+															<div className="zl_send_currency_text">
+																<p><span>Balance: 0.00 xxx</span></p>
+															</div>
+														</div>
+														<FormControl
+															type="number"
+															placeholder="Amount to Send"
+															id="send_amount"
+															value={sendForm.send_amount || ''}
+															onChange={handleSendFormChange}
+														/>
+														<div className="zl_send_currency_input_btns">
+															<Button onClick={handleSendPercent10}>10%</Button>
+															<Button onClick={handleSendPercent25}>25%</Button>
+															<Button onClick={handleSendPercent50}>50%</Button>
+															<Button onClick={handleSendPercent75}>75%</Button>
+															<Button onClick={handleSendPercent100}>All</Button>
+														</div>
+													</div>
+													<div className="zl_send_currency_input_content">
+														<FormControl
+															type="password"
+															placeholder="Your Password"
+															id="send_password"
+															onChange={handleSendFormChange}
+														/>
+													</div>
+													<div className="zl_send_currency_text_type">
+														<h3 className="zl_send_currency_text">€0.00</h3>
+														<h3 className="zl_send_currency_type">EUR</h3>
+													</div>
+													<div className="zl_send_currency_btn_text">
+														<Button onClick={doSend} className="zl_send_currency_btn">
+															Send
+														</Button>
+														<div className="zl_send_currency_text">
+															<p>Network Fee<span>0.00 xxx</span></p>
+														</div>
 													</div>
 												</div>
 											</div>
+											<div className="zl_send_recive_content_column">
+												<div className="zl_send_recive_inner_content">
+													<h3 className="zl_send_recive_heading zl_recive_heading">
+														<svg width="15" height="15" viewBox="0 0 6 6" fill="none" xmlns="http://www.w3.org/2000/svg">
+															<path d="M3.60609 3.60609L2.69695 4.51523C2.36222 4.84996 1.81951 4.84996 1.48477 4.51523C1.15004 4.18049 1.15004 3.63778 1.48477 3.30305L2.39391 2.39391L0 0H6V6L3.60609 3.60609Z" fill="#53B9EA" />
+														</svg>
+														Receive xxxx
+													</h3>
+													<div className="zl_recive_address_content">
+														<p className="zl_recive_address_heading">Address</p>
+														<div className="zl_recive_copy_address_content">
+															<Button onClick={(e) => doCopyAddress(e, walletaddress)}>
+																<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+																	<path d="M1.48116 0H12.5365C13.3244 0 13.9653 0.641 13.9653 1.42887V4.78252H12.661V1.42887C12.661 1.36022 12.6051 1.30435 12.5365 1.30435H1.48116C1.4125 1.30435 1.35663 1.36022 1.35663 1.42887V12.4842C1.35663 12.5529 1.4125 12.6087 1.48116 12.6087H4.73024V13.9131H1.48116C0.693287 13.9131 0.0522861 13.2721 0.0522861 12.4842V1.42887C0.0523291 0.641 0.693287 0 1.48116 0Z" fill="#CAD3F2" />
+																	<path d="M7.46358 6.08691H18.5188C19.3068 6.08691 19.9478 6.72791 19.9478 7.51583V18.5711C19.9477 19.3591 19.3068 20.0001 18.5188 20.0001H7.46354C6.67562 20.0001 6.03463 19.3591 6.03463 18.5712V7.51583C6.03458 6.72791 6.67567 6.08691 7.46358 6.08691ZM7.46349 18.6957H18.5188C18.5875 18.6957 18.6434 18.6398 18.6434 18.5712V7.51583C18.6434 7.44713 18.5875 7.39126 18.5188 7.39126H7.46354C7.39484 7.39126 7.33897 7.44713 7.33897 7.51583V18.5712H7.33893C7.33893 18.6398 7.39484 18.6957 7.46349 18.6957Z" fill="#CAD3F2" />
+																</svg>
+															</Button>
+															<p>{walletaddress}</p>
+														</div>
+														<div className="zl_recive_address_qr_code">
+															<QRCode
+																onClick={e => scanQR(e)}
+																value={walletaddress}
+																bgColor={"transparent"}
+																fgColor={"#CAD3F2"}
+																size={166}
+																className="zl_dark_theme_qrcode"
+															/>
+															<QRCode
+																onClick={e => scanQR(e)}
+																value={walletaddress}
+																bgColor={"transparent"}
+																fgColor={"#3D476A"}
+																size={166}
+																className="zl_light_theme_qrcode"
+															/>
+														</div>
+													</div>
+												</div>
+											</div>
+
+
+
 										</div>
-
-
-
 									</div>
+
 								</div>
 
-							</div>
+							):''}
 
+							{theAction === 'burn'?(
 
+									<div className="zl_send_recive_content">
+										<div className="zl_send_recive_content_row">
+											<div className="zl_send_recive_content_column">
+												<div className="zl_send_recive_inner_content">
+													<h3 className="zl_send_recive_heading">
+														<svg width="15" height="15" viewBox="0 0 6 6" fill="none" xmlns="http://www.w3.org/2000/svg">
+															<path d="M3.60609 3.60609L2.69695 4.51523C2.36222 4.84996 1.81951 4.84996 1.48477 4.51523C1.15004 4.18049 1.15004 3.63778 1.48477 3.30305L2.39391 2.39391L0 0H6V6L3.60609 3.60609Z" fill="#53B9EA" />
+														</svg>
+														Burn xxx
+													</h3>
 
+													<div className="zl_send_currency_input_content">
+														<div className="zl_send_currency_btn_text">
+															<div className="zl_send_currency_text">
+																<p><span>Balance: 0.00 xxx</span></p>
+															</div>
+														</div>
+														<FormControl
+															type="number"
+															placeholder="Amount to Burn"
+															id="send_amount"
+															value={sendForm.send_amount || ''}
+															onChange={handleSendFormChange}
+														/>
+														<div className="zl_send_currency_input_btns">
+															<Button onClick={handleSendPercent10}>10%</Button>
+															<Button onClick={handleSendPercent25}>25%</Button>
+															<Button onClick={handleSendPercent50}>50%</Button>
+															<Button onClick={handleSendPercent75}>75%</Button>
+															<Button onClick={handleSendPercent100}>All</Button>
+														</div>
+													</div>
+													
+													<div className="zl_send_currency_btn_text">
+														<Button onClick={doSend} className="btn">
+															Burn Tokens
+														</Button>
 
+													</div>
+												
+												</div>
+											</div>
+										</div>
+									</div>
+									
+							):''}
+
+							{theAction === 'mint'?(
+
+									<div className="zl_send_recive_content">
+										<div className="zl_send_recive_content_row">
+											<div className="zl_send_recive_content_column">
+												<div className="zl_send_recive_inner_content">
+													<h3 className="zl_send_recive_heading">
+														<svg width="15" height="15" viewBox="0 0 6 6" fill="none" xmlns="http://www.w3.org/2000/svg">
+															<path d="M3.60609 3.60609L2.69695 4.51523C2.36222 4.84996 1.81951 4.84996 1.48477 4.51523C1.15004 4.18049 1.15004 3.63778 1.48477 3.30305L2.39391 2.39391L0 0H6V6L3.60609 3.60609Z" fill="#53B9EA" />
+														</svg>
+														Mint xxx
+													</h3>
+
+													<div className="zl_send_currency_input_content">
+														<div className="zl_send_currency_btn_text">
+															<div className="zl_send_currency_text">
+																<p><span>Balance: 0.00 xxx</span></p>
+															</div>
+														</div>
+														<FormControl
+															type="number"
+															placeholder="Amount to Mint"
+															id="send_amount"
+															value={sendForm.send_amount || ''}
+															onChange={handleSendFormChange}
+														/>
+
+													</div>
+													
+													<div className="zl_send_currency_btn_text">
+														<Button onClick={doSend} className="btn">
+															Mint New Tokens
+														</Button>
+
+													</div>
+												
+												</div>
+											</div>
+										</div>
+									</div>
+
+							):''}
+
+							{theAction === 'pause'?(
+
+									<div className="zl_send_recive_content">
+										<div className="zl_send_recive_content_row">
+											<div className="zl_send_recive_content_column">
+												<div className="zl_send_recive_inner_content">
+													<h3 className="zl_send_recive_heading">
+														<svg width="15" height="15" viewBox="0 0 6 6" fill="none" xmlns="http://www.w3.org/2000/svg">
+															<path d="M3.60609 3.60609L2.69695 4.51523C2.36222 4.84996 1.81951 4.84996 1.48477 4.51523C1.15004 4.18049 1.15004 3.63778 1.48477 3.30305L2.39391 2.39391L0 0H6V6L3.60609 3.60609Z" fill="#53B9EA" />
+														</svg>
+														Pause xxx
+													</h3>
+
+													<div className="zl_send_currency_input_content">
+														<div className="zl_send_currency_btn_text">
+															<div className="zl_send_currency_text">
+																<p><span>Current Status: xxx</span></p>
+															</div>
+														</div>
+													</div>
+													
+													<div className="zl_send_currency_btn_text">
+														<Button onClick={doSend} className="btn">
+															Pause Token
+														</Button>
+
+													</div>
+												
+												</div>
+											</div>
+										</div>
+									</div>
+
+							):''}
+							
+							{theAction === 'resume'?(
+
+									<div className="zl_send_recive_content">
+										<div className="zl_send_recive_content_row">
+											<div className="zl_send_recive_content_column">
+												<div className="zl_send_recive_inner_content">
+													<h3 className="zl_send_recive_heading">
+														<svg width="15" height="15" viewBox="0 0 6 6" fill="none" xmlns="http://www.w3.org/2000/svg">
+															<path d="M3.60609 3.60609L2.69695 4.51523C2.36222 4.84996 1.81951 4.84996 1.48477 4.51523C1.15004 4.18049 1.15004 3.63778 1.48477 3.30305L2.39391 2.39391L0 0H6V6L3.60609 3.60609Z" fill="#53B9EA" />
+														</svg>
+														Resume xxx
+													</h3>
+
+													<div className="zl_send_currency_input_content">
+														<div className="zl_send_currency_btn_text">
+															<div className="zl_send_currency_text">
+																<p><span>Current Status: xxx</span></p>
+															</div>
+														</div>
+													</div>
+													
+													<div className="zl_send_currency_btn_text">
+														<Button onClick={doSend} className="btn">
+															Resume Token
+														</Button>
+
+													</div>
+												
+												</div>
+											</div>
+										</div>
+									</div>
+
+							):''}
+
+							{theAction === 'newowner'?(
+
+									<div className="zl_send_recive_content">
+										<div className="zl_send_recive_content_row">
+											<div className="zl_send_recive_content_column">
+												<div className="zl_send_recive_inner_content">
+													<h3 className="zl_send_recive_heading">
+														<svg width="15" height="15" viewBox="0 0 6 6" fill="none" xmlns="http://www.w3.org/2000/svg">
+															<path d="M3.60609 3.60609L2.69695 4.51523C2.36222 4.84996 1.81951 4.84996 1.48477 4.51523C1.15004 4.18049 1.15004 3.63778 1.48477 3.30305L2.39391 2.39391L0 0H6V6L3.60609 3.60609Z" fill="#53B9EA" />
+														</svg>
+														New Owner for xxx
+													</h3>
+												
+													<div className="zl_send_currency_input_content" style={{ borderBottom: '0px'}}>
+
+														<FormControl
+															placeholder="New Owner Address"
+															style={{ width: "calc(100% - 36px)", marginRight: "2px" }}
+															id="send_address"
+															value={sendForm.send_address || ''}
+															onChange={handleSendFormChange}
+														/>
+														<QRCode
+															onClick={e => scanQR(e)}
+															value="EYdNhC7hGgHuL2sF20p2dLv"
+															bgColor={"#3D476A"}
+															fgColor={"#CAD3F2"}
+															size={32}
+															className="zl_dark_theme_qrcode"
+														/>
+														<QRCode
+															onClick={e => scanQR(e)}
+															value="EYdNhC7hGgHuL2sF20p2dLv"
+															bgColor={"#EFF0F2"}
+															fgColor={"#3D476A"}
+															size={32}
+															className="zl_light_theme_qrcode"
+														/>
+
+													</div>
+								
+													<div className="zl_send_currency_input_content">
+
+														<div style={{width: '100%'}}>
+														<Select
+															placeholder={'Select New Owner Contact...'}
+															options={colorOptions}
+															styles={colorStyles}
+															isClearable={true}
+															isSearchable={true}
+															id="send_contact"
+															onChange={handleContactSendFormChange}
+														/>
+														</div>
+
+													</div>
+								
+													<div className="zl_send_currency_btn_text">
+														<Button onClick={doSend} className="btn">
+															Set New Ownership
+														</Button>
+
+													</div>
+													
+													
+												</div>
+											</div>
+										</div>
+									</div>
+
+							):''}
 
                         </Tab.Pane>
                         <Tab.Pane eventKey="tab2">
-                            <p>ark</p>
+
+
+
+                        	<div className='primary-color' style={{textAlign: 'left'}}>
+                        	Network: Ark ASLP-1
+							</div>
+							
+							<div style={{textAlign: 'left'}}>
+
+								<Select
+									placeholder={'Select Token...'}
+									options={colorOptions2}
+									styles={colorStyles2}
+									isClearable={true}
+									isSearchable={true}
+									id="select_token"
+									onChange={handleTokenSelectFormChange}
+									value={selectedToken}
+								/>
+
+							</div>
+							
+							{selectedToken === null?(
+							<div style={{textAlign: 'left', marginTop: '3px', marginBottom: '3px'}}>
+							
+								<button onClick={doActionSend} className={"btn" + (theAction==='send'?" btn-primary":" btn-secondary")}>Send / Receive</button> 
+								&nbsp;<button onClick={doActionBurn} className={"btn" + (theAction==='burn'?" btn-primary":" btn-secondary")}>Burn</button> 
+								&nbsp;<button onClick={doActionMint} className={"btn" + (theAction==='mint'?" btn-primary":" btn-secondary")}>Mint</button> 
+								&nbsp;<button onClick={doActionPause} className={"btn" + (theAction==='pause'?" btn-primary":" btn-secondary")}>Pause</button> 
+								&nbsp;<button onClick={doActionResume} className={"btn" + (theAction==='resume'?" btn-primary":" btn-secondary")}>Resume</button> 
+								&nbsp;<button onClick={doActionNewOwner} className={"btn" + (theAction==='newowner'?" btn-primary":" btn-secondary")}>New Owner</button>
+								
+							</div>
+							):''}
+			
+							{theAction === 'send'?(
+							
+								<div className="zl_chart_component active">
+									<div className="zl_send_recive_content">
+										<div className="zl_send_recive_content_row">
+											<div className="zl_send_recive_content_column">
+												<div className="zl_send_recive_inner_content">
+													<h3 className="zl_send_recive_heading">
+														<svg width="15" height="15" viewBox="0 0 6 6" fill="none" xmlns="http://www.w3.org/2000/svg">
+															<path d="M3.60609 3.60609L2.69695 4.51523C2.36222 4.84996 1.81951 4.84996 1.48477 4.51523C1.15004 4.18049 1.15004 3.63778 1.48477 3.30305L2.39391 2.39391L0 0H6V6L3.60609 3.60609Z" fill="#53B9EA" />
+														</svg>
+														Send xxx
+													</h3>
+
+
+
+													<div className="zl_send_currency_input_content" style={{ borderBottom: '0px'}}>
+
+														<FormControl
+															placeholder="To Address"
+															style={{ width: "calc(100% - 36px)", marginRight: "2px" }}
+															id="send_address"
+															value={sendForm.send_address || ''}
+															onChange={handleSendFormChange}
+														/>
+														<QRCode
+															onClick={e => scanQR(e)}
+															value="EYdNhC7hGgHuL2sF20p2dLv"
+															bgColor={"#3D476A"}
+															fgColor={"#CAD3F2"}
+															size={32}
+															className="zl_dark_theme_qrcode"
+														/>
+														<QRCode
+															onClick={e => scanQR(e)}
+															value="EYdNhC7hGgHuL2sF20p2dLv"
+															bgColor={"#EFF0F2"}
+															fgColor={"#3D476A"}
+															size={32}
+															className="zl_light_theme_qrcode"
+														/>
+
+													</div>
+								
+													<div className="zl_send_currency_input_content">
+
+														<div style={{width: '100%'}}>
+														<Select
+															placeholder={'Select Contact...'}
+															options={colorOptions}
+															styles={colorStyles}
+															isClearable={true}
+															isSearchable={true}
+															id="send_contact"
+															onChange={handleContactSendFormChange}
+														/>
+														</div>
+
+													</div>
+								
+													<div className="zl_send_currency_input_content">
+														<div className="zl_send_currency_btn_text">
+															<div className="zl_send_currency_text">
+																<p><span>Balance: 0.00 xxx</span></p>
+															</div>
+														</div>
+														<FormControl
+															type="number"
+															placeholder="Amount to Send"
+															id="send_amount"
+															value={sendForm.send_amount || ''}
+															onChange={handleSendFormChange}
+														/>
+														<div className="zl_send_currency_input_btns">
+															<Button onClick={handleSendPercent10}>10%</Button>
+															<Button onClick={handleSendPercent25}>25%</Button>
+															<Button onClick={handleSendPercent50}>50%</Button>
+															<Button onClick={handleSendPercent75}>75%</Button>
+															<Button onClick={handleSendPercent100}>All</Button>
+														</div>
+													</div>
+													<div className="zl_send_currency_input_content">
+														<FormControl
+															type="password"
+															placeholder="Your Password"
+															id="send_password"
+															onChange={handleSendFormChange}
+														/>
+													</div>
+													<div className="zl_send_currency_text_type">
+														<h3 className="zl_send_currency_text">€0.00</h3>
+														<h3 className="zl_send_currency_type">EUR</h3>
+													</div>
+													<div className="zl_send_currency_btn_text">
+														<Button onClick={doSend} className="zl_send_currency_btn">
+															Send
+														</Button>
+														<div className="zl_send_currency_text">
+															<p>Network Fee<span>0.00 xxx</span></p>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div className="zl_send_recive_content_column">
+												<div className="zl_send_recive_inner_content">
+													<h3 className="zl_send_recive_heading zl_recive_heading">
+														<svg width="15" height="15" viewBox="0 0 6 6" fill="none" xmlns="http://www.w3.org/2000/svg">
+															<path d="M3.60609 3.60609L2.69695 4.51523C2.36222 4.84996 1.81951 4.84996 1.48477 4.51523C1.15004 4.18049 1.15004 3.63778 1.48477 3.30305L2.39391 2.39391L0 0H6V6L3.60609 3.60609Z" fill="#53B9EA" />
+														</svg>
+														Receive xxxx
+													</h3>
+													<div className="zl_recive_address_content">
+														<p className="zl_recive_address_heading">Address</p>
+														<div className="zl_recive_copy_address_content">
+															<Button onClick={(e) => doCopyAddress(e, walletaddress)}>
+																<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+																	<path d="M1.48116 0H12.5365C13.3244 0 13.9653 0.641 13.9653 1.42887V4.78252H12.661V1.42887C12.661 1.36022 12.6051 1.30435 12.5365 1.30435H1.48116C1.4125 1.30435 1.35663 1.36022 1.35663 1.42887V12.4842C1.35663 12.5529 1.4125 12.6087 1.48116 12.6087H4.73024V13.9131H1.48116C0.693287 13.9131 0.0522861 13.2721 0.0522861 12.4842V1.42887C0.0523291 0.641 0.693287 0 1.48116 0Z" fill="#CAD3F2" />
+																	<path d="M7.46358 6.08691H18.5188C19.3068 6.08691 19.9478 6.72791 19.9478 7.51583V18.5711C19.9477 19.3591 19.3068 20.0001 18.5188 20.0001H7.46354C6.67562 20.0001 6.03463 19.3591 6.03463 18.5712V7.51583C6.03458 6.72791 6.67567 6.08691 7.46358 6.08691ZM7.46349 18.6957H18.5188C18.5875 18.6957 18.6434 18.6398 18.6434 18.5712V7.51583C18.6434 7.44713 18.5875 7.39126 18.5188 7.39126H7.46354C7.39484 7.39126 7.33897 7.44713 7.33897 7.51583V18.5712H7.33893C7.33893 18.6398 7.39484 18.6957 7.46349 18.6957Z" fill="#CAD3F2" />
+																</svg>
+															</Button>
+															<p>{walletaddress}</p>
+														</div>
+														<div className="zl_recive_address_qr_code">
+															<QRCode
+																onClick={e => scanQR(e)}
+																value={walletaddress}
+																bgColor={"transparent"}
+																fgColor={"#CAD3F2"}
+																size={166}
+																className="zl_dark_theme_qrcode"
+															/>
+															<QRCode
+																onClick={e => scanQR(e)}
+																value={walletaddress}
+																bgColor={"transparent"}
+																fgColor={"#3D476A"}
+																size={166}
+																className="zl_light_theme_qrcode"
+															/>
+														</div>
+													</div>
+												</div>
+											</div>
+
+
+
+										</div>
+									</div>
+
+								</div>
+
+							):''}
+
+							{theAction === 'burn'?(
+
+									<div className="zl_send_recive_content">
+										<div className="zl_send_recive_content_row">
+											<div className="zl_send_recive_content_column">
+												<div className="zl_send_recive_inner_content">
+													<h3 className="zl_send_recive_heading">
+														<svg width="15" height="15" viewBox="0 0 6 6" fill="none" xmlns="http://www.w3.org/2000/svg">
+															<path d="M3.60609 3.60609L2.69695 4.51523C2.36222 4.84996 1.81951 4.84996 1.48477 4.51523C1.15004 4.18049 1.15004 3.63778 1.48477 3.30305L2.39391 2.39391L0 0H6V6L3.60609 3.60609Z" fill="#53B9EA" />
+														</svg>
+														Burn xxx
+													</h3>
+
+													<div className="zl_send_currency_input_content">
+														<div className="zl_send_currency_btn_text">
+															<div className="zl_send_currency_text">
+																<p><span>Balance: 0.00 xxx</span></p>
+															</div>
+														</div>
+														<FormControl
+															type="number"
+															placeholder="Amount to Burn"
+															id="send_amount"
+															value={sendForm.send_amount || ''}
+															onChange={handleSendFormChange}
+														/>
+														<div className="zl_send_currency_input_btns">
+															<Button onClick={handleSendPercent10}>10%</Button>
+															<Button onClick={handleSendPercent25}>25%</Button>
+															<Button onClick={handleSendPercent50}>50%</Button>
+															<Button onClick={handleSendPercent75}>75%</Button>
+															<Button onClick={handleSendPercent100}>All</Button>
+														</div>
+													</div>
+													
+													<div className="zl_send_currency_btn_text">
+														<Button onClick={doSend} className="btn">
+															Burn Tokens
+														</Button>
+
+													</div>
+												
+												</div>
+											</div>
+										</div>
+									</div>
+									
+							):''}
+
+							{theAction === 'mint'?(
+
+									<div className="zl_send_recive_content">
+										<div className="zl_send_recive_content_row">
+											<div className="zl_send_recive_content_column">
+												<div className="zl_send_recive_inner_content">
+													<h3 className="zl_send_recive_heading">
+														<svg width="15" height="15" viewBox="0 0 6 6" fill="none" xmlns="http://www.w3.org/2000/svg">
+															<path d="M3.60609 3.60609L2.69695 4.51523C2.36222 4.84996 1.81951 4.84996 1.48477 4.51523C1.15004 4.18049 1.15004 3.63778 1.48477 3.30305L2.39391 2.39391L0 0H6V6L3.60609 3.60609Z" fill="#53B9EA" />
+														</svg>
+														Mint xxx
+													</h3>
+
+													<div className="zl_send_currency_input_content">
+														<div className="zl_send_currency_btn_text">
+															<div className="zl_send_currency_text">
+																<p><span>Balance: 0.00 xxx</span></p>
+															</div>
+														</div>
+														<FormControl
+															type="number"
+															placeholder="Amount to Mint"
+															id="send_amount"
+															value={sendForm.send_amount || ''}
+															onChange={handleSendFormChange}
+														/>
+
+													</div>
+													
+													<div className="zl_send_currency_btn_text">
+														<Button onClick={doSend} className="btn">
+															Mint New Tokens
+														</Button>
+
+													</div>
+												
+												</div>
+											</div>
+										</div>
+									</div>
+
+							):''}
+
+							{theAction === 'pause'?(
+
+									<div className="zl_send_recive_content">
+										<div className="zl_send_recive_content_row">
+											<div className="zl_send_recive_content_column">
+												<div className="zl_send_recive_inner_content">
+													<h3 className="zl_send_recive_heading">
+														<svg width="15" height="15" viewBox="0 0 6 6" fill="none" xmlns="http://www.w3.org/2000/svg">
+															<path d="M3.60609 3.60609L2.69695 4.51523C2.36222 4.84996 1.81951 4.84996 1.48477 4.51523C1.15004 4.18049 1.15004 3.63778 1.48477 3.30305L2.39391 2.39391L0 0H6V6L3.60609 3.60609Z" fill="#53B9EA" />
+														</svg>
+														Pause xxx
+													</h3>
+
+													<div className="zl_send_currency_input_content">
+														<div className="zl_send_currency_btn_text">
+															<div className="zl_send_currency_text">
+																<p><span>Current Status: xxx</span></p>
+															</div>
+														</div>
+													</div>
+													
+													<div className="zl_send_currency_btn_text">
+														<Button onClick={doSend} className="btn">
+															Pause Token
+														</Button>
+
+													</div>
+												
+												</div>
+											</div>
+										</div>
+									</div>
+
+							):''}
+							
+							{theAction === 'resume'?(
+
+									<div className="zl_send_recive_content">
+										<div className="zl_send_recive_content_row">
+											<div className="zl_send_recive_content_column">
+												<div className="zl_send_recive_inner_content">
+													<h3 className="zl_send_recive_heading">
+														<svg width="15" height="15" viewBox="0 0 6 6" fill="none" xmlns="http://www.w3.org/2000/svg">
+															<path d="M3.60609 3.60609L2.69695 4.51523C2.36222 4.84996 1.81951 4.84996 1.48477 4.51523C1.15004 4.18049 1.15004 3.63778 1.48477 3.30305L2.39391 2.39391L0 0H6V6L3.60609 3.60609Z" fill="#53B9EA" />
+														</svg>
+														Resume xxx
+													</h3>
+
+													<div className="zl_send_currency_input_content">
+														<div className="zl_send_currency_btn_text">
+															<div className="zl_send_currency_text">
+																<p><span>Current Status: xxx</span></p>
+															</div>
+														</div>
+													</div>
+													
+													<div className="zl_send_currency_btn_text">
+														<Button onClick={doSend} className="btn">
+															Resume Token
+														</Button>
+
+													</div>
+												
+												</div>
+											</div>
+										</div>
+									</div>
+
+							):''}
+
+							{theAction === 'newowner'?(
+
+									<div className="zl_send_recive_content">
+										<div className="zl_send_recive_content_row">
+											<div className="zl_send_recive_content_column">
+												<div className="zl_send_recive_inner_content">
+													<h3 className="zl_send_recive_heading">
+														<svg width="15" height="15" viewBox="0 0 6 6" fill="none" xmlns="http://www.w3.org/2000/svg">
+															<path d="M3.60609 3.60609L2.69695 4.51523C2.36222 4.84996 1.81951 4.84996 1.48477 4.51523C1.15004 4.18049 1.15004 3.63778 1.48477 3.30305L2.39391 2.39391L0 0H6V6L3.60609 3.60609Z" fill="#53B9EA" />
+														</svg>
+														New Owner for xxx
+													</h3>
+												
+													<div className="zl_send_currency_input_content" style={{ borderBottom: '0px'}}>
+
+														<FormControl
+															placeholder="New Owner Address"
+															style={{ width: "calc(100% - 36px)", marginRight: "2px" }}
+															id="send_address"
+															value={sendForm.send_address || ''}
+															onChange={handleSendFormChange}
+														/>
+														<QRCode
+															onClick={e => scanQR(e)}
+															value="EYdNhC7hGgHuL2sF20p2dLv"
+															bgColor={"#3D476A"}
+															fgColor={"#CAD3F2"}
+															size={32}
+															className="zl_dark_theme_qrcode"
+														/>
+														<QRCode
+															onClick={e => scanQR(e)}
+															value="EYdNhC7hGgHuL2sF20p2dLv"
+															bgColor={"#EFF0F2"}
+															fgColor={"#3D476A"}
+															size={32}
+															className="zl_light_theme_qrcode"
+														/>
+
+													</div>
+								
+													<div className="zl_send_currency_input_content">
+
+														<div style={{width: '100%'}}>
+														<Select
+															placeholder={'Select New Owner Contact...'}
+															options={colorOptions}
+															styles={colorStyles}
+															isClearable={true}
+															isSearchable={true}
+															id="send_contact"
+															onChange={handleContactSendFormChange}
+														/>
+														</div>
+
+													</div>
+								
+													<div className="zl_send_currency_btn_text">
+														<Button onClick={doSend} className="btn">
+															Set New Ownership
+														</Button>
+
+													</div>
+													
+													
+												</div>
+											</div>
+										</div>
+									</div>
+
+							):''}
+
+
+
+
                         </Tab.Pane>
                     </Tab.Content>
                 </Tab.Container>

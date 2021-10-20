@@ -129,7 +129,7 @@ const CreateTokenModule = ({ props }) => {
                                             	<img style={{width: '20px', height: '20px'}} src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMjAwIiBoZWlnaHQ9IjEyMDAiPjxyZWN0IHdpZHRoPSIxMjAwIiBoZWlnaHQ9IjEyMDAiIGZpbGw9IiNjOTI5MmMiIGRhdGEtbmFtZT0i0J/RgNGP0LzQvtGD0LPQvtC70YzQvdC40LosINGB0LrRgNGD0LPQuy4g0YPQs9C70YsgMSIgcng9IjkwIiByeT0iOTAiLz48cGF0aCBmaWxsPSIjZmZmIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik0xMDY1LjU1IDk3NC41bC00NjQuMy00OTEuMTNMMTMzLjU1MyA5NzQuNWw0NjcuNy03NTQuOTd6TTUxOC41ODIgNjgzLjI0OGgxNjQuMmwtODEuNTMyLTg0LjUyMXpNODEwLjc1MSA4MTYuODhsLTc0Ljc0LTc4LjgwOUg0NjUuMzU3bC03NC43NCA3OC44MDloNDIwLjEzNHoiIGRhdGEtbmFtZT0i0KTQuNCz0YPRgNCwIDMg0LrQvtC/0LjRjyIvPjwvc3ZnPg==" alt="currency-icon" />
 												&nbsp;Ark ASLP-1 (Fungible)
 											</h3>
-                                            <p>Create Token: 500 ARK</p>
+                                            <p>Create Token: 1 ARK</p>
                                         </div>
                                     </div>
                                 </Nav.Link>
@@ -142,7 +142,7 @@ const CreateTokenModule = ({ props }) => {
                                             	<img style={{width: '20px', height: '20px'}} src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMjAwIiBoZWlnaHQ9IjEyMDAiPjxyZWN0IHdpZHRoPSIxMjAwIiBoZWlnaHQ9IjEyMDAiIGZpbGw9IiNjOTI5MmMiIGRhdGEtbmFtZT0i0J/RgNGP0LzQvtGD0LPQvtC70YzQvdC40LosINGB0LrRgNGD0LPQuy4g0YPQs9C70YsgMSIgcng9IjkwIiByeT0iOTAiLz48cGF0aCBmaWxsPSIjZmZmIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik0xMDY1LjU1IDk3NC41bC00NjQuMy00OTEuMTNMMTMzLjU1MyA5NzQuNWw0NjcuNy03NTQuOTd6TTUxOC41ODIgNjgzLjI0OGgxNjQuMmwtODEuNTMyLTg0LjUyMXpNODEwLjc1MSA4MTYuODhsLTc0Ljc0LTc4LjgwOUg0NjUuMzU3bC03NC43NCA3OC44MDloNDIwLjEzNHoiIGRhdGEtbmFtZT0i0KTQuNCz0YPRgNCwIDMg0LrQvtC/0LjRjyIvPjwvc3ZnPg==" alt="currency-icon" />
 												&nbsp;Ark ASLP-2 (Non-Fungible)
 											</h3>
-                                            <p>Create Token: 500 ARK</p>
+                                            <p>Create Token: 1 ARK</p>
                                         </div>
                                     </div>
                                 </Nav.Link>
@@ -507,7 +507,7 @@ const CreateTokenModule = ({ props }) => {
 													<Button onClick={doCreateAslp1} className="btn btn-success">
 														Create ASLP-1 Token
 													</Button>
-													<span style={{marginLeft: '20px'}}>Fee: 500 ARK</span>
+													<span style={{marginLeft: '20px'}}>Fee: 1 ARK</span>
 												</div>
 											</div>
 										</div>
@@ -601,7 +601,7 @@ const CreateTokenModule = ({ props }) => {
 													<Button onClick={doCreateAslp2} className="btn btn-success">
 														Create ASLP-1 Token
 													</Button>
-													<span style={{marginLeft: '20px'}}>Fee: 500 ARK</span>
+													<span style={{marginLeft: '20px'}}>Fee: 1 ARK</span>
 												</div>
 											</div>
 										</div>

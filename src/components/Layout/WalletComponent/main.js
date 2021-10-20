@@ -603,13 +603,7 @@ const MainComponent = (props) => {
 
                     </div>
                 </div>
-                {/*<div className="zl_transaction_list">
-                    <h3 className="zl_transaction_list_main_heading">
-                        Transaction
-                        <Link to={'/transactions'}>See All</Link>
-                    </h3>
-                    <AllTransactionList value={props} />
-                </div>*/}
+
             </div>
             
         <Modal centered show={showModal} onHide={closeModal} backdrop="static" keyboard={false}>

@@ -307,6 +307,26 @@ const QSLP1Module = ({ props }) => {
 
     };
 
+    const doBurn = (e) => {
+    
+    }
+
+    const doMint = (e) => {
+    
+    }
+    
+    const doPause = (e) => {
+    
+    }
+    
+    const doResume = (e) => {
+    
+    }
+
+    const doNewOwner = (e) => {
+    
+    }
+    
     const doCopyAddress = (e, address) => {
 
         e.preventDefault();
@@ -319,6 +339,7 @@ const QSLP1Module = ({ props }) => {
 
     const handleTokenSelectFormChange = (selectedOption) => {
 
+		setSelectedToken(selectedOption.value);
 
 	}
 	
@@ -492,12 +513,18 @@ const QSLP1Module = ({ props }) => {
     const setTabQredit = (e) => {
 
        	setTheTab('qredit');
+       	setTheAction(null);
+       	setSendForm({});
+       	setSelectedToken(null);
 
     };
 
     const setTabArk = (e) => {
 
        	setTheTab('ark');
+       	setTheAction(null);
+		setSendForm({});
+       	setSelectedToken(null);
 
     };
     
@@ -761,7 +788,7 @@ const QSLP1Module = ({ props }) => {
 													</div>
 													
 													<div className="zl_send_currency_btn_text">
-														<Button onClick={doSend} className="btn">
+														<Button onClick={doBurn} className="btn">
 															Burn Tokens
 														</Button>
 
@@ -804,7 +831,7 @@ const QSLP1Module = ({ props }) => {
 													</div>
 													
 													<div className="zl_send_currency_btn_text">
-														<Button onClick={doSend} className="btn">
+														<Button onClick={doMint} className="btn">
 															Mint New Tokens
 														</Button>
 
@@ -839,7 +866,7 @@ const QSLP1Module = ({ props }) => {
 													</div>
 													
 													<div className="zl_send_currency_btn_text">
-														<Button onClick={doSend} className="btn">
+														<Button onClick={doPause} className="btn">
 															Pause Token
 														</Button>
 
@@ -874,7 +901,7 @@ const QSLP1Module = ({ props }) => {
 													</div>
 													
 													<div className="zl_send_currency_btn_text">
-														<Button onClick={doSend} className="btn">
+														<Button onClick={doResume} className="btn">
 															Resume Token
 														</Button>
 
@@ -945,7 +972,7 @@ const QSLP1Module = ({ props }) => {
 													</div>
 								
 													<div className="zl_send_currency_btn_text">
-														<Button onClick={doSend} className="btn">
+														<Button onClick={doNewOwner} className="btn">
 															Set New Ownership
 														</Button>
 
@@ -1185,7 +1212,7 @@ const QSLP1Module = ({ props }) => {
 													</div>
 													
 													<div className="zl_send_currency_btn_text">
-														<Button onClick={doSend} className="btn">
+														<Button onClick={doBurn} className="btn">
 															Burn Tokens
 														</Button>
 
@@ -1228,7 +1255,7 @@ const QSLP1Module = ({ props }) => {
 													</div>
 													
 													<div className="zl_send_currency_btn_text">
-														<Button onClick={doSend} className="btn">
+														<Button onClick={doMint} className="btn">
 															Mint New Tokens
 														</Button>
 
@@ -1263,7 +1290,7 @@ const QSLP1Module = ({ props }) => {
 													</div>
 													
 													<div className="zl_send_currency_btn_text">
-														<Button onClick={doSend} className="btn">
+														<Button onClick={doPause} className="btn">
 															Pause Token
 														</Button>
 
@@ -1298,7 +1325,7 @@ const QSLP1Module = ({ props }) => {
 													</div>
 													
 													<div className="zl_send_currency_btn_text">
-														<Button onClick={doSend} className="btn">
+														<Button onClick={doResume} className="btn">
 															Resume Token
 														</Button>
 
@@ -1369,7 +1396,7 @@ const QSLP1Module = ({ props }) => {
 													</div>
 								
 													<div className="zl_send_currency_btn_text">
-														<Button onClick={doSend} className="btn">
+														<Button onClick={doNewOwner} className="btn">
 															Set New Ownership
 														</Button>
 

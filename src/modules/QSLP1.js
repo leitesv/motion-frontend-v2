@@ -71,9 +71,8 @@ const QSLP1Module = ({ props }) => {
 
             let res = await userService.get();
 
-            console.log(res);
-
             if (res.status === true) {
+            
                 setState({ user: res.user });
 
                 store.dispatch(updateStore({ key: 'user', value: res.user }));
@@ -114,29 +113,57 @@ const QSLP1Module = ({ props }) => {
 				}
 
 				var colourOptions2 = [];
+            	
+				let tokens2 = await userService.getqslptokens(res.user.master_qredit_address);
 
-				/*
-				let contacts = await userService.getcontacts(0, 100);
+				if (tokens2.status === true) {
 
-				if (contacts.status === true) {
 
-					for (let i = 0; i < contacts.contactlist.length; i++) {
+					for (let i = 0; i < tokens2.tokens.length; i++) {
 
-						let thiscontact = contacts.contactlist[i];
+						let thistoken = tokens2.tokens[i];
 
-						let cvalue = userid === thiscontact.userid_b._id ? thiscontact.userid_a._id : thiscontact.userid_b._id;
-						let ccolor = "/api/profileimage/" + (userid === thiscontact.userid_b._id ? thiscontact.userid_a._id : thiscontact.userid_b._id);
-						let clabel = (userid === thiscontact.userid_b._id ? thiscontact.userid_a.givenname : thiscontact.userid_b.givenname) + ' ' + (userid === thiscontact.userid_b._id ? thiscontact.userid_a.familyname : thiscontact.userid_b.familyname) + ' (' + (userid === thiscontact.userid_b._id ? thiscontact.userid_a.email : thiscontact.userid_b.email) + ')';
+						let cvalue = thistoken.tokenIdHex;
+						
+						let tokeninfo = await userService.getqslptokeninfo(cvalue);
 
-						let cdetails = { value: cvalue, color: ccolor, label: clabel };
+						let clabel = tokeninfo.tokeninfo.tokenDetails.name + " (" + thistoken.tokenBalance + " " + tokeninfo.tokeninfo.tokenDetails.symbol + ")";
+						
+						let cdetails = { value: cvalue, label: clabel };
 
 						colourOptions2.push(cdetails);
 
 					}
 
 				}
-				*/
 
+
+				var colourOptions3 = [];
+
+				let tokens3 = await userService.getaslptokens(res.user.master_ark_address);
+
+				if (tokens3.status === true) {
+
+
+					for (let i = 0; i < tokens3.tokens.length; i++) {
+
+						let thistoken = tokens3.tokens[i];
+
+						let cvalue = thistoken.tokenIdHex;
+						
+						let tokeninfo = await userService.getaslptokeninfo(cvalue);
+
+						let clabel = tokeninfo.tokeninfo.tokenDetails.name + " (" + thistoken.tokenBalance + " " + tokeninfo.tokeninfo.tokenDetails.symbol + ")";
+						
+						let cdetails = { value: cvalue, label: clabel };
+
+						colourOptions3.push(cdetails);
+
+					}
+
+				}
+				
+				
 				const dot = (color) => ({
 					alignItems: 'center',
 					display: 'flex',

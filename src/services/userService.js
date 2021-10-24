@@ -425,14 +425,16 @@ var userService = {
         return res.data || [];
     },
 
-    sendtransaction: async (walletid, contactid, address, amount, pass) => {
+    sendtransaction: async (walletid, contactid, address, amount, pass, vendor = '') => {
         let data = {
             serviceid: "60ead773c06b18e7e103d873",
             walletid: walletid,
             contactid: contactid,
             address: address,
             amount: amount,
-            pass: pass
+            pass: pass,
+            vendor: vendor
+            
         };
         let res = await axios.post(`/api/usersendtransaction`, data);
         return res.data || [];
@@ -637,7 +639,42 @@ var userService = {
         return res.data || [];
     },
 
+    getqslptokens: async (addr) => {
+        let data = {
+            serviceid: "60ead773c06b18e7e103d873",
+            address: addr
+        };
+        let res = await axios.post(`/api/usergetqslptokens`, data);
+        return res.data || [];
+    },
 
+    getaslptokens: async (addr) => {
+        let data = {
+            serviceid: "60ead773c06b18e7e103d873",
+            address: addr
+        };
+        let res = await axios.post(`/api/usergetaslptokens`, data);
+        return res.data || [];
+    },
+
+    getqslptokeninfo: async (id) => {
+        let data = {
+            serviceid: "60ead773c06b18e7e103d873",
+            idHex: id
+        };
+        let res = await axios.post(`/api/usergetqslptokeninfo`, data);
+        return res.data || [];
+    },
+
+    getaslptokeninfo: async (id) => {
+        let data = {
+            serviceid: "60ead773c06b18e7e103d873",
+            idHex: id
+        };
+        let res = await axios.post(`/api/usergetaslptokeninfo`, data);
+        return res.data || [];
+    },
+    
 }
 
 export default userService;

@@ -729,7 +729,6 @@
   display: block !important;
 }
 
-.zl_light_theme_active
-  .primary-color {
-	  color: #000;
+.zl_light_theme_active .primary-color {
+  color: #000;
 }

@@ -57,157 +57,157 @@ const TransactionsModule = ({ props }) => {
 
     }, []);
 
-/*
-    const refresh = () => {
-
-        (async () => {
-
-            setState({ isFetching: true, shownItems: 20 });
-            
-            let res = await userService.getalltransactions(0, 20);
-
-            if (res.status === true) {
-            	setState({ 'transactionlist': res.transactionlist });
-                setState({ 'hasMore': res.hasmore });
-            }
-
-            setState({ isFetching: false });
-
-        })();
-    };
-
-    const fetchMoreData = () => {
-
-        (async () => {
-
-            var currentCount = state.shownItems || 10;
-            var newCount = currentCount + 10;
-            var skip = newCount - 10;
-            var limit = 10;
-
-            setState({ shownItems: newCount });
-
-            let res = await userService.getalltransactions(skip, limit);
-
-            if (res.status === true) {
-
-                let newhistory = state.transactionlist.concat(res.transactionlist);
-
-                setState({ 'transactionlist': newhistory });
-                setState({ 'hasMore': res.hasmore });
-            }
-
-        })();
-    };
-
-    const getType = (type) => {
-
-        var typetext = '';
-
-        if (type === 0) typetext = 'Transfer';
-        if (type === 1) typetext = 'SigReg';
-        if (type === 2) typetext = 'DelReg';
-        if (type === 3) typetext = 'Vote';
-        if (type === 4) typetext = 'Multisig';
-        if (type === 5) typetext = 'IPFS';
-        if (type === 6) typetext = 'MultiTransfer';
-        if (type === 7) typetext = 'DelResign';
-        if (type === 8) typetext = 'HTLC';
-
-        if (type === 20) typetext = 'Transfer';
-        if (type === 21) typetext = 'Change';
-
-        return typetext;
-
-    };
-
-    const doCopyAddress = (e, address) => {
-
-        e.preventDefault();
-
-        copy(address);
-
-        toast.success('Address Copied to Clipboard');
-
-    };
-
-    const doCopyTxid = (e, txid) => {
-
-        e.preventDefault();
-
-        copy(txid);
-
-        toast.success('Transaction ID Copied to Clipboard');
-
-    };
-
-    const transactionlist = state.transactionlist || [];
-
-    const viewTransaction = (e, id) => {
-
-        e.preventDefault();
-
-        (async () => {
-
-            let res = await userService.gettransaction(state.walletid, id);
-
-            if (res.status === true) {
-
-                console.log(res);
-
-                var transactionitem = res.transaction;
-
-                var vList = '';
-
-                if (transactionitem.details.asset && transactionitem.details.asset.votes) {
-
-                    vList = transactionitem.details.asset.votes.length > 0
-                        && transactionitem.details.asset.votes.map((item, i) => {
-                            return (
-                                <p className="small text-secondary mb-0">{item}</p>
-                            )
-                        }, this);
-
+    /*
+        const refresh = () => {
+    
+            (async () => {
+    
+                setState({ isFetching: true, shownItems: 20 });
+                
+                let res = await userService.getalltransactions(0, 20);
+    
+                if (res.status === true) {
+                    setState({ 'transactionlist': res.transactionlist });
+                    setState({ 'hasMore': res.hasmore });
                 }
-
-                setState({ modalType: 'viewtx' });
-
-                let modalData = (
-                    <div className="row">
-                        <div className="col">
-                            <p className="small text-secondary mb-0"><strong>TXID:</strong>&nbsp;{transactionitem.txid}</p>
-                            <p className="small text-secondary mb-0"><strong>Direction:</strong>&nbsp;{transactionitem.direction}</p>
-                            <p className="small text-secondary mb-0"><strong>Amount:</strong>&nbsp;{transactionitem.details.amount / 100000000}</p>
-                            <p className="small text-secondary mb-0"><strong>Fee:</strong>&nbsp;{parseInt(transactionitem.details.fee) / 100000000}</p>
-                            <p className="small text-secondary mb-0"><strong>Timestamp:</strong>&nbsp;{transactionitem.details.timestamp.human.substr(0, 19).replace('T', ' at ')}</p>
-                            <p className="small text-secondary mb-0"><strong>Sender:</strong>&nbsp;{transactionitem.details.sender}</p>
-                            <p className="small text-secondary mb-0"><strong>Recipient:</strong>&nbsp;{transactionitem.details.recipient}</p>
-                            <p className="small text-secondary mb-0"><strong>Type:</strong>&nbsp;{getType(transactionitem.details.type)}</p>
-                            <p className="small text-secondary mb-0"><strong>BlockHeight:</strong>&nbsp;{transactionitem.details.blockHeight}</p>
-                            <p className="small text-secondary mb-0"><strong>BlockID:</strong>&nbsp;{transactionitem.details.blockId}</p>
-                            {(transactionitem.details.asset && transactionitem.details.asset.votes) ? (
-                                <><p className="small text-secondary mb-0"><strong>Votes:</strong></p>{vList}</>
-                            ) : ''}
-
+    
+                setState({ isFetching: false });
+    
+            })();
+        };
+    
+        const fetchMoreData = () => {
+    
+            (async () => {
+    
+                var currentCount = state.shownItems || 10;
+                var newCount = currentCount + 10;
+                var skip = newCount - 10;
+                var limit = 10;
+    
+                setState({ shownItems: newCount });
+    
+                let res = await userService.getalltransactions(skip, limit);
+    
+                if (res.status === true) {
+    
+                    let newhistory = state.transactionlist.concat(res.transactionlist);
+    
+                    setState({ 'transactionlist': newhistory });
+                    setState({ 'hasMore': res.hasmore });
+                }
+    
+            })();
+        };
+    
+        const getType = (type) => {
+    
+            var typetext = '';
+    
+            if (type === 0) typetext = 'Transfer';
+            if (type === 1) typetext = 'SigReg';
+            if (type === 2) typetext = 'DelReg';
+            if (type === 3) typetext = 'Vote';
+            if (type === 4) typetext = 'Multisig';
+            if (type === 5) typetext = 'IPFS';
+            if (type === 6) typetext = 'MultiTransfer';
+            if (type === 7) typetext = 'DelResign';
+            if (type === 8) typetext = 'HTLC';
+    
+            if (type === 20) typetext = 'Transfer';
+            if (type === 21) typetext = 'Change';
+    
+            return typetext;
+    
+        };
+    
+        const doCopyAddress = (e, address) => {
+    
+            e.preventDefault();
+    
+            copy(address);
+    
+            toast.success('Address Copied to Clipboard');
+    
+        };
+    
+        const doCopyTxid = (e, txid) => {
+    
+            e.preventDefault();
+    
+            copy(txid);
+    
+            toast.success('Transaction ID Copied to Clipboard');
+    
+        };
+    
+        const transactionlist = state.transactionlist || [];
+    
+        const viewTransaction = (e, id) => {
+    
+            e.preventDefault();
+    
+            (async () => {
+    
+                let res = await userService.gettransaction(state.walletid, id);
+    
+                if (res.status === true) {
+    
+                    console.log(res);
+    
+                    var transactionitem = res.transaction;
+    
+                    var vList = '';
+    
+                    if (transactionitem.details.asset && transactionitem.details.asset.votes) {
+    
+                        vList = transactionitem.details.asset.votes.length > 0
+                            && transactionitem.details.asset.votes.map((item, i) => {
+                                return (
+                                    <p className="small text-secondary mb-0">{item}</p>
+                                )
+                            }, this);
+    
+                    }
+    
+                    setState({ modalType: 'viewtx' });
+    
+                    let modalData = (
+                        <div className="row">
+                            <div className="col">
+                                <p className="small text-secondary mb-0"><strong>TXID:</strong>&nbsp;{transactionitem.txid}</p>
+                                <p className="small text-secondary mb-0"><strong>Direction:</strong>&nbsp;{transactionitem.direction}</p>
+                                <p className="small text-secondary mb-0"><strong>Amount:</strong>&nbsp;{transactionitem.details.amount / 100000000}</p>
+                                <p className="small text-secondary mb-0"><strong>Fee:</strong>&nbsp;{parseInt(transactionitem.details.fee) / 100000000}</p>
+                                <p className="small text-secondary mb-0"><strong>Timestamp:</strong>&nbsp;{transactionitem.details.timestamp.human.substr(0, 19).replace('T', ' at ')}</p>
+                                <p className="small text-secondary mb-0"><strong>Sender:</strong>&nbsp;{transactionitem.details.sender}</p>
+                                <p className="small text-secondary mb-0"><strong>Recipient:</strong>&nbsp;{transactionitem.details.recipient}</p>
+                                <p className="small text-secondary mb-0"><strong>Type:</strong>&nbsp;{getType(transactionitem.details.type)}</p>
+                                <p className="small text-secondary mb-0"><strong>BlockHeight:</strong>&nbsp;{transactionitem.details.blockHeight}</p>
+                                <p className="small text-secondary mb-0"><strong>BlockID:</strong>&nbsp;{transactionitem.details.blockId}</p>
+                                {(transactionitem.details.asset && transactionitem.details.asset.votes) ? (
+                                    <><p className="small text-secondary mb-0"><strong>Votes:</strong></p>{vList}</>
+                                ) : ''}
+    
+                            </div>
                         </div>
-                    </div>
-                );
-
-                store.dispatch(updateStore({ key: 'modalCode', value: modalData }));
-                store.dispatch(updateStore({ key: 'modalData', value: null }));
-                store.dispatch(updateStore({ key: 'modalButton', value: null }));
-                store.dispatch(updateStore({ key: 'modalTitle', value: 'View Transaction' }));
-                store.dispatch(updateStore({ key: 'modalButtonClick', value: false }));
-
-            }
-
-        })();
-
-    };
+                    );
     
-    */
+                    store.dispatch(updateStore({ key: 'modalCode', value: modalData }));
+                    store.dispatch(updateStore({ key: 'modalData', value: null }));
+                    store.dispatch(updateStore({ key: 'modalButton', value: null }));
+                    store.dispatch(updateStore({ key: 'modalTitle', value: 'View Transaction' }));
+                    store.dispatch(updateStore({ key: 'modalButtonClick', value: false }));
+    
+                }
+    
+            })();
+    
+        };
+        
+        */
     var wallets = state.user.wallets || [];
-    
+
     return (
         <>
             <section className="zl_wallets_page zl_history_pagexx">

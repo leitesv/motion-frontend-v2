@@ -2145,6 +2145,7 @@ table {
       margin-bottom: 20px;
     }
     .zl_add_currency_column.active {
+      color: #f9f9f9 !important;
       .zl_add_currency_inner_content {
         background: $color21;
         &::before {

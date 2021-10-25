@@ -47,6 +47,7 @@ const QSLP1Module = ({ props }) => {
 	const [modalButtonClick, setModalButtonClick] = useState(false);
 
 	const [selectedToken, setSelectedToken] = useState(null);
+	const [tokenInfo, setTokenInfo] = useState({});
 
 
 	const [walletaddress, setWalletaddress] = useState('');
@@ -90,34 +91,15 @@ const QSLP1Module = ({ props }) => {
 
 				const userid = state.user._id || '';
 
-				var colourOptions = [];
 
-				let contacts = await userService.getcontacts(0, 100);
-
-				if (contacts.status === true) {
-
-					for (let i = 0; i < contacts.contactlist.length; i++) {
-
-						let thiscontact = contacts.contactlist[i];
-
-						let cvalue = userid === thiscontact.userid_b._id ? thiscontact.userid_a._id : thiscontact.userid_b._id;
-						let ccolor = "/api/profileimage/" + (userid === thiscontact.userid_b._id ? thiscontact.userid_a._id : thiscontact.userid_b._id);
-						let clabel = (userid === thiscontact.userid_b._id ? thiscontact.userid_a.givenname : thiscontact.userid_b.givenname) + ' ' + (userid === thiscontact.userid_b._id ? thiscontact.userid_a.familyname : thiscontact.userid_b.familyname) + ' (' + (userid === thiscontact.userid_b._id ? thiscontact.userid_a.email : thiscontact.userid_b.email) + ')';
-
-						let cdetails = { value: cvalue, color: ccolor, label: clabel };
-
-						colourOptions.push(cdetails);
-
-					}
-
-				}
 
 				var colourOptions2 = [];
+				
+				var tokenData = {};
 
 				let tokens2 = await userService.getqslptokens(res.user.master_qredit_address);
 
 				if (tokens2.status === true) {
-
 
 					for (let i = 0; i < tokens2.tokens.length; i++) {
 
@@ -132,14 +114,23 @@ const QSLP1Module = ({ props }) => {
 						let cdetails = { value: cvalue, label: clabel };
 
 						colourOptions2.push(cdetails);
-
+						
+						tokenData[cvalue] = {
+							data: thistoken,
+							info: tokeninfo.tokeninfo
+						}
+						
 					}
 
 				}
+				
+				setTokenInfo(tokenData);
 
+console.log(tokenData);
 
 				var colourOptions3 = [];
 
+/*
 				let tokens3 = await userService.getaslptokens(res.user.master_ark_address);
 
 				if (tokens3.status === true) {
@@ -162,7 +153,29 @@ const QSLP1Module = ({ props }) => {
 					}
 
 				}
+*/
 
+				var colourOptions = [];
+
+				let contacts = await userService.getcontacts(0, 100);
+
+				if (contacts.status === true) {
+
+					for (let i = 0; i < contacts.contactlist.length; i++) {
+
+						let thiscontact = contacts.contactlist[i];
+
+						let cvalue = userid === thiscontact.userid_b._id ? thiscontact.userid_a._id : thiscontact.userid_b._id;
+						let ccolor = "/api/profileimage/" + (userid === thiscontact.userid_b._id ? thiscontact.userid_a._id : thiscontact.userid_b._id);
+						let clabel = (userid === thiscontact.userid_b._id ? thiscontact.userid_a.givenname : thiscontact.userid_b.givenname) + ' ' + (userid === thiscontact.userid_b._id ? thiscontact.userid_a.familyname : thiscontact.userid_b.familyname) + ' (' + (userid === thiscontact.userid_b._id ? thiscontact.userid_a.email : thiscontact.userid_b.email) + ')';
+
+						let cdetails = { value: cvalue, color: ccolor, label: clabel };
+
+						colourOptions.push(cdetails);
+
+					}
+
+				}
 
 				const dot = (color) => ({
 					alignItems: 'center',
@@ -236,7 +249,7 @@ const QSLP1Module = ({ props }) => {
 
 					input: styles => ({ ...styles }),
 					placeholder: styles => ({ ...styles }),
-					singleValue: (styles, { data }) => ({ ...styles, ...dot(data.color) }),
+					singleValue: (styles, { data }) => ({ ...styles }),
 				};
 
 				setColorOptions(colourOptions);
@@ -267,11 +280,21 @@ const QSLP1Module = ({ props }) => {
 
 	}
 
-	const handleSendFormChange = (e) => {
+    const handleSendFormChange = event => {
 
-		e.preventDefault();
+        if (event.target.type === 'checkbox') {
+            event.target.value = event.target.checked;
+        }
+        
+        var currentSendForm = {};
+            
+        Object.assign(currentSendForm, sendForm);
+            
+        currentSendForm[event.target.id] = event.target.value;
 
-	}
+        setSendForm(currentSendForm);
+
+    };
 
 	const handleReset = () => {
 		//Array.from(document.querySelectorAll("input")).forEach(
@@ -282,12 +305,23 @@ const QSLP1Module = ({ props }) => {
 
 	const doSend = (e) => {
 
-		let walletid = props._id;
+		var walletid;
+
+		for (let i = 0; i < state.user.wallets.length; i++) {
+
+			let tw = state.user.wallets[i];
+
+			if (tw.currencyid.ticker === "XQR" && theTab == 'qredit') walletid = state.user.wallets[i]._id;
+			if (tw.currencyid.ticker === "ARK" && theTab == 'ark') walletid = state.user.wallets[i]._id;
+
+		}
 
 		var contactid = sendForm.send_contactid || null;
 		var address = sendForm.send_address || null;
 		var amount = sendForm.send_amount || null;
 		var pass = sendForm.send_password || null;
+		
+		var notes = '';
 
 		var error = false;
 
@@ -295,6 +329,21 @@ const QSLP1Module = ({ props }) => {
 			error = true;
 		}
 
+		var balance = parseFloat(tokenInfo[selectedToken].data.tokenBalance);
+		var sendamount = parseFloat(amount).toFixed(tokenInfo[selectedToken].data.tokenDecimals);
+
+		if (parseFloat(sendamount) <= 0) {
+			error = true;
+		}
+
+		if (parseFloat(sendamount) > balance) {
+			error = true;
+		}
+		
+		if (isNaN(parseFloat(amount))) {
+			error = true;
+		}
+		
 		if (!isFinite(amount)) {
 			error = true;
 		}
@@ -311,8 +360,19 @@ const QSLP1Module = ({ props }) => {
 		else {
 
 			(async () => {
+			
+				var tobject = {
+					qslp1: {
+						tp: 'SEND',
+						id: selectedToken,
+						qt: sendamount,
+						no: notes
+					}
+				};
 
-				let res = await userService.sendtransaction(walletid, contactid, address, amount, pass);
+				var vendor = JSON.stringify(tobject);
+
+				let res = await userService.sendtransaction(walletid, contactid, address, 0.00000001, pass, vendor);
 
 				if (res.status === true) {
 
@@ -366,6 +426,7 @@ const QSLP1Module = ({ props }) => {
 
 	const handleTokenSelectFormChange = (selectedOption) => {
 
+
 		setSelectedToken(selectedOption.value);
 
 	}
@@ -406,7 +467,7 @@ const QSLP1Module = ({ props }) => {
 		e.preventDefault();
 
 		try {
-			var amount = (walletbalance * 0.10).toFixed(8);
+			var amount = (tokenInfo[selectedToken].data.tokenBalance * 0.10).toFixed(tokenInfo[selectedToken].data.tokenDecimals);
 		} catch (e) {
 			var amount = 0;
 		}
@@ -426,7 +487,7 @@ const QSLP1Module = ({ props }) => {
 		e.preventDefault();
 
 		try {
-			var amount = (walletbalance * 0.25).toFixed(8);
+			var amount = (tokenInfo[selectedToken].data.tokenBalance * 0.25).toFixed(tokenInfo[selectedToken].data.tokenDecimals);
 		} catch (e) {
 			var amount = 0;
 		}
@@ -446,7 +507,7 @@ const QSLP1Module = ({ props }) => {
 		e.preventDefault();
 
 		try {
-			var amount = (walletbalance * 0.50).toFixed(8);
+			var amount = (tokenInfo[selectedToken].data.tokenBalance * 0.50).toFixed(tokenInfo[selectedToken].data.tokenDecimals);
 		} catch (e) {
 			var amount = 0;
 		}
@@ -466,7 +527,7 @@ const QSLP1Module = ({ props }) => {
 		e.preventDefault();
 
 		try {
-			var amount = (walletbalance * 0.75).toFixed(8);
+			var amount = (tokenInfo[selectedToken].data.tokenBalance * 0.75).toFixed(tokenInfo[selectedToken].data.tokenDecimals);
 		} catch (e) {
 			var amount = 0;
 		}
@@ -486,7 +547,7 @@ const QSLP1Module = ({ props }) => {
 		e.preventDefault();
 
 		try {
-			var amount = walletbalance;
+			var amount = tokenInfo[selectedToken].data.tokenBalance;
 		} catch (e) {
 			var amount = 0;
 		}
@@ -608,20 +669,19 @@ const QSLP1Module = ({ props }) => {
 									isSearchable={true}
 									id="select_token"
 									onChange={handleTokenSelectFormChange}
-									value={selectedToken}
 								/>
 
 							</div>
 
-							{selectedToken === null ? (
+							{selectedToken !== null ? (
 								<div style={{ textAlign: 'left', marginTop: '3px', marginBottom: '3px' }}>
 
 									<button onClick={doActionSend} className={"btn" + (theAction === 'send' ? " btn-primary" : " btn-secondary")}>Send / Receive</button>
-									&nbsp;<button onClick={doActionBurn} className={"btn" + (theAction === 'burn' ? " btn-primary" : " btn-secondary")}>Burn</button>
-									&nbsp;<button onClick={doActionMint} className={"btn" + (theAction === 'mint' ? " btn-primary" : " btn-secondary")}>Mint</button>
-									&nbsp;<button onClick={doActionPause} className={"btn" + (theAction === 'pause' ? " btn-primary" : " btn-secondary")}>Pause</button>
-									&nbsp;<button onClick={doActionResume} className={"btn" + (theAction === 'resume' ? " btn-primary" : " btn-secondary")}>Resume</button>
-									&nbsp;<button onClick={doActionNewOwner} className={"btn" + (theAction === 'newowner' ? " btn-primary" : " btn-secondary")}>New Owner</button>
+									&nbsp;<button onClick={doActionBurn} className={"btn" + (theAction === 'burn' ? " btn-primary" : " btn-secondary")} style={tokenInfo[selectedToken].isOwner===true?{display:'none'}:{}}>Burn</button>
+									&nbsp;<button onClick={doActionMint} className={"btn" + (theAction === 'mint' ? " btn-primary" : " btn-secondary")} style={tokenInfo[selectedToken].isOwner===true?{display:'none'}:{}}>Mint</button>
+									&nbsp;<button onClick={doActionPause} className={"btn" + (theAction === 'pause' ? " btn-primary" : " btn-secondary")} style={tokenInfo[selectedToken].isOwner===true?{display:'none'}:{}}>Pause</button>
+									&nbsp;<button onClick={doActionResume} className={"btn" + (theAction === 'resume' ? " btn-primary" : " btn-secondary")} style={tokenInfo[selectedToken].isOwner===true?{display:'none'}:{}}>Resume</button>
+									&nbsp;<button onClick={doActionNewOwner} className={"btn" + (theAction === 'newowner' ? " btn-primary" : " btn-secondary")} style={tokenInfo[selectedToken].isOwner===true?{display:'none'}:{}}>New Owner</button>
 
 								</div>
 							) : ''}
@@ -637,7 +697,7 @@ const QSLP1Module = ({ props }) => {
 														<svg width="15" height="15" viewBox="0 0 6 6" fill="none" xmlns="http://www.w3.org/2000/svg">
 															<path d="M3.60609 3.60609L2.69695 4.51523C2.36222 4.84996 1.81951 4.84996 1.48477 4.51523C1.15004 4.18049 1.15004 3.63778 1.48477 3.30305L2.39391 2.39391L0 0H6V6L3.60609 3.60609Z" fill="#53B9EA" />
 														</svg>
-														Send xxx
+														Send {tokenInfo[selectedToken].info.tokenDetails.name} ({tokenInfo[selectedToken].info.tokenDetails.symbol})
 													</h3>
 
 
@@ -689,7 +749,7 @@ const QSLP1Module = ({ props }) => {
 													<div className="zl_send_currency_input_content">
 														<div className="zl_send_currency_btn_text">
 															<div className="zl_send_currency_text">
-																<p><span>Balance: 0.00 xxx</span></p>
+																<p><span>Balance: {tokenInfo[selectedToken].data.tokenBalance} {tokenInfo[selectedToken].info.tokenDetails.symbol}</span></p>
 															</div>
 														</div>
 														<FormControl
@@ -724,7 +784,7 @@ const QSLP1Module = ({ props }) => {
 															Send
 														</Button>
 														<div className="zl_send_currency_text">
-															<p>Network Fee<span>0.00 xxx</span></p>
+															<p>Network Fee<span>0.02 XQR (+1 satoshi)</span></p>
 														</div>
 													</div>
 												</div>
@@ -735,23 +795,23 @@ const QSLP1Module = ({ props }) => {
 														<svg width="15" height="15" viewBox="0 0 6 6" fill="none" xmlns="http://www.w3.org/2000/svg">
 															<path d="M3.60609 3.60609L2.69695 4.51523C2.36222 4.84996 1.81951 4.84996 1.48477 4.51523C1.15004 4.18049 1.15004 3.63778 1.48477 3.30305L2.39391 2.39391L0 0H6V6L3.60609 3.60609Z" fill="#53B9EA" />
 														</svg>
-														Receive xxxx
+														Receive {tokenInfo[selectedToken].info.tokenDetails.name} ({tokenInfo[selectedToken].info.tokenDetails.symbol})
 													</h3>
 													<div className="zl_recive_address_content">
 														<p className="zl_recive_address_heading">Address</p>
 														<div className="zl_recive_copy_address_content">
-															<Button onClick={(e) => doCopyAddress(e, walletaddress)}>
+															<Button onClick={(e) => doCopyAddress(e, tokenInfo[selectedToken].data.address)}>
 																<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
 																	<path d="M1.48116 0H12.5365C13.3244 0 13.9653 0.641 13.9653 1.42887V4.78252H12.661V1.42887C12.661 1.36022 12.6051 1.30435 12.5365 1.30435H1.48116C1.4125 1.30435 1.35663 1.36022 1.35663 1.42887V12.4842C1.35663 12.5529 1.4125 12.6087 1.48116 12.6087H4.73024V13.9131H1.48116C0.693287 13.9131 0.0522861 13.2721 0.0522861 12.4842V1.42887C0.0523291 0.641 0.693287 0 1.48116 0Z" fill="#CAD3F2" />
 																	<path d="M7.46358 6.08691H18.5188C19.3068 6.08691 19.9478 6.72791 19.9478 7.51583V18.5711C19.9477 19.3591 19.3068 20.0001 18.5188 20.0001H7.46354C6.67562 20.0001 6.03463 19.3591 6.03463 18.5712V7.51583C6.03458 6.72791 6.67567 6.08691 7.46358 6.08691ZM7.46349 18.6957H18.5188C18.5875 18.6957 18.6434 18.6398 18.6434 18.5712V7.51583C18.6434 7.44713 18.5875 7.39126 18.5188 7.39126H7.46354C7.39484 7.39126 7.33897 7.44713 7.33897 7.51583V18.5712H7.33893C7.33893 18.6398 7.39484 18.6957 7.46349 18.6957Z" fill="#CAD3F2" />
 																</svg>
 															</Button>
-															<p>{walletaddress}</p>
+															<p>{tokenInfo[selectedToken].data.address}</p>
 														</div>
 														<div className="zl_recive_address_qr_code">
 															<QRCode
 																onClick={e => scanQR(e)}
-																value={walletaddress}
+																value={tokenInfo[selectedToken].data.address}
 																bgColor={"transparent"}
 																fgColor={"#CAD3F2"}
 																size={166}
@@ -759,7 +819,7 @@ const QSLP1Module = ({ props }) => {
 															/>
 															<QRCode
 																onClick={e => scanQR(e)}
-																value={walletaddress}
+																value={tokenInfo[selectedToken].data.address}
 																bgColor={"transparent"}
 																fgColor={"#3D476A"}
 																size={166}
@@ -789,7 +849,7 @@ const QSLP1Module = ({ props }) => {
 													<svg width="15" height="15" viewBox="0 0 6 6" fill="none" xmlns="http://www.w3.org/2000/svg">
 														<path d="M3.60609 3.60609L2.69695 4.51523C2.36222 4.84996 1.81951 4.84996 1.48477 4.51523C1.15004 4.18049 1.15004 3.63778 1.48477 3.30305L2.39391 2.39391L0 0H6V6L3.60609 3.60609Z" fill="#53B9EA" />
 													</svg>
-													Burn xxx
+													Burn {tokenInfo[selectedToken].info.tokenDetails.name} ({tokenInfo[selectedToken].info.tokenDetails.symbol})
 												</h3>
 
 												<div className="zl_send_currency_input_content">
@@ -838,7 +898,7 @@ const QSLP1Module = ({ props }) => {
 													<svg width="15" height="15" viewBox="0 0 6 6" fill="none" xmlns="http://www.w3.org/2000/svg">
 														<path d="M3.60609 3.60609L2.69695 4.51523C2.36222 4.84996 1.81951 4.84996 1.48477 4.51523C1.15004 4.18049 1.15004 3.63778 1.48477 3.30305L2.39391 2.39391L0 0H6V6L3.60609 3.60609Z" fill="#53B9EA" />
 													</svg>
-													Mint xxx
+													Mint {tokenInfo[selectedToken].info.tokenDetails.name} ({tokenInfo[selectedToken].info.tokenDetails.symbol})
 												</h3>
 
 												<div className="zl_send_currency_input_content">
@@ -881,7 +941,7 @@ const QSLP1Module = ({ props }) => {
 													<svg width="15" height="15" viewBox="0 0 6 6" fill="none" xmlns="http://www.w3.org/2000/svg">
 														<path d="M3.60609 3.60609L2.69695 4.51523C2.36222 4.84996 1.81951 4.84996 1.48477 4.51523C1.15004 4.18049 1.15004 3.63778 1.48477 3.30305L2.39391 2.39391L0 0H6V6L3.60609 3.60609Z" fill="#53B9EA" />
 													</svg>
-													Pause xxx
+													Pause {tokenInfo[selectedToken].info.tokenDetails.name} ({tokenInfo[selectedToken].info.tokenDetails.symbol})
 												</h3>
 
 												<div className="zl_send_currency_input_content">
@@ -916,7 +976,7 @@ const QSLP1Module = ({ props }) => {
 													<svg width="15" height="15" viewBox="0 0 6 6" fill="none" xmlns="http://www.w3.org/2000/svg">
 														<path d="M3.60609 3.60609L2.69695 4.51523C2.36222 4.84996 1.81951 4.84996 1.48477 4.51523C1.15004 4.18049 1.15004 3.63778 1.48477 3.30305L2.39391 2.39391L0 0H6V6L3.60609 3.60609Z" fill="#53B9EA" />
 													</svg>
-													Resume xxx
+													Resume {tokenInfo[selectedToken].info.tokenDetails.name} ({tokenInfo[selectedToken].info.tokenDetails.symbol})
 												</h3>
 
 												<div className="zl_send_currency_input_content">
@@ -951,7 +1011,7 @@ const QSLP1Module = ({ props }) => {
 													<svg width="15" height="15" viewBox="0 0 6 6" fill="none" xmlns="http://www.w3.org/2000/svg">
 														<path d="M3.60609 3.60609L2.69695 4.51523C2.36222 4.84996 1.81951 4.84996 1.48477 4.51523C1.15004 4.18049 1.15004 3.63778 1.48477 3.30305L2.39391 2.39391L0 0H6V6L3.60609 3.60609Z" fill="#53B9EA" />
 													</svg>
-													New Owner for xxx
+													New Ownership for {tokenInfo[selectedToken].info.tokenDetails.name} ({tokenInfo[selectedToken].info.tokenDetails.symbol})
 												</h3>
 
 												<div className="zl_send_currency_input_content" style={{ borderBottom: '0px' }}>
@@ -1032,7 +1092,6 @@ const QSLP1Module = ({ props }) => {
 									isSearchable={true}
 									id="select_token"
 									onChange={handleTokenSelectFormChange}
-									value={selectedToken}
 								/>
 
 							</div>

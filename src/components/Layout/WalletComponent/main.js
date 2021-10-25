@@ -34,6 +34,8 @@ const MainComponent = (props) => {
     // send btn
     const [sendForm, setSendForm] = useState({});
 
+    const [sendType, setSendType] = useState('send');
+
     //const handleToggle = () => {
     //    setSend(!send);
     //};
@@ -51,7 +53,13 @@ const MainComponent = (props) => {
 
     const [colorOptions, setColorOptions] = useState([]);
     const [colorStyles, setColorStyles] = useState({});
+    
+    const [delegateList, setDelegateList] = useState([]);
+    const [currentVote, setCurrentVote] = useState(null);
+    const [currentVoteName, setCurrentVoteName] = useState('');
 
+	const [colorOptionsVote, setColorOptionsVote] = useState([]);
+    const [colorStyles2, setColorStyles2] = useState({});
 
     React.useEffect(() => {
         // Runs after the first render() lifecycle
@@ -73,6 +81,54 @@ const MainComponent = (props) => {
                 setWalletbalance(resbal.balance);
             }
 
+			let resd = await userService.getdelegatelist(walletid);
+			
+			setDelegateList(resd.delegates);
+
+			let cvote = await userService.getwalletvotes(walletid);
+			
+			if (cvote.vote)
+			{
+				setCurrentVote(cvote.vote);
+
+				var currentSendForm = {};
+
+				Object.assign(currentSendForm, sendForm);
+
+				currentSendForm['send_vote'] = cvote.vote;
+			
+				setSendForm(currentSendForm);
+            
+				let cvotename = '';
+				
+				for (let i = 0; i < resd.delegates.length; i++)
+				{
+					let ditem = resd.delegates[i];
+					if (ditem.publicKey === cvote.vote)
+					{
+					
+						setCurrentVoteName(ditem.username);
+					
+					}
+				}
+            
+            }
+            
+        	var colourOptionsVote = [];
+
+			for (let i = 0; i < resd.delegates.length; i++) {
+
+				let thisdelegate = resd.delegates[i];
+
+				let cvalue = thisdelegate.publicKey;
+				let clabel = thisdelegate.username;
+				
+				let cdetails = { value: cvalue, label: clabel };
+
+				colourOptionsVote.push(cdetails);
+
+			}
+            
             
 			const userid = state.user._id || '';
 
@@ -145,8 +201,40 @@ const MainComponent = (props) => {
                 singleValue: (styles, { data }) => ({ ...styles, ...dot(data.color) }),
             };
 
+            const colourStyles2 = {
+                control: styles => ({ ...styles }),
+
+                option: (styles, { data, isDisabled, isFocused, isSelected }) => {
+
+                    return {
+                        ...styles,
+                        backgroundColor: isDisabled
+                            ? null
+                            : isSelected
+                                ? '#BBF'
+                                : isFocused
+                                    ? '#DDF'
+                                    : null,
+                        cursor: isDisabled ? 'not-allowed' : 'default',
+
+                        ':active': {
+                            ...styles[':active'],
+                            backgroundColor:
+                                !isDisabled && (isSelected ? '#FFF' : '#DDF'),
+                        },
+                    };
+                },
+
+                input: styles => ({ ...styles }),
+                placeholder: styles => ({ ...styles }),
+                singleValue: (styles, { data }) => ({ ...styles, ...dot(data.color) }),
+            };
+            
 			setColorOptions(colourOptions);
 			setColorStyles(colourStyles);
+			setColorStyles2(colourStyles2);
+
+			setColorOptionsVote(colourOptionsVote);
 
         })();
 
@@ -285,6 +373,44 @@ const MainComponent = (props) => {
 
     };
 
+	const doVote = (e) => {
+	
+		e.preventDefault();
+
+		
+		var tovote = sendForm.send_vote;
+		var pass = sendForm.send_password;
+
+
+
+	
+		var error = false;
+		
+		(async () => {
+
+			let walletid = props._id;
+
+			let res = await userService.sendqreditvote(walletid, tovote, pass);
+
+			if (res.status === true)
+			{
+			
+				toast.success(res.message);
+				
+				setSendType('send');
+            
+			}
+			else
+			{
+		
+				toast.error(res.message);
+
+			}
+
+		})();
+		
+	};
+	
     const doCopyAddress = (e, address) => {
 
         e.preventDefault();
@@ -321,6 +447,32 @@ const MainComponent = (props) => {
 
     };
 
+    const handleVoteSendFormChange = (selectedOption) => {
+
+        if (selectedOption !== null) {
+
+            var currentSendForm = {};
+            
+            Object.assign(currentSendForm, sendForm);
+
+            currentSendForm['send_vote'] = selectedOption.value;
+			
+            setSendForm(currentSendForm);
+
+        }
+        else {
+        
+        	var currentSendForm = {};
+
+            Object.assign(currentSendForm, sendForm);
+
+            currentSendForm['send_vote'] = null;
+			
+            setSendForm(currentSendForm);
+        }
+
+    };
+    
     const handleContactSendFormChange = (selectedOption) => {
 
         if (selectedOption !== null) {
@@ -461,6 +613,16 @@ const MainComponent = (props) => {
                 <div className="zl_send_recive_content">
                     <div className="zl_send_recive_content_row">
                         <div className="zl_send_recive_content_column">
+                        	{
+                        		props.currencyid.ticker === "XQR" || props.currencyid.ticker === 'XQR' ?
+                        		(<div style={{marginBottom: '-40px'}}>
+                        			<Button className={sendType==='send'?"btn-primary":"btn-secondary"} onClick={(e) => setSendType('send')}>Send</Button>
+                        			&nbsp;
+                        			<Button className={sendType==='vote'?"btn-primary":"btn-secondary"} onClick={(e) => setSendType('vote')}>Vote</Button>
+                        		</div>):""
+                        	}
+                        	{sendType==='send'?
+                        	(
                             <div className="zl_send_recive_inner_content">
                                 <h3 className="zl_send_recive_heading">
                                     <svg width="15" height="15" viewBox="0 0 6 6" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -557,6 +719,76 @@ const MainComponent = (props) => {
                                     </div>
                                 </div>
                             </div>
+                            ):(
+                            <div className="zl_send_recive_inner_content">
+                                <h3 className="zl_send_recive_heading">
+                                    <svg width="15" height="15" viewBox="0 0 6 6" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M3.60609 3.60609L2.69695 4.51523C2.36222 4.84996 1.81951 4.84996 1.48477 4.51523C1.15004 4.18049 1.15004 3.63778 1.48477 3.30305L2.39391 2.39391L0 0H6V6L3.60609 3.60609Z" fill="#53B9EA" />
+                                    </svg>
+                                    Vote {props.currencyid.name} Delegate
+                                </h3>
+								{currentVote!==null?
+									(<>
+										<div className="zl_send_currency_input_content" style={{ borderBottom: '0px'}}>
+											<label className="form-control-label primary-color">You must first Un-vote your current vote prior to making a new vote.</label>
+											<FormControl
+												type="text"
+												readOnly
+												defaultValue={currentVoteName}
+											/>
+											<label className="form-control-label primary-color" style={{marginTop:'-8px', fontSize:'10px'}}>Current Vote</label>
+
+										</div>
+										<div className="zl_send_currency_input_content" style={{ borderBottom: '0px'}}>
+											<FormControl
+												type="password"
+												autoComplete="new-password"
+												placeholder="Your Password"
+												id="send_password"
+												onChange={handleSendFormChange}
+											/>
+											<label className="form-control-label primary-color" style={{marginTop:'-8px', fontSize:'10px'}}>Your Password</label>
+										</div>
+										<div className="zl_send_currency_btn_text">
+											<Button onClick={doVote} className="zl_send_currency_btn">
+												Unvote
+											</Button>
+										</div>
+									</>):(<>
+										<div className="zl_send_currency_input_content" style={{ borderBottom: '0px'}}>
+											<label className="form-control-label primary-color">Select the delegate that you wish to vote for.</label>
+											<div style={{width: '100%'}}>
+											<Select
+												placeholder={'Select Delegate...'}
+												options={colorOptionsVote}
+												isClearable={true}
+												isSearchable={true}
+												id="send_vote"
+												onChange={handleVoteSendFormChange}
+											/>
+											<label className="form-control-label primary-color" style={{marginTop:'-8px', fontSize:'10px'}}>Select Delegate</label>
+
+											</div>
+										</div>
+										<div className="zl_send_currency_input_content" style={{ borderBottom: '0px'}}>
+											<FormControl
+												type="password"
+												autoComplete="new-password"
+												placeholder="Your Password"
+												id="send_password"
+												onChange={handleSendFormChange}
+											/>
+											<label className="form-control-label primary-color" style={{marginTop:'-8px', fontSize:'10px'}}>Your Password</label>
+										</div>
+										<div className="zl_send_currency_btn_text">
+											<Button onClick={doVote} className="zl_send_currency_btn">
+												Vote
+											</Button>
+										</div>
+									</>)
+								}
+                            </div>
+                            )}
                         </div>
                         <div className="zl_send_recive_content_column">
                             <div className="zl_send_recive_inner_content">

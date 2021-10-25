@@ -669,7 +669,7 @@ const CreateTokenModule = ({ props }) => {
 													<FormControl
 														placeholder="Notes"
 														id="token_notes"
-														value={tokenForm.token_documenturi || ''}
+														value={tokenForm.token_notes || ''}
 														onChange={handleTokenFormChange}
 													/>
 													<i style={{ fontSize: '12px', marginBottom: '0px', marginTop: '-6px' }}>For any notes you may want to attach with the genesis transaction</i>
@@ -790,7 +790,7 @@ const CreateTokenModule = ({ props }) => {
 													<FormControl
 														placeholder="Notes"
 														id="token_notes"
-														value={tokenForm.token_documenturi || ''}
+														value={tokenForm.token_notes || ''}
 														onChange={handleTokenFormChange}
 													/>
 													<i style={{ fontSize: '12px', marginBottom: '0px', marginTop: '-6px' }}>For any notes you may want to attach with the genesis transaction</i>

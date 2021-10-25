@@ -311,8 +311,8 @@ console.log(tokenData);
 
 			let tw = state.user.wallets[i];
 
-			if (tw.currencyid.ticker === "XQR" && theTab == 'qredit') walletid = state.user.wallets[i]._id;
-			if (tw.currencyid.ticker === "ARK" && theTab == 'ark') walletid = state.user.wallets[i]._id;
+			if (tw.currencyid.ticker === "XQR" && theTab === 'qredit') walletid = state.user.wallets[i]._id;
+			if (tw.currencyid.ticker === "ARK" && theTab === 'ark') walletid = state.user.wallets[i]._id;
 
 		}
 
@@ -396,22 +396,369 @@ console.log(tokenData);
 
 	const doBurn = (e) => {
 
+		var walletid;
+
+		for (let i = 0; i < state.user.wallets.length; i++) {
+
+			let tw = state.user.wallets[i];
+
+			if (tw.currencyid.ticker === "XQR" && theTab === 'qredit') walletid = state.user.wallets[i]._id;
+			if (tw.currencyid.ticker === "ARK" && theTab === 'ark') walletid = state.user.wallets[i]._id;
+
+		}
+
+		var address = "XQRJgWWdxrUqn7hnrtMWbVh7wgz2tP6hnh"; // QslpMasterAddress
+		var amount = sendForm.burn_amount || null;
+		var pass = sendForm.send_password || null;
+		
+		var notes = '';
+
+		var error = false;
+
+		if (isNaN(parseFloat(amount))) {
+			error = true;
+		}
+
+		var balance = parseFloat(tokenInfo[selectedToken].data.tokenBalance);
+		var burnamount = parseFloat(amount).toFixed(tokenInfo[selectedToken].data.tokenDecimals);
+
+		if (parseFloat(burnamount) <= 0) {
+			error = true;
+		}
+
+		if (parseFloat(burnamount) > balance) {
+			error = true;
+		}
+		
+		if (isNaN(parseFloat(amount))) {
+			error = true;
+		}
+		
+		if (!isFinite(amount)) {
+			error = true;
+		}
+
+		if (error === true) {
+
+			toast.error('Form error');
+
+		}
+		else {
+
+			(async () => {
+			
+				var tobject = {
+					qslp1: {
+						tp: 'BURN',
+						id: selectedToken,
+						qt: burnamount,
+						no: notes
+					}
+				};
+
+				var vendor = JSON.stringify(tobject);
+
+				let res = await userService.sendtransaction(walletid, null, address, 0.00000001, pass, vendor);
+
+				if (res.status === true) {
+
+					toast.success(res.message);
+
+					handleReset();
+
+
+				}
+				else {
+
+					toast.error(res.message);
+
+				}
+
+			})();
+
+		}
+		
 	}
 
 	const doMint = (e) => {
 
+		var walletid;
+
+		for (let i = 0; i < state.user.wallets.length; i++) {
+
+			let tw = state.user.wallets[i];
+
+			if (tw.currencyid.ticker === "XQR" && theTab === 'qredit') walletid = state.user.wallets[i]._id;
+			if (tw.currencyid.ticker === "ARK" && theTab === 'ark') walletid = state.user.wallets[i]._id;
+
+		}
+
+		var address = "XQRJgWWdxrUqn7hnrtMWbVh7wgz2tP6hnh"; // QslpMasterAddress
+		var amount = sendForm.mint_amount || null;
+		var pass = sendForm.send_password || null;
+		
+		var notes = '';
+
+		var error = false;
+
+		if (isNaN(parseFloat(amount))) {
+			error = true;
+		}
+
+		var mintamount = parseFloat(amount).toFixed(tokenInfo[selectedToken].data.tokenDecimals);
+		
+		if (tokenInfo[selectedToken].info.tokenDetails.mintable === false)
+		{	
+			error = true;
+		}
+		
+		if (isNaN(parseFloat(amount))) {
+			error = true;
+		}
+		
+		if (!isFinite(amount)) {
+			error = true;
+		}
+
+		if (error === true) {
+
+			toast.error('Form error');
+
+		}
+		else {
+
+			(async () => {
+			
+				var tobject = {
+					qslp1: {
+						tp: 'MINT',
+						id: selectedToken,
+						qt: mintamount,
+						no: notes
+					}
+				};
+
+				var vendor = JSON.stringify(tobject);
+
+				let res = await userService.sendtransaction(walletid, null, address, 0.00000001, pass, vendor);
+
+				if (res.status === true) {
+
+					toast.success(res.message);
+
+					handleReset();
+
+
+				}
+				else {
+
+					toast.error(res.message);
+
+				}
+
+			})();
+
+		}
+		
 	}
 
 	const doPause = (e) => {
 
+		var walletid;
+
+		for (let i = 0; i < state.user.wallets.length; i++) {
+
+			let tw = state.user.wallets[i];
+
+			if (tw.currencyid.ticker === "XQR" && theTab === 'qredit') walletid = state.user.wallets[i]._id;
+			if (tw.currencyid.ticker === "ARK" && theTab === 'ark') walletid = state.user.wallets[i]._id;
+
+		}
+
+		var address = "XQRJgWWdxrUqn7hnrtMWbVh7wgz2tP6hnh"; // QslpMasterAddress
+		var pass = sendForm.send_password || null;
+		
+		var notes = '';
+
+		var error = false;
+
+		if (tokenInfo[selectedToken].info.tokenDetails.pausable === false)
+		{	
+			error = true;
+		}
+
+		if (error === true) {
+
+			toast.error('Form error');
+
+		}
+		else {
+
+			(async () => {
+			
+				var tobject = {
+					qslp1: {
+						tp: 'PAUSE',
+						id: selectedToken,
+						no: notes
+					}
+				};
+
+				var vendor = JSON.stringify(tobject);
+
+				let res = await userService.sendtransaction(walletid, null, address, 0.00000001, pass, vendor);
+
+				if (res.status === true) {
+
+					toast.success(res.message);
+
+					handleReset();
+
+
+				}
+				else {
+
+					toast.error(res.message);
+
+				}
+
+			})();
+
+		}
+		
 	}
 
 	const doResume = (e) => {
 
+		var walletid;
+
+		for (let i = 0; i < state.user.wallets.length; i++) {
+
+			let tw = state.user.wallets[i];
+
+			if (tw.currencyid.ticker === "XQR" && theTab === 'qredit') walletid = state.user.wallets[i]._id;
+			if (tw.currencyid.ticker === "ARK" && theTab === 'ark') walletid = state.user.wallets[i]._id;
+
+		}
+
+		var address = "XQRJgWWdxrUqn7hnrtMWbVh7wgz2tP6hnh"; // QslpMasterAddress
+		var pass = sendForm.send_password || null;
+		
+		var notes = '';
+
+		var error = false;
+
+		if (tokenInfo[selectedToken].info.tokenDetails.pausable === false)
+		{	
+			error = true;
+		}
+
+		if (error === true) {
+
+			toast.error('Form error');
+
+		}
+		else {
+
+			(async () => {
+			
+				var tobject = {
+					qslp1: {
+						tp: 'RESUME',
+						id: selectedToken,
+						no: notes
+					}
+				};
+
+				var vendor = JSON.stringify(tobject);
+
+				let res = await userService.sendtransaction(walletid, null, address, 0.00000001, pass, vendor);
+
+				if (res.status === true) {
+
+					toast.success(res.message);
+
+					handleReset();
+
+
+				}
+				else {
+
+					toast.error(res.message);
+
+				}
+
+			})();
+
+		}
+		
 	}
 
 	const doNewOwner = (e) => {
 
+		var walletid;
+
+		for (let i = 0; i < state.user.wallets.length; i++) {
+
+			let tw = state.user.wallets[i];
+
+			if (tw.currencyid.ticker === "XQR" && theTab === 'qredit') walletid = state.user.wallets[i]._id;
+			if (tw.currencyid.ticker === "ARK" && theTab === 'ark') walletid = state.user.wallets[i]._id;
+
+		}
+
+		var contactid = sendForm.send_contactid || null;
+		var address = sendForm.newowner_address || null;
+		var pass = sendForm.send_password || null;
+		
+		var notes = '';
+
+		var error = false;
+
+		if (tokenInfo[selectedToken].info.tokenDetails.pausable === false)
+		{	
+			error = true;
+		}
+
+		if (error === true) {
+
+			toast.error('Form error');
+
+		}
+		else {
+
+			(async () => {
+			
+				var tobject = {
+					qslp1: {
+						tp: 'NEWOWNER',
+						id: selectedToken,
+						no: notes
+					}
+				};
+
+				var vendor = JSON.stringify(tobject);
+
+				let res = await userService.sendtransaction(walletid, null, address, 0.00000001, pass, vendor);
+
+				if (res.status === true) {
+
+					toast.success(res.message);
+
+					handleReset();
+
+
+				}
+				else {
+
+					toast.error(res.message);
+
+				}
+
+			})();
+
+		}
+		
 	}
 
 	const doCopyAddress = (e, address) => {
@@ -562,6 +909,106 @@ console.log(tokenData);
 
 	};
 
+	const handleBurnPercent10 = (e) => {
+
+		e.preventDefault();
+
+		try {
+			var amount = (tokenInfo[selectedToken].data.tokenBalance * 0.10).toFixed(tokenInfo[selectedToken].data.tokenDecimals);
+		} catch (e) {
+			var amount = 0;
+		}
+
+		var currentSendForm = {};
+
+		Object.assign(currentSendForm, sendForm);
+
+		currentSendForm['burn_amount'] = amount;
+
+		setSendForm(currentSendForm);
+
+	};
+
+	const handleBurnPercent25 = (e) => {
+
+		e.preventDefault();
+
+		try {
+			var amount = (tokenInfo[selectedToken].data.tokenBalance * 0.25).toFixed(tokenInfo[selectedToken].data.tokenDecimals);
+		} catch (e) {
+			var amount = 0;
+		}
+
+		var currentSendForm = {};
+
+		Object.assign(currentSendForm, sendForm);
+
+		currentSendForm['burn_amount'] = amount;
+
+		setSendForm(currentSendForm);
+
+	};
+
+	const handleBurnPercent50 = (e) => {
+
+		e.preventDefault();
+
+		try {
+			var amount = (tokenInfo[selectedToken].data.tokenBalance * 0.50).toFixed(tokenInfo[selectedToken].data.tokenDecimals);
+		} catch (e) {
+			var amount = 0;
+		}
+
+		var currentSendForm = {};
+
+		Object.assign(currentSendForm, sendForm);
+
+		currentSendForm['burn_amount'] = amount;
+
+		setSendForm(currentSendForm);
+
+	};
+
+	const handleBurnPercent75 = (e) => {
+
+		e.preventDefault();
+
+		try {
+			var amount = (tokenInfo[selectedToken].data.tokenBalance * 0.75).toFixed(tokenInfo[selectedToken].data.tokenDecimals);
+		} catch (e) {
+			var amount = 0;
+		}
+
+		var currentSendForm = {};
+
+		Object.assign(currentSendForm, sendForm);
+
+		currentSendForm['burn_amount'] = amount;
+
+		setSendForm(currentSendForm);
+
+	};
+
+	const handleBurnPercent100 = (e) => {
+
+		e.preventDefault();
+
+		try {
+			var amount = tokenInfo[selectedToken].data.tokenBalance;
+		} catch (e) {
+			var amount = 0;
+		}
+
+		var currentSendForm = {};
+
+		Object.assign(currentSendForm, sendForm);
+
+		currentSendForm['burn_amount'] = amount;
+
+		setSendForm(currentSendForm);
+
+	};
+	
 	const doActionSend = (e) => {
 
 		setTheAction('send');
@@ -676,12 +1123,12 @@ console.log(tokenData);
 							{selectedToken !== null ? (
 								<div style={{ textAlign: 'left', marginTop: '3px', marginBottom: '3px' }}>
 
-									<button onClick={doActionSend} className={"btn" + (theAction === 'send' ? " btn-primary" : " btn-secondary")}>Send / Receive</button>
-									&nbsp;<button onClick={doActionBurn} className={"btn" + (theAction === 'burn' ? " btn-primary" : " btn-secondary")} style={tokenInfo[selectedToken].isOwner===true?{display:'none'}:{}}>Burn</button>
-									&nbsp;<button onClick={doActionMint} className={"btn" + (theAction === 'mint' ? " btn-primary" : " btn-secondary")} style={tokenInfo[selectedToken].isOwner===true?{display:'none'}:{}}>Mint</button>
-									&nbsp;<button onClick={doActionPause} className={"btn" + (theAction === 'pause' ? " btn-primary" : " btn-secondary")} style={tokenInfo[selectedToken].isOwner===true?{display:'none'}:{}}>Pause</button>
-									&nbsp;<button onClick={doActionResume} className={"btn" + (theAction === 'resume' ? " btn-primary" : " btn-secondary")} style={tokenInfo[selectedToken].isOwner===true?{display:'none'}:{}}>Resume</button>
-									&nbsp;<button onClick={doActionNewOwner} className={"btn" + (theAction === 'newowner' ? " btn-primary" : " btn-secondary")} style={tokenInfo[selectedToken].isOwner===true?{display:'none'}:{}}>New Owner</button>
+									<button onClick={doActionSend} className={"btn mr-2" + (theAction === 'send' ? " btn-primary" : " btn-secondary")}>Send / Receive</button>
+									<button onClick={doActionBurn} className={"btn mr-2" + (theAction === 'burn' ? " btn-primary" : " btn-secondary")} style={tokenInfo[selectedToken].data.isOwner===true?{}:{display:'none'}}>Burn</button>
+									<button onClick={doActionMint} className={"btn mr-2" + (theAction === 'mint' ? " btn-primary" : " btn-secondary")} style={tokenInfo[selectedToken].data.isOwner===true&&tokenInfo[selectedToken].info.tokenDetails.mintable===true?{}:{display:'none'}}>Mint</button>
+									<button onClick={doActionPause} className={"btn mr-2" + (theAction === 'pause' ? " btn-primary" : " btn-secondary")} style={tokenInfo[selectedToken].data.isOwner===true&&tokenInfo[selectedToken].info.tokenDetails.pausable===true?{}:{display:'none'}}>Pause</button>
+									<button onClick={doActionResume} className={"btn mr-2" + (theAction === 'resume' ? " btn-primary" : " btn-secondary")} style={tokenInfo[selectedToken].data.isOwner===true&&tokenInfo[selectedToken].info.tokenDetails.pausable===true?{}:{display:'none'}}>Resume</button>
+									<button onClick={doActionNewOwner} className={"btn mr-2" + (theAction === 'newowner' ? " btn-primary" : " btn-secondary")} style={tokenInfo[selectedToken].data.isOwner===true?{}:{display:'none'}}>New Owner</button>
 
 								</div>
 							) : ''}
@@ -855,25 +1302,34 @@ console.log(tokenData);
 												<div className="zl_send_currency_input_content">
 													<div className="zl_send_currency_btn_text">
 														<div className="zl_send_currency_text">
-															<p><span>Balance: 0.00 xxx</span></p>
+															<p><span>Balance: {tokenInfo[selectedToken].data.tokenBalance} {tokenInfo[selectedToken].info.tokenDetails.symbol}</span></p>
 														</div>
 													</div>
 													<FormControl
 														type="number"
 														placeholder="Amount to Burn"
-														id="send_amount"
-														value={sendForm.send_amount || ''}
+														id="burn_amount"
+														value={sendForm.burn_amount || ''}
 														onChange={handleSendFormChange}
 													/>
 													<div className="zl_send_currency_input_btns">
-														<Button onClick={handleSendPercent10}>10%</Button>
-														<Button onClick={handleSendPercent25}>25%</Button>
-														<Button onClick={handleSendPercent50}>50%</Button>
-														<Button onClick={handleSendPercent75}>75%</Button>
-														<Button onClick={handleSendPercent100}>All</Button>
+														<Button onClick={handleBurnPercent10}>10%</Button>
+														<Button onClick={handleBurnPercent25}>25%</Button>
+														<Button onClick={handleBurnPercent50}>50%</Button>
+														<Button onClick={handleBurnPercent75}>75%</Button>
+														<Button onClick={handleBurnPercent100}>All</Button>
 													</div>
 												</div>
 
+												<div className="zl_send_currency_input_content">
+													<FormControl
+														type="password"
+														placeholder="Your Password"
+														id="send_password"
+														onChange={handleSendFormChange}
+													/>
+												</div>
+												
 												<div className="zl_send_currency_btn_text">
 													<Button onClick={doBurn} className="btn">
 														Burn Tokens
@@ -904,19 +1360,28 @@ console.log(tokenData);
 												<div className="zl_send_currency_input_content">
 													<div className="zl_send_currency_btn_text">
 														<div className="zl_send_currency_text">
-															<p><span>Balance: 0.00 xxx</span></p>
+															<p><span>Balance: {tokenInfo[selectedToken].data.tokenBalance} {tokenInfo[selectedToken].info.tokenDetails.symbol}</span></p>
 														</div>
 													</div>
 													<FormControl
 														type="number"
 														placeholder="Amount to Mint"
-														id="send_amount"
-														value={sendForm.send_amount || ''}
+														id="mint_amount"
+														value={sendForm.mint_amount || ''}
 														onChange={handleSendFormChange}
 													/>
 
 												</div>
 
+												<div className="zl_send_currency_input_content">
+													<FormControl
+														type="password"
+														placeholder="Your Password"
+														id="send_password"
+														onChange={handleSendFormChange}
+													/>
+												</div>
+												
 												<div className="zl_send_currency_btn_text">
 													<Button onClick={doMint} className="btn">
 														Mint New Tokens
@@ -947,11 +1412,20 @@ console.log(tokenData);
 												<div className="zl_send_currency_input_content">
 													<div className="zl_send_currency_btn_text">
 														<div className="zl_send_currency_text">
-															<p><span>Current Status: xxx</span></p>
+															<p><span>Current Status: {tokenInfo[selectedToken].info.paused===true?"Paused":"Active"}</span></p>
 														</div>
 													</div>
 												</div>
 
+												<div className="zl_send_currency_input_content">
+													<FormControl
+														type="password"
+														placeholder="Your Password"
+														id="send_password"
+														onChange={handleSendFormChange}
+													/>
+												</div>
+												
 												<div className="zl_send_currency_btn_text">
 													<Button onClick={doPause} className="btn">
 														Pause Token
@@ -982,11 +1456,20 @@ console.log(tokenData);
 												<div className="zl_send_currency_input_content">
 													<div className="zl_send_currency_btn_text">
 														<div className="zl_send_currency_text">
-															<p><span>Current Status: xxx</span></p>
+															<p><span>Current Status: {tokenInfo[selectedToken].info.paused===true?"Paused":"Active"}</span></p>
 														</div>
 													</div>
 												</div>
 
+												<div className="zl_send_currency_input_content">
+													<FormControl
+														type="password"
+														placeholder="Your Password"
+														id="send_password"
+														onChange={handleSendFormChange}
+													/>
+												</div>
+												
 												<div className="zl_send_currency_btn_text">
 													<Button onClick={doResume} className="btn">
 														Resume Token
@@ -1058,6 +1541,15 @@ console.log(tokenData);
 
 												</div>
 
+												<div className="zl_send_currency_input_content">
+													<FormControl
+														type="password"
+														placeholder="Your Password"
+														id="send_password"
+														onChange={handleSendFormChange}
+													/>
+												</div>
+
 												<div className="zl_send_currency_btn_text">
 													<Button onClick={doNewOwner} className="btn">
 														Set New Ownership
@@ -1076,11 +1568,10 @@ console.log(tokenData);
 						</Tab.Pane>
 						<Tab.Pane eventKey="tab2">
 
-
-
 							<div className='primary-color' style={{ textAlign: 'left' }}>
 								Network: Ark ASLP-1
 							</div>
+
 
 							<div style={{ textAlign: 'left' }}>
 
@@ -1096,15 +1587,15 @@ console.log(tokenData);
 
 							</div>
 
-							{selectedToken === null ? (
+							{selectedToken !== null ? (
 								<div style={{ textAlign: 'left', marginTop: '3px', marginBottom: '3px' }}>
 
-									<button onClick={doActionSend} className={"btn" + (theAction === 'send' ? " btn-primary" : " btn-secondary")}>Send / Receive</button>
-									&nbsp;<button onClick={doActionBurn} className={"btn" + (theAction === 'burn' ? " btn-primary" : " btn-secondary")}>Burn</button>
-									&nbsp;<button onClick={doActionMint} className={"btn" + (theAction === 'mint' ? " btn-primary" : " btn-secondary")}>Mint</button>
-									&nbsp;<button onClick={doActionPause} className={"btn" + (theAction === 'pause' ? " btn-primary" : " btn-secondary")}>Pause</button>
-									&nbsp;<button onClick={doActionResume} className={"btn" + (theAction === 'resume' ? " btn-primary" : " btn-secondary")}>Resume</button>
-									&nbsp;<button onClick={doActionNewOwner} className={"btn" + (theAction === 'newowner' ? " btn-primary" : " btn-secondary")}>New Owner</button>
+									<button onClick={doActionSend} className={"btn mr-2" + (theAction === 'send' ? " btn-primary" : " btn-secondary")}>Send / Receive</button>
+									<button onClick={doActionBurn} className={"btn mr-2" + (theAction === 'burn' ? " btn-primary" : " btn-secondary")} style={tokenInfo[selectedToken].data.isOwner===true?{}:{display:'none'}}>Burn</button>
+									<button onClick={doActionMint} className={"btn mr-2" + (theAction === 'mint' ? " btn-primary" : " btn-secondary")} style={tokenInfo[selectedToken].data.isOwner===true&&tokenInfo[selectedToken].info.tokenDetails.mintable===true?{}:{display:'none'}}>Mint</button>
+									<button onClick={doActionPause} className={"btn mr-2" + (theAction === 'pause' ? " btn-primary" : " btn-secondary")} style={tokenInfo[selectedToken].data.isOwner===true&&tokenInfo[selectedToken].info.tokenDetails.pausable===true?{}:{display:'none'}}>Pause</button>
+									<button onClick={doActionResume} className={"btn mr-2" + (theAction === 'resume' ? " btn-primary" : " btn-secondary")} style={tokenInfo[selectedToken].data.isOwner===true&&tokenInfo[selectedToken].info.tokenDetails.pausable===true?{}:{display:'none'}}>Resume</button>
+									<button onClick={doActionNewOwner} className={"btn mr-2" + (theAction === 'newowner' ? " btn-primary" : " btn-secondary")} style={tokenInfo[selectedToken].data.isOwner===true?{}:{display:'none'}}>New Owner</button>
 
 								</div>
 							) : ''}
@@ -1120,7 +1611,7 @@ console.log(tokenData);
 														<svg width="15" height="15" viewBox="0 0 6 6" fill="none" xmlns="http://www.w3.org/2000/svg">
 															<path d="M3.60609 3.60609L2.69695 4.51523C2.36222 4.84996 1.81951 4.84996 1.48477 4.51523C1.15004 4.18049 1.15004 3.63778 1.48477 3.30305L2.39391 2.39391L0 0H6V6L3.60609 3.60609Z" fill="#53B9EA" />
 														</svg>
-														Send xxx
+														Send {tokenInfo[selectedToken].info.tokenDetails.name} ({tokenInfo[selectedToken].info.tokenDetails.symbol})
 													</h3>
 
 
@@ -1172,7 +1663,7 @@ console.log(tokenData);
 													<div className="zl_send_currency_input_content">
 														<div className="zl_send_currency_btn_text">
 															<div className="zl_send_currency_text">
-																<p><span>Balance: 0.00 xxx</span></p>
+																<p><span>Balance: {tokenInfo[selectedToken].data.tokenBalance} {tokenInfo[selectedToken].info.tokenDetails.symbol}</span></p>
 															</div>
 														</div>
 														<FormControl
@@ -1207,7 +1698,7 @@ console.log(tokenData);
 															Send
 														</Button>
 														<div className="zl_send_currency_text">
-															<p>Network Fee<span>0.00 xxx</span></p>
+															<p>Network Fee<span>0.04 ARK (+1 satoshi)</span></p>
 														</div>
 													</div>
 												</div>
@@ -1218,23 +1709,23 @@ console.log(tokenData);
 														<svg width="15" height="15" viewBox="0 0 6 6" fill="none" xmlns="http://www.w3.org/2000/svg">
 															<path d="M3.60609 3.60609L2.69695 4.51523C2.36222 4.84996 1.81951 4.84996 1.48477 4.51523C1.15004 4.18049 1.15004 3.63778 1.48477 3.30305L2.39391 2.39391L0 0H6V6L3.60609 3.60609Z" fill="#53B9EA" />
 														</svg>
-														Receive xxxx
+														Receive {tokenInfo[selectedToken].info.tokenDetails.name} ({tokenInfo[selectedToken].info.tokenDetails.symbol})
 													</h3>
 													<div className="zl_recive_address_content">
 														<p className="zl_recive_address_heading">Address</p>
 														<div className="zl_recive_copy_address_content">
-															<Button onClick={(e) => doCopyAddress(e, walletaddress)}>
+															<Button onClick={(e) => doCopyAddress(e, tokenInfo[selectedToken].data.address)}>
 																<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
 																	<path d="M1.48116 0H12.5365C13.3244 0 13.9653 0.641 13.9653 1.42887V4.78252H12.661V1.42887C12.661 1.36022 12.6051 1.30435 12.5365 1.30435H1.48116C1.4125 1.30435 1.35663 1.36022 1.35663 1.42887V12.4842C1.35663 12.5529 1.4125 12.6087 1.48116 12.6087H4.73024V13.9131H1.48116C0.693287 13.9131 0.0522861 13.2721 0.0522861 12.4842V1.42887C0.0523291 0.641 0.693287 0 1.48116 0Z" fill="#CAD3F2" />
 																	<path d="M7.46358 6.08691H18.5188C19.3068 6.08691 19.9478 6.72791 19.9478 7.51583V18.5711C19.9477 19.3591 19.3068 20.0001 18.5188 20.0001H7.46354C6.67562 20.0001 6.03463 19.3591 6.03463 18.5712V7.51583C6.03458 6.72791 6.67567 6.08691 7.46358 6.08691ZM7.46349 18.6957H18.5188C18.5875 18.6957 18.6434 18.6398 18.6434 18.5712V7.51583C18.6434 7.44713 18.5875 7.39126 18.5188 7.39126H7.46354C7.39484 7.39126 7.33897 7.44713 7.33897 7.51583V18.5712H7.33893C7.33893 18.6398 7.39484 18.6957 7.46349 18.6957Z" fill="#CAD3F2" />
 																</svg>
 															</Button>
-															<p>{walletaddress}</p>
+															<p>{tokenInfo[selectedToken].data.address}</p>
 														</div>
 														<div className="zl_recive_address_qr_code">
 															<QRCode
 																onClick={e => scanQR(e)}
-																value={walletaddress}
+																value={tokenInfo[selectedToken].data.address}
 																bgColor={"transparent"}
 																fgColor={"#CAD3F2"}
 																size={166}
@@ -1242,7 +1733,7 @@ console.log(tokenData);
 															/>
 															<QRCode
 																onClick={e => scanQR(e)}
-																value={walletaddress}
+																value={tokenInfo[selectedToken].data.address}
 																bgColor={"transparent"}
 																fgColor={"#3D476A"}
 																size={166}
@@ -1272,31 +1763,40 @@ console.log(tokenData);
 													<svg width="15" height="15" viewBox="0 0 6 6" fill="none" xmlns="http://www.w3.org/2000/svg">
 														<path d="M3.60609 3.60609L2.69695 4.51523C2.36222 4.84996 1.81951 4.84996 1.48477 4.51523C1.15004 4.18049 1.15004 3.63778 1.48477 3.30305L2.39391 2.39391L0 0H6V6L3.60609 3.60609Z" fill="#53B9EA" />
 													</svg>
-													Burn xxx
+													Burn {tokenInfo[selectedToken].info.tokenDetails.name} ({tokenInfo[selectedToken].info.tokenDetails.symbol})
 												</h3>
 
 												<div className="zl_send_currency_input_content">
 													<div className="zl_send_currency_btn_text">
 														<div className="zl_send_currency_text">
-															<p><span>Balance: 0.00 xxx</span></p>
+															<p><span>Balance: {tokenInfo[selectedToken].data.tokenBalance} {tokenInfo[selectedToken].info.tokenDetails.symbol}</span></p>
 														</div>
 													</div>
 													<FormControl
 														type="number"
 														placeholder="Amount to Burn"
-														id="send_amount"
-														value={sendForm.send_amount || ''}
+														id="burn_amount"
+														value={sendForm.burn_amount || ''}
 														onChange={handleSendFormChange}
 													/>
 													<div className="zl_send_currency_input_btns">
-														<Button onClick={handleSendPercent10}>10%</Button>
-														<Button onClick={handleSendPercent25}>25%</Button>
-														<Button onClick={handleSendPercent50}>50%</Button>
-														<Button onClick={handleSendPercent75}>75%</Button>
-														<Button onClick={handleSendPercent100}>All</Button>
+														<Button onClick={handleBurnPercent10}>10%</Button>
+														<Button onClick={handleBurnPercent25}>25%</Button>
+														<Button onClick={handleBurnPercent50}>50%</Button>
+														<Button onClick={handleBurnPercent75}>75%</Button>
+														<Button onClick={handleBurnPercent100}>All</Button>
 													</div>
 												</div>
 
+												<div className="zl_send_currency_input_content">
+													<FormControl
+														type="password"
+														placeholder="Your Password"
+														id="send_password"
+														onChange={handleSendFormChange}
+													/>
+												</div>
+												
 												<div className="zl_send_currency_btn_text">
 													<Button onClick={doBurn} className="btn">
 														Burn Tokens
@@ -1321,25 +1821,34 @@ console.log(tokenData);
 													<svg width="15" height="15" viewBox="0 0 6 6" fill="none" xmlns="http://www.w3.org/2000/svg">
 														<path d="M3.60609 3.60609L2.69695 4.51523C2.36222 4.84996 1.81951 4.84996 1.48477 4.51523C1.15004 4.18049 1.15004 3.63778 1.48477 3.30305L2.39391 2.39391L0 0H6V6L3.60609 3.60609Z" fill="#53B9EA" />
 													</svg>
-													Mint xxx
+													Mint {tokenInfo[selectedToken].info.tokenDetails.name} ({tokenInfo[selectedToken].info.tokenDetails.symbol})
 												</h3>
 
 												<div className="zl_send_currency_input_content">
 													<div className="zl_send_currency_btn_text">
 														<div className="zl_send_currency_text">
-															<p><span>Balance: 0.00 xxx</span></p>
+															<p><span>Balance: {tokenInfo[selectedToken].data.tokenBalance} {tokenInfo[selectedToken].info.tokenDetails.symbol}</span></p>
 														</div>
 													</div>
 													<FormControl
 														type="number"
 														placeholder="Amount to Mint"
-														id="send_amount"
-														value={sendForm.send_amount || ''}
+														id="mint_amount"
+														value={sendForm.mint_amount || ''}
 														onChange={handleSendFormChange}
 													/>
 
 												</div>
 
+												<div className="zl_send_currency_input_content">
+													<FormControl
+														type="password"
+														placeholder="Your Password"
+														id="send_password"
+														onChange={handleSendFormChange}
+													/>
+												</div>
+												
 												<div className="zl_send_currency_btn_text">
 													<Button onClick={doMint} className="btn">
 														Mint New Tokens
@@ -1364,17 +1873,26 @@ console.log(tokenData);
 													<svg width="15" height="15" viewBox="0 0 6 6" fill="none" xmlns="http://www.w3.org/2000/svg">
 														<path d="M3.60609 3.60609L2.69695 4.51523C2.36222 4.84996 1.81951 4.84996 1.48477 4.51523C1.15004 4.18049 1.15004 3.63778 1.48477 3.30305L2.39391 2.39391L0 0H6V6L3.60609 3.60609Z" fill="#53B9EA" />
 													</svg>
-													Pause xxx
+													Pause {tokenInfo[selectedToken].info.tokenDetails.name} ({tokenInfo[selectedToken].info.tokenDetails.symbol})
 												</h3>
 
 												<div className="zl_send_currency_input_content">
 													<div className="zl_send_currency_btn_text">
 														<div className="zl_send_currency_text">
-															<p><span>Current Status: xxx</span></p>
+															<p><span>Current Status: {tokenInfo[selectedToken].info.paused===true?"Paused":"Active"}</span></p>
 														</div>
 													</div>
 												</div>
 
+												<div className="zl_send_currency_input_content">
+													<FormControl
+														type="password"
+														placeholder="Your Password"
+														id="send_password"
+														onChange={handleSendFormChange}
+													/>
+												</div>
+												
 												<div className="zl_send_currency_btn_text">
 													<Button onClick={doPause} className="btn">
 														Pause Token
@@ -1399,17 +1917,26 @@ console.log(tokenData);
 													<svg width="15" height="15" viewBox="0 0 6 6" fill="none" xmlns="http://www.w3.org/2000/svg">
 														<path d="M3.60609 3.60609L2.69695 4.51523C2.36222 4.84996 1.81951 4.84996 1.48477 4.51523C1.15004 4.18049 1.15004 3.63778 1.48477 3.30305L2.39391 2.39391L0 0H6V6L3.60609 3.60609Z" fill="#53B9EA" />
 													</svg>
-													Resume xxx
+													Resume {tokenInfo[selectedToken].info.tokenDetails.name} ({tokenInfo[selectedToken].info.tokenDetails.symbol})
 												</h3>
 
 												<div className="zl_send_currency_input_content">
 													<div className="zl_send_currency_btn_text">
 														<div className="zl_send_currency_text">
-															<p><span>Current Status: xxx</span></p>
+															<p><span>Current Status: {tokenInfo[selectedToken].info.paused===true?"Paused":"Active"}</span></p>
 														</div>
 													</div>
 												</div>
 
+												<div className="zl_send_currency_input_content">
+													<FormControl
+														type="password"
+														placeholder="Your Password"
+														id="send_password"
+														onChange={handleSendFormChange}
+													/>
+												</div>
+												
 												<div className="zl_send_currency_btn_text">
 													<Button onClick={doResume} className="btn">
 														Resume Token
@@ -1434,7 +1961,7 @@ console.log(tokenData);
 													<svg width="15" height="15" viewBox="0 0 6 6" fill="none" xmlns="http://www.w3.org/2000/svg">
 														<path d="M3.60609 3.60609L2.69695 4.51523C2.36222 4.84996 1.81951 4.84996 1.48477 4.51523C1.15004 4.18049 1.15004 3.63778 1.48477 3.30305L2.39391 2.39391L0 0H6V6L3.60609 3.60609Z" fill="#53B9EA" />
 													</svg>
-													New Owner for xxx
+													New Ownership for {tokenInfo[selectedToken].info.tokenDetails.name} ({tokenInfo[selectedToken].info.tokenDetails.symbol})
 												</h3>
 
 												<div className="zl_send_currency_input_content" style={{ borderBottom: '0px' }}>
@@ -1481,6 +2008,15 @@ console.log(tokenData);
 
 												</div>
 
+												<div className="zl_send_currency_input_content">
+													<FormControl
+														type="password"
+														placeholder="Your Password"
+														id="send_password"
+														onChange={handleSendFormChange}
+													/>
+												</div>
+
 												<div className="zl_send_currency_btn_text">
 													<Button onClick={doNewOwner} className="btn">
 														Set New Ownership
@@ -1495,7 +2031,6 @@ console.log(tokenData);
 								</div>
 
 							) : ''}
-
 
 
 

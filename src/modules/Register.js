@@ -248,7 +248,7 @@ const RegisterModule = ({ navigation }) => {
 		
 			<div className="zl_login_content container">
 				<div className="zl_login_heading_text">
-					<img className="mb-15" src="/assets/img/qredit-wide3.png" />
+					<a href="/"><img className="mb-15" src="/assets/img/qredit-wide3.png" /></a>
 					<h3 className="zl_login_heading">Register</h3>
 					<p className="zl_login_peregraph">Fill in the form below to register a new account.</p>
 				</div>

@@ -106,7 +106,7 @@ const LogInModule = ({ navigation }) => {
 		<section className="zl_login_section">
 			<div className="zl_login_content container pb-1">
 				<div className="zl_login_heading_text">
-					<img className="mb-15" src="/assets/img/qredit-wide3.png" />
+					<a href="/"><img className="mb-15" src="/assets/img/qredit-wide3.png" /></a>
 					<h3 className="zl_login_heading">Login</h3>
 					<p className="zl_login_peregraph">Enter your email, password, and two-factor pin (if enabled) to login.</p>
 				</div>

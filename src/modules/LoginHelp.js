@@ -258,7 +258,7 @@ const LoginHelpModule = ({ props }) => {
 			<div className="zl_login_content container pb-1">
 
 				<div className="zl_login_heading_text">
-					<img className="mb-15" src="/assets/img/qredit-wide3.png" />
+					<a href="/"><img className="mb-15" src="/assets/img/qredit-wide3.png" /></a>
 					<h3 className="zl_login_heading">Login Help</h3>
 				</div>
 				

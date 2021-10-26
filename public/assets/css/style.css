@@ -53,6 +53,14 @@ ul {
   ~ .zl_all_pages_inner_content {
   padding: 0;
 }
+.zl_all_pages_content .zl_page_sidebar[title="loginhelp"] {
+  display: none;
+}
+.zl_all_pages_content
+  .zl_page_sidebar[title="loginhelp"]
+  ~ .zl_all_pages_inner_content {
+  padding: 0;
+}
 .zl_all_pages_content .zl_page_sidebar[title=""] {
   display: none;
 }

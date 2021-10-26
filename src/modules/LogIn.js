@@ -24,31 +24,23 @@ const LogInModule = ({ navigation }) => {
 
 	const [state, setState] = React.useState(store.getState());
 
-	const calledOnce = React.useRef(false);
-
 	React.useEffect(() => {
 		// Runs after the first render() lifecycle
 
-		if (!calledOnce.current) {
+		(async () => {
 
-			(async () => {
+			let res = await userService.get();
 
-				let res = await userService.get();
+			if (res.status !== false) {
+				// redirect
 
-				if (res.status !== false) {
-					// redirect
+				history.push('/dashboard/');
 
-					history.push('/dashboard/');
+			}
 
-				}
+		})();
 
-			})();
-
-			calledOnce.current = true;
-
-		}
-
-	});
+	}, []);
 
 
 	const handleLoginFormChange = (event) => {
@@ -112,7 +104,7 @@ const LogInModule = ({ navigation }) => {
 
 	return (
 		<section className="zl_login_section">
-			<div className="zl_login_content container">
+			<div className="zl_login_content container pb-1">
 				<div className="zl_login_heading_text">
 					<img className="mb-15" src="/assets/img/qredit-wide3.png" />
 					<h3 className="zl_login_heading">Login</h3>
@@ -142,6 +134,9 @@ const LogInModule = ({ navigation }) => {
 				</div>
 				<div className="zl_login_btn">
 					<Link onClick={doLogin} to={'/login'} className="mx-auto">Login</Link>
+				</div>
+				<div className="col-12" style={{textAlign: 'right'}}>
+					<p className="primary-color"><Link to={'/loginhelp'} className="mx-auto">Login Help</Link></p>
 				</div>
 			</div>
 			

@@ -34,8 +34,8 @@ import Viewcontact from './Viewcontact';
 import Register from './Register';
 import LoginHelp from './LoginHelp';
 //import TwoFactor from './TwoFactor';
-import Security from './Security';
-import Phone from './Phone';
+//import Security from './Security';
+//import Phone from './Phone';
 
 export default {
 	// [routes.homepage]: Homepage,
@@ -74,6 +74,6 @@ export default {
 	[routes.register]: Register,
 	[routes.loginhelp]: LoginHelp,
 	//[routes.twofactor]: TwoFactor,
-	[routes.security]: Security,
-	[routes.phone]: Phone,
+	//[routes.security]: Security,
+	//[routes.phone]: Phone,
 };

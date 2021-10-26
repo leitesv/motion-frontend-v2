@@ -26,8 +26,6 @@ const PricePlanModule = ({ props }) => {
 
             let res = await userService.get();
 
-            console.log(res);
-
             if (res.status === true) {
                 setState({ user: res.user });
             }

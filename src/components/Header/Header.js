@@ -23,15 +23,15 @@ const Header = (props) => {
     //const [state, setState] = React.useState({ user: {} });
     const [state, setState] = React.useState(store.getState());
 
+    let history = useHistory()
+    
     const handleLogOut = (event) => {
 
         localStorage.removeItem("accessToken");
-        history.push('/login/');
+        history.push('/login');
         toast.success("You have been logged out");
 
     };
-
-    let history = useHistory()
 
     React.useEffect(() => {
 

@@ -60,8 +60,6 @@ const ContactsModule = (props) => {
 
             let res = await userService.get();
 
-            //console.log(res);
-
             if (res.status === true) {
                 store.dispatch(updateStore({ key: 'user', value: res.user }));
                 setState(store.getState());

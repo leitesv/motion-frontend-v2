@@ -34,8 +34,6 @@ const RegisterModule = ({ navigation }) => {
 
 			let res = await userService.get();
 
-			console.log(res);
-
 			if (res.status !== false) {
 				// redirect
 
@@ -364,7 +362,7 @@ const RegisterModule = ({ navigation }) => {
 						
 							<div className="custom-control custom-checkbox mb-3">
 								<input type="checkbox" className={"custom-control-input" + isInvalid('termsinvalid')} id="register_terms" onChange={handleRegisterFormChange} required />
-								<label className="zl_login_input_text custom-control-label " for="register_terms">Agree to terms and conditions</label>
+								<label className="zl_login_input_text custom-control-label primary-color" for="register_terms">Agree to terms and conditions</label>
 								{feedbackShow('termsinvalid')}
 							</div>
 

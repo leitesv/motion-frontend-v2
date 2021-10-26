@@ -35,10 +35,6 @@ const QSLP1Module = ({ props }) => {
 	// send btn
 	const [sendForm, setSendForm] = useState({});
 
-	//const handleToggle = () => {
-	//    setSend(!send);
-	//};
-
 	const [modalData, setModalData] = useState(null);
 	const [modalButton, setModalButton] = useState(null);
 	const [modalTitle, setModalTitle] = useState(null);
@@ -126,11 +122,12 @@ const QSLP1Module = ({ props }) => {
 				
 				setTokenInfo(tokenData);
 
-console.log(tokenData);
-
 				var colourOptions3 = [];
 
 /*
+
+still working on ark tokens
+
 				let tokens3 = await userService.getaslptokens(res.user.master_ark_address);
 
 				if (tokens3.status === true) {

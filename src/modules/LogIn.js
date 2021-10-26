@@ -35,8 +35,6 @@ const LogInModule = ({ navigation }) => {
 
 				let res = await userService.get();
 
-				console.log(res);
-
 				if (res.status !== false) {
 					// redirect
 
@@ -88,8 +86,6 @@ const LogInModule = ({ navigation }) => {
 					toast.success(res.message);
 
 					let res2 = await userService.get();
-
-					//console.log(res);
 
 					if (res2.status === true) {
 						store.dispatch(updateStore({ key: 'user', value: res2.user }));

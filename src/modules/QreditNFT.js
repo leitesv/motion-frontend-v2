@@ -17,8 +17,6 @@ const QreditNFTModule = ({ props }) => {
 
             let res = await userService.get();
 
-            console.log(res);
-
             if (res.status === false) {
 
                 toast.error('Authentication Session Has Expired');

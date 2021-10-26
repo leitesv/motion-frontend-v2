@@ -94,13 +94,19 @@ function Step1(props) {
         return null
     }
     return (
-        <div className="zl_welcome_slide_img center-center">
-            <img src="assets/img/home-1.png" alt="wizard-img" className="img-fluid zl_dark_theme_slide_img welcomeimage" />
-            <img src="assets/img/home-1.png" alt="wizard-img" className="img-fluid zl_light_theme_slide_img" />
-            <img src="assets/img/qredit-wide3.png" alt="wizard-img" className="img-fluid zl_light_theme_slide_img mb-15" />
-            <h2 className="zl_welcome_slide_heading">Digital Banking Excellence</h2>
-            <p className="zl_welcome_slide_peregraph">The new and revolutionary Qredit Motion app empowers user to spend a broad range of crypto and fiat currencies with real-time conversion at point-of-sale and low exchange fees.</p>
-        </div>
+    	<React.Fragment>
+			<div className="zl_welcome_slide_img center-center">
+				<img src="assets/img/home-1.png" alt="wizard-img" className="img-fluid zl_dark_theme_slide_img welcomeimage" />
+				<img src="assets/img/home-1.png" alt="wizard-img" className="img-fluid zl_light_theme_slide_img" />
+				<img src="assets/img/qredit-wide3.png" alt="wizard-img" className="img-fluid zl_light_theme_slide_img mb-15" />
+				<h2 className="zl_welcome_slide_heading">Digital Banking Excellence</h2>
+				<p className="zl_welcome_slide_peregraph">The new and revolutionary Qredit Motion app empowers user to spend a broad range of crypto and fiat currencies with real-time conversion at point-of-sale and low exchange fees.</p>
+			</div>
+            <div className="row primary-color" style={{textAlign:'center', margin:'auto'}}>
+                If you're ready, then&nbsp;<Link to={'/register'} className="">Signup</Link>
+                &nbsp; or you can&nbsp;<Link to={'/login'} className="">Login</Link>
+            </div>
+		</React.Fragment>
     );
 }
 
@@ -109,13 +115,19 @@ function Step2(props) {
         return null
     }
     return (
-        <div className="zl_welcome_slide_img center-center">
-            <img src="assets/img/home-2.png" alt="wizard-img" className="img-fluid zl_dark_theme_slide_img" />
-            <img src="assets/img/home-2.png" alt="wizard-img" className="img-fluid zl_light_theme_slide_img" />
-            <img src="assets/img/qredit-wide3.png" alt="wizard-img" className="img-fluid zl_light_theme_slide_img mb-15" />
-            <h2 className="zl_welcome_slide_heading">Open Banking Standard Compliant</h2>
-            <p className="zl_welcome_slide_peregraph">It opens the way to new products and services that could help customers and small to medium-sized businesses get a better deal. It could also give you a more detailed understanding of your accounts and help you find new ways to make the most of your money.</p>
-        </div>
+    	<React.Fragment>
+			<div className="zl_welcome_slide_img center-center">
+				<img src="assets/img/home-2.png" alt="wizard-img" className="img-fluid zl_dark_theme_slide_img" />
+				<img src="assets/img/home-2.png" alt="wizard-img" className="img-fluid zl_light_theme_slide_img" />
+				<img src="assets/img/qredit-wide3.png" alt="wizard-img" className="img-fluid zl_light_theme_slide_img mb-15" />
+				<h2 className="zl_welcome_slide_heading">Open Banking Standard Compliant</h2>
+				<p className="zl_welcome_slide_peregraph">It opens the way to new products and services that could help customers and small to medium-sized businesses get a better deal. It could also give you a more detailed understanding of your accounts and help you find new ways to make the most of your money.</p>
+			</div>
+            <div className="row primary-color" style={{textAlign:'center', margin:'auto'}}>
+                If you're ready, then&nbsp;<Link to={'/register'} className="">Signup</Link>
+                &nbsp; or you can&nbsp;<Link to={'/login'} className="">Login</Link>
+            </div>
+        </React.Fragment>
     );
 }
 

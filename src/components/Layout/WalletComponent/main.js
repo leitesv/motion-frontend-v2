@@ -83,7 +83,9 @@ const MainComponent = (props) => {
 
 			let resd = await userService.getdelegatelist(walletid);
 			
-			setDelegateList(resd.delegates);
+			if (resd.status === true) {
+				setDelegateList(resd.delegates);
+			}
 
 			let cvote = await userService.getwalletvotes(walletid);
 			
@@ -101,32 +103,40 @@ const MainComponent = (props) => {
             
 				let cvotename = '';
 				
-				for (let i = 0; i < resd.delegates.length; i++)
-				{
-					let ditem = resd.delegates[i];
-					if (ditem.publicKey === cvote.vote)
+				if (resd.status === true) {
+				
+					for (let i = 0; i < resd.delegates.length; i++)
 					{
+						let ditem = resd.delegates[i];
+						if (ditem.publicKey === cvote.vote)
+						{
 					
-						setCurrentVoteName(ditem.username);
+							setCurrentVoteName(ditem.username);
 					
+						}
 					}
+				
 				}
             
             }
             
         	var colourOptionsVote = [];
 
-			for (let i = 0; i < resd.delegates.length; i++) {
+			if (resd.status === true) {
+			
+				for (let i = 0; i < resd.delegates.length; i++) {
 
-				let thisdelegate = resd.delegates[i];
+					let thisdelegate = resd.delegates[i];
 
-				let cvalue = thisdelegate.publicKey;
-				let clabel = thisdelegate.username;
+					let cvalue = thisdelegate.publicKey;
+					let clabel = thisdelegate.username;
 				
-				let cdetails = { value: cvalue, label: clabel };
+					let cdetails = { value: cvalue, label: clabel };
 
-				colourOptionsVote.push(cdetails);
+					colourOptionsVote.push(cdetails);
 
+				}
+			
 			}
             
             
@@ -614,7 +624,7 @@ const MainComponent = (props) => {
                     <div className="zl_send_recive_content_row">
                         <div className="zl_send_recive_content_column">
                         	{
-                        		props.currencyid.ticker === "XQR" || props.currencyid.ticker === 'XQR' ?
+                        		props.currencyid.ticker === "XQR" || props.currencyid.ticker === 'ARK' ?
                         		(<div style={{marginBottom: '-40px'}}>
                         			<Button className={sendType==='send'?"btn-primary":"btn-secondary"} onClick={(e) => setSendType('send')}>Send</Button>
                         			&nbsp;

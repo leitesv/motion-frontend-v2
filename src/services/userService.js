@@ -6,6 +6,9 @@ const apiUrl = "https://unifiedapi.qredit.cloud/";
 
 const kyi = ky.extend({
 	prefixUrl: apiUrl,
+	retry: {
+		limit: 10
+	},
 	hooks: {
 		beforeRequest: [
 			

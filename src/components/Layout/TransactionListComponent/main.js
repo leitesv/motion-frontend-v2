@@ -19,7 +19,7 @@ const MainComponent = (props) => {
     //const [startDate, endDate] = dateRange;
 
     // send btn
-    const [sendForm, setSendForm] = useState({});
+    //const [sendForm, setSendForm] = useState({});
 
     //const handleToggle = () => {
     //    setSend(!send);
@@ -55,6 +55,7 @@ const MainComponent = (props) => {
 
     }, [props]);
 
+/*
     const handleReset = () => {
         Array.from(document.querySelectorAll("input")).forEach(
             input => (input.value = "")
@@ -151,7 +152,7 @@ const MainComponent = (props) => {
     };
 
     let transactions = [];
-
+*/
 
     return (
         <>

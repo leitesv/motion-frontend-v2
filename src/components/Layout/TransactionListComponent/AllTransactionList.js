@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { Table } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 
 import InfiniteScroll from "react-infinite-scroll-component";
 
@@ -30,7 +31,7 @@ const AllTransactionListComponent = (props) => {
 
             let res = await userService.getwallettransactions(walletid, 0, 10);
 
-console.log(res);
+//console.log(res);
 
             if (res.status === true) {
             
@@ -55,7 +56,7 @@ console.log(res);
 
             let res = await userService.getwallettransactions(walletid, skip, limit);
 
-console.log(res);
+//console.log(res);
 
             if (res.status === true) {
             
@@ -89,6 +90,14 @@ console.log(res);
 		if (type === 21) typetext = 'Change';
 
 		return typetext;
+	
+	};
+	
+	const gotoExplorer = (url, txid) => {
+	
+		var openurl = url.replace('%txid%', txid);
+	
+		return openurl;
 	
 	};
 	
@@ -135,9 +144,9 @@ console.log(res);
 							{translist.map((transactionListData, i) => (
 								<tr key={transactionListData._id}>
 
-									<td className="zl_transaction_list_name" style={{ textTransform: "uppercase" }}>{transactionListData.internaltype}</td>
-									<td className="zl_transaction_list_id">{transactionListData.details.txid.substr(0,7) + '...' + transactionListData.details.txid.substr(-7)}</td>
-									<td className={(transactionListData.direction==='in'?'zl_transaction_pluse':'zl_transaction_minas') + " zl_transaction_list_value"}>{(transactionListData.direction==='in'?'+':'-')}{transactionListData.amount}</td>
+									<td className="zl_transaction_list_name" style={{ textTransform: "uppercase" }}>{transactionListData.internaltype} {transactionListData.direction.toUpperCase()}</td>
+									<td className="zl_transaction_list_id"><a href={gotoExplorer(transactionListData.currencyid.explorerregex, transactionListData.details.txid)} target="_blank" rel="noreferrer">{transactionListData.details.txid.substr(0,7) + '...' + transactionListData.details.txid.substr(-7)}</a></td>
+									<td className={(transactionListData.direction==='in'?'zl_transaction_pluse':'zl_transaction_minas') + " zl_transaction_list_value"}>{(transactionListData.direction==='in'?'+':'-')}{parseFloat(transactionListData.amount).toFixed(8)}</td>
 									<td className="zl_transaction_list_name">{(transactionListData.direction==='in'?'N/A':transactionListData.details.fee)}</td>
 									<td className="zl_transaction_list_date">{transactionListData.details.timestamp.human.substr(0,19).replace('T',' ')}</td>
 								</tr>

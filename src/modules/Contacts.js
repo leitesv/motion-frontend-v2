@@ -58,6 +58,13 @@ const ContactsModule = (props) => {
     const [backgroundImage, setBackgroundImage] = useState('url(https://unifiedapi.qredit.cloud/api/backgroundimage/)');
     const [profileImage, setProfileImage] = useState('url(https://unifiedapi.qredit.cloud/api/profileimage/)');
 
+    const [showUploadPic, setShowUploadPic] = useState(false);
+    const [showUploadBG, setShowUploadBG] = useState(false);
+
+    const [uploadingPic, setUploadingPic] = useState(false);
+    const [uploadingBG, setUploadingBG] = useState(false);
+
+
     React.useEffect(() => {
         // Runs after the first render() lifecycle
 
@@ -492,12 +499,8 @@ const ContactsModule = (props) => {
     	else
     	{
 
+			setUploadingPic(false);
 
-			var currentState = {};
-			Object.assign(currentState, state);
-			currentState['uploadingPic'] = true;
-			setState(currentState);
-		
 			(async () => {
 
 				let data = pictureDataURLs[0];
@@ -506,21 +509,15 @@ console.log(data);
 
 				let res = await userService.updateprofilepic(data);
 
-				var currentState = {};
-				Object.assign(currentState, state);
-				currentState['uploadingPic'] = false;
-				setState(currentState);
+				setUploadingPic(false);
 
 				if (res.status === true)
 				{
 
 					store.dispatch( updateStore({ key: 'userImages', value: res.userimages }) );
 					
-					var currentState = {};
-					Object.assign(currentState, state);
-					currentState['showUploadPic'] = false;
-					setState(currentState);
-
+					setShowUploadPic(false);
+					
 					toast.success(res.message);
 
 				}
@@ -542,11 +539,8 @@ console.log(data);
     	}
     	else
     	{
-
-			var currentState = {};
-			Object.assign(currentState, state);
-			currentState['uploadingBG'] = true;
-			setState(currentState);
+			
+			setUploadingBG(true);
 			
 			(async () => {
 
@@ -554,20 +548,14 @@ console.log(data);
 
 				let res = await userService.updateprofilebg(data);
 				
-				var currentState = {};
-				Object.assign(currentState, state);
-				currentState['uploadingBG'] = false;
-				setState(currentState);
+				setUploadingBG(false);
 			
 				if (res.status === true)
 				{
 
 					store.dispatch( updateStore({ key: 'userImages', value: res.userimages }) );
 					
-					var currentState = {};
-					Object.assign(currentState, state);
-					currentState['showUploadBG'] = false;
-					setState(currentState);
+					setShowUploadBG(false);
 
 					toast.success(res.message);
 
@@ -583,28 +571,7 @@ console.log(data);
 			
     	}
 
-    }
-    
-    const setShowUploadPic = (value) => {        
-        
-		var currentState = {};
-		Object.assign(currentState, state);
-		currentState['showUploadPic'] = value;
-		setState(currentState);
-		
-    }
-    
-
-    const setShowUploadBG = (value) => {        
-
-		var currentState = {};
-		Object.assign(currentState, state);
-		currentState['showUploadBG'] = value;
-		setState(currentState);
-        
-    }
-    
-    
+    }    
     
     
     return (
@@ -619,9 +586,9 @@ console.log(data);
 				<div className="container-fluid px-0">
 					<div className="card overflow-hidden" style={{background: 'transparent', maxWidth: '1140px', margin: 'auto'}}>
 						<div className="card-body p-0" style={{height:'150px'}}>
-							<div className="background text-center" style={((state.showUploadBG===true||state.uploadingBG===true)?{backgroundColor: 'rgba(255,255,255,0.35)'}:{backgroundImage: backgroundImage})} onMouseEnter={() => setShowUploadBG(true)} onMouseLeave={() => setShowUploadBG(false)}>
+							<div className="background text-center" style={((showUploadBG===true||uploadingBG===true)?{backgroundColor: 'rgba(255,255,255,0.35)'}:{backgroundImage: backgroundImage})} onMouseEnter={() => setShowUploadBG(true)} onMouseLeave={() => setShowUploadBG(false)}>
 								<ImageUploader
-									fileContainerStyle={{boxShadow: 'none', background: 'transparent', display: (state.showUploadBG===true&&state.uploadingBG!==true?'inline':'none')}}
+									fileContainerStyle={{boxShadow: 'none', background: 'transparent', display: (showUploadBG===true&&uploadingBG!==true?'inline':'none')}}
 									withIcon={false}
 									withLabel={false}
 									singleImage={true}
@@ -633,7 +600,7 @@ console.log(data);
 								<Loader
 									type="Puff"
 									color="#FFFFFF"
-									visible={state.uploadingBG === true? true : false}
+									visible={uploadingBG === true? true : false}
 								/>
 							</div>
 						</div>
@@ -641,9 +608,9 @@ console.log(data);
 				</div>
 				<div className="container-fluid text-center mb-4">
 					<div className="avatar rounded-circle mx-auto shadow" style={{height: '140px', width: '140px', marginTop: '-50px'}}>
-						<div className="background" style={((state.showUploadPic===true||state.uploadingPic===true)?{backgroundColor: 'rgba(255,255,255,0.35)'}:{backgroundImage: profileImage})} onMouseEnter={() => setShowUploadPic(true)} onMouseLeave={() => setShowUploadPic(false)}>
+						<div className="background" style={((showUploadPic===true||uploadingPic===true)?{backgroundColor: 'rgba(255,255,255,0.35)'}:{backgroundImage: profileImage})} onMouseEnter={() => setShowUploadPic(true)} onMouseLeave={() => setShowUploadPic(false)}>
 							<ImageUploader
-								fileContainerStyle={{boxShadow: 'none', background: 'transparent', display: (state.showUploadPic===true&&state.uploadingPic!==true?'inline':'none')}}
+								fileContainerStyle={{boxShadow: 'none', background: 'transparent', display: (showUploadPic===true&&uploadingPic!==true?'inline':'none')}}
 								withIcon={false}
 								withLabel={false}
 								singleImage={true}
@@ -655,7 +622,7 @@ console.log(data);
 							<Loader
 								type="Puff"
 								color="#FFFFFF"
-								visible={state.uploadingPic === true? true : false}
+								visible={uploadingPic === true? true : false}
 							/>
 						</div>
 					</div>

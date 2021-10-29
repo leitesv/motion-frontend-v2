@@ -20,6 +20,11 @@ const Header = (props) => {
         setSend(!send);
     };
 
+    const handleToggleMobile = () => {
+    	if (window.innerWidth <= 760)
+        	setSend(false);
+    };
+    
     //const [state, setState] = React.useState({ user: {} });
     const [state, setState] = React.useState(store.getState());
 
@@ -105,7 +110,7 @@ const Header = (props) => {
                     <ul className="zl_page_sidebar_nav">
                     
                         <li className="zl_page_sidebar_items" title="notificationsettings">
-                            <Link to={'/notificationsettings'} className="zl_page_sidebar_link position-relative">
+                            <Link to={'/notificationsettings'} onClick={handleToggleMobile} className="zl_page_sidebar_link position-relative">
                             	<div style={{textAlign: 'center', marginRight: '15px', width:'20px', height: '20px'}}>
                             		<span style={{fontSize: '16px', color: notificationFill}}>{notificationCount}</span>
                             	</div>
@@ -114,52 +119,52 @@ const Header = (props) => {
                         </li>
                         
                         <li className="zl_page_sidebar_items" title="dashboard">
-                            <Link to={'/dashboard'} className="zl_page_sidebar_link position-relative">
+                            <Link to={'/dashboard'} onClick={handleToggleMobile} className="zl_page_sidebar_link position-relative">
                                 <img src="/assets/svg-icons/064-home.svg" className="mr-15" width="20" height="20"></img>
                                 <span className="zl_pagesidebar_text">Dashboard</span>
                             </Link>
                         </li>
 
                         <li className="zl_page_sidebar_items" title="contacts">
-                            <Link to={'/contacts'} className="zl_page_sidebar_link position-relative">
+                            <Link to={'/contacts'} onClick={handleToggleMobile} className="zl_page_sidebar_link position-relative">
                                 <img src="/assets/svg-icons/006-user.svg" className="mr-15" width="20" height="20"></img>
                                 <span className="zl_pagesidebar_text">Contacts</span>
                             </Link>
                         </li>
                         <li className="zl_page_sidebar_items" title="persona">
-                            <Link to={'/persona'} className="zl_page_sidebar_link position-relative">
+                            <Link to={'/persona'} onClick={handleToggleMobile} className="zl_page_sidebar_link position-relative">
                                 <img src="/assets/icons/personalogo.svg" className="mr-15" width="20" height="20"></img>
                                 <span className="zl_pagesidebar_text">Persona / KYC</span>
                             </Link>
                         </li>
                         <li className="zl_page_sidebar_items" title="wallets">
-                            <Link to={'/wallets'} className="zl_page_sidebar_link position-relative">
+                            <Link to={'/wallets'} onClick={handleToggleMobile} className="zl_page_sidebar_link position-relative">
                                 <img src="/assets/svg-icons/078-wallet.svg" className="mr-15" width="20" height="20"></img>
                                 <span className="zl_pagesidebar_text">Wallets</span>
                                 <span className="zl_page_sidebar_notification_dot"></span>
                             </Link>
                         </li>
                         <li className="zl_page_sidebar_items" title="transactions">
-                            <Link to={'/transactions'} className="zl_page_sidebar_link position-relative">
+                            <Link to={'/transactions'} onClick={handleToggleMobile} className="zl_page_sidebar_link position-relative">
                                 <img src="/assets/svg-icons/088-transfer.svg" className="mr-15" width="20" height="20"></img>
                                 <span className="zl_pagesidebar_text">Transactions</span>
                             </Link>
                         </li>
                         <li className="zl_page_sidebar_items" title="qslp1">
-                            <Link to={'/qslp1'} className="zl_page_sidebar_link position-relative">
+                            <Link to={'/qslp1'} onClick={handleToggleMobile} className="zl_page_sidebar_link position-relative">
                                 <img src="/assets/svg-icons/081-crown.svg" className="mr-15" width="20" height="20"></img>
                                 <span className="zl_pagesidebar_text">Tokens Wallet</span>
                             </Link>
                         </li>
                         <li className="zl_page_sidebar_items" title="qreditnft">
-                            <Link to={'/qreditnft'} className="zl_page_sidebar_link position-relative">
+                            <Link to={'/qreditnft'} onClick={handleToggleMobile} className="zl_page_sidebar_link position-relative">
                                 <img src="/assets/svg-icons/007-star.svg" className="mr-15" width="20" height="20"></img>
                                 <span className="zl_pagesidebar_text">NFT's</span>
                             </Link>
                         </li>
 
                         <li className="zl_page_sidebar_items" title="createtokens">
-                            <Link to={'/createtokens'} className="zl_page_sidebar_link position-relative">
+                            <Link to={'/createtokens'} onClick={handleToggleMobile} className="zl_page_sidebar_link position-relative">
                                 <img src="/assets/svg-icons/009-plus.svg" className="mr-15" width="20" height="20"></img>
                                 <span className="zl_pagesidebar_text">Create Tokens</span>
                             </Link>
@@ -174,13 +179,13 @@ const Header = (props) => {
                         </li> */}
 
                         <li className="zl_page_sidebar_items" title="accountsupport">
-                            <Link to={'/accountsupport'} className="zl_page_sidebar_link position-relative">
+                            <Link to={'/accountsupport'} onClick={handleToggleMobile} className="zl_page_sidebar_link position-relative">
                                 <img src="/assets/svg-icons/019-chat.svg" className="mr-15" width="20" height="20"></img>
                                 <span className="zl_pagesidebar_text">Support</span>
                             </Link>
                         </li>
                         <li className="zl_page_sidebar_items" title="settings">
-                            <Link to={'/settings'} className="zl_page_sidebar_link position-relative">
+                            <Link to={'/settings'} onClick={handleToggleMobile} className="zl_page_sidebar_link position-relative">
                                 <img src="/assets/svg-icons/001-gear.svg" className="mr-15" width="20" height="20"></img>
                                 <span className="zl_pagesidebar_text">Settings</span>
                             </Link>

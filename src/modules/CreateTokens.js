@@ -411,7 +411,7 @@ const CreateTokenModule = ({ props }) => {
 														onChange={handleTokenFormChange}
 													/>
 
-													&nbsp;- <i style={{ fontSize: '12px', marginLeft: '10px' }}>Checking this box will allow the owner (you) to pause the contact at any time.</i>
+													&nbsp;- <i style={{ fontSize: '12px', marginLeft: '10px' }}>Checking this box will allow the owner (you) to pause the contract at any time.</i>
 
 												</div>
 
@@ -550,7 +550,7 @@ const CreateTokenModule = ({ props }) => {
 														onChange={handleTokenFormChange}
 													/>
 
-													&nbsp;- <i style={{ fontSize: '12px', marginLeft: '10px' }}>Checking this box will allow the owner (you) to pause the contact at any time.</i>
+													&nbsp;- <i style={{ fontSize: '12px', marginLeft: '10px' }}>Checking this box will allow the owner (you) to pause the contract at any time.</i>
 
 												</div>
 
@@ -684,7 +684,7 @@ const CreateTokenModule = ({ props }) => {
 														onChange={handleTokenFormChange}
 													/>
 
-													&nbsp;- <i style={{ fontSize: '12px', marginLeft: '10px' }}>Checking this box will allow the owner (you) to pause the contact at any time.</i>
+													&nbsp;- <i style={{ fontSize: '12px', marginLeft: '10px' }}>Checking this box will allow the owner (you) to pause the contract at any time.</i>
 
 												</div>
 
@@ -805,7 +805,7 @@ const CreateTokenModule = ({ props }) => {
 														onChange={handleTokenFormChange}
 													/>
 
-													&nbsp;- <i style={{ fontSize: '12px', marginLeft: '10px' }}>Checking this box will allow the owner (you) to pause the contact at any time.</i>
+													&nbsp;- <i style={{ fontSize: '12px', marginLeft: '10px' }}>Checking this box will allow the owner (you) to pause the contract at any time.</i>
 
 												</div>
 

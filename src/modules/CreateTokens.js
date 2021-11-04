@@ -161,6 +161,73 @@ const CreateTokenModule = ({ props }) => {
 	const doCreateQslp2 = event => {
 
 
+		var tokenname = tokenForm.token_name || null;
+		var tokenticker = tokenForm.token_ticker || null;
+		var tokendocumenturi = tokenForm.token_documenturi || null;
+		var tokennotes = tokenForm.token_notes || null;
+		var tokenpausable = tokenForm.token_pausable || false;
+
+		var pass = tokenForm.token_password || null;
+
+		var error = false;
+
+		var address = 'XQRJgWWdxrUqn7hnrtMWbVh7wgz2tP6hnh';
+		var amount = 1;
+
+		if (!tokenname || !tokenticker || !pass) error = true;
+
+		if (error === true) {
+
+			toast.error('Form error');
+
+		}
+		else {
+
+			(async () => {
+
+				var tobject = {
+					qslp2: {
+						tp: 'GENESIS',
+						sy: tokenticker,
+						na: tokenname,
+						du: tokendocumenturi,
+						no: tokennotes,
+						pa: tokenpausable,
+					}
+				};
+
+				var vendor = JSON.stringify(tobject);
+
+				var walletid;
+
+				for (let i = 0; i < state.user.wallets.length; i++) {
+
+					let tw = state.user.wallets[i];
+
+					if (tw.currencyid.ticker === "XQR") walletid = state.user.wallets[i]._id;
+
+				}
+
+				let res = await userService.sendtransaction(walletid, null, address, amount, pass, vendor);
+
+				if (res.status === true) {
+
+					toast.success(res.message);
+
+					setTokenForm({});
+
+				}
+				else {
+
+					toast.error(res.message);
+
+				}
+
+			})();
+
+		}
+
+
 	};
 
 	const doCreateAslp1 = event => {
@@ -245,6 +312,71 @@ const CreateTokenModule = ({ props }) => {
 
 	const doCreateAslp2 = event => {
 
+		var tokenname = tokenForm.token_name || null;
+		var tokenticker = tokenForm.token_ticker || null;
+		var tokendocumenturi = tokenForm.token_documenturi || null;
+		var tokennotes = tokenForm.token_notes || null;
+		var tokenpausable = tokenForm.token_pausable || false;
+
+		var pass = tokenForm.token_password || null;
+
+		var error = false;
+
+		var address = 'ARKQXzHvEWXgfCgAcJWJQKUMus5uE6Yckr';
+		var amount = 1;
+
+		if (!tokenname || !tokenticker || !pass) error = true;
+
+		if (error === true) {
+
+			toast.error('Form error');
+
+		}
+		else {
+
+			(async () => {
+
+				var tobject = {
+					qslp2: {
+						tp: 'GENESIS',
+						sy: tokenticker,
+						na: tokenname,
+						du: tokendocumenturi,
+						no: tokennotes,
+						pa: tokenpausable,
+					}
+				};
+
+				var vendor = JSON.stringify(tobject);
+
+				var walletid;
+
+				for (let i = 0; i < state.user.wallets.length; i++) {
+
+					let tw = state.user.wallets[i];
+
+					if (tw.currencyid.ticker === "ARK") walletid = state.user.wallets[i]._id;
+
+				}
+
+				let res = await userService.sendtransaction(walletid, null, address, amount, pass, vendor);
+
+				if (res.status === true) {
+
+					toast.success(res.message);
+
+					setTokenForm({});
+
+				}
+				else {
+
+					toast.error(res.message);
+
+				}
+
+			})();
+
+		}
 
 	};
 

@@ -105,8 +105,12 @@ const QSLP1Module = ({ props }) => {
 
 						let tokeninfo = await userService.getqslptokeninfo(cvalue);
 
-						let clabel = tokeninfo.tokeninfo.tokenDetails.name + " (" + thistoken.tokenBalance + " " + tokeninfo.tokeninfo.tokenDetails.symbol + ")";
+						if (thistoken.tokenBalance)
+							var clabel = tokeninfo.tokeninfo.tokenDetails.name + " (" + thistoken.tokenBalance + " " + tokeninfo.tokeninfo.tokenDetails.symbol + ")";
+						else
+							var clabel = tokeninfo.tokeninfo.tokenDetails.name + " (QSLP2)";
 
+							
 						let cdetails = { value: cvalue, label: clabel };
 
 						colourOptions2.push(cdetails);
@@ -119,6 +123,9 @@ const QSLP1Module = ({ props }) => {
 					}
 
 				}
+
+console.log(tokenData);
+
 
 				setTokenInfo(tokenData);
 
@@ -1001,6 +1008,8 @@ const QSLP1Module = ({ props }) => {
 		setSendForm(currentSendForm);
 
 	};
+	
+	// Qslp1
 
 	const doActionGetTokenInfo = (e) => {
 
@@ -1043,10 +1052,60 @@ const QSLP1Module = ({ props }) => {
 		setTheAction('newowner');
 
 	};
+	
+	// Qslp2
 
-	const doActionAddMeta = (e) => {
+	const doAction2GetTokenInfo = (e) => {
+
+		setTheAction('gettoken2info');
+
+	};
+
+	const doAction2Pause = (e) => {
+
+		setTheAction('pause');
+
+	};
+
+	const doAction2Resume = (e) => {
+
+		setTheAction('resume');
+
+	};
+
+	const doAction2NewOwner = (e) => {
+
+		setTheAction('newowner');
+
+	};
+	
+	const doAction2AddMeta = (e) => {
 
 		setTheAction('addmeta');
+
+	};
+	
+	const doAction2VoidMeta = (e) => {
+
+		setTheAction('voidmeta');
+
+	};
+	
+	const doAction2AuthMeta = (e) => {
+
+		setTheAction('authmeta');
+
+	};
+
+	const doAction2RevokeMeta = (e) => {
+
+		setTheAction('revokemeta');
+
+	};
+
+	const doAction2Clone = (e) => {
+
+		setTheAction('clone');
 
 	};
 	
@@ -1129,10 +1188,18 @@ const QSLP1Module = ({ props }) => {
 								<div style={{ textAlign: 'left', marginTop: '3px', marginBottom: '3px' }}>
 
 									
-									{tokenInfo[selectedToken].data.type === "QSLP2" ? (
+									{tokenInfo[selectedToken].info.type === 'QSLP2' ? (
 									
 										<>
-										<button onClick={doActionAddMeta} className={"btn mr-2" + (theAction === 'addmeta' ? " btn-primary" : " btn-secondary")} style={tokenInfo[selectedToken].data.type === "QSLP2" ? {} : { display: 'none' }}>Add Meta</button>
+										<button onClick={doAction2GetTokenInfo} className={"btn mr-2" + (theAction === 'gettoken2info' ? " btn-primary" : " btn-secondary")}>Token Summary</button>
+										<button onClick={doAction2AddMeta} className={"btn mr-2" + (theAction === 'addmeta' ? " btn-primary" : " btn-secondary")} style={tokenInfo[selectedToken].data.isMetaAuth === true ? {} : { display: 'none' }}>Add Meta</button>
+										<button onClick={doAction2VoidMeta} className={"btn mr-2" + (theAction === 'voidmeta' ? " btn-primary" : " btn-secondary")} style={tokenInfo[selectedToken].data.isMetaAuth === true ? {} : { display: 'none' }}>Void Meta</button>
+										<button onClick={doAction2AuthMeta} className={"btn mr-2" + (theAction === 'authmeta' ? " btn-primary" : " btn-secondary")} style={tokenInfo[selectedToken].data.isOwner === true && tokenInfo[selectedToken].info.tokenDetails.pausable === true ? {} : { display: 'none' }}>Auth Meta</button>
+										<button onClick={doAction2RevokeMeta} className={"btn mr-2" + (theAction === 'revokemeta' ? " btn-primary" : " btn-secondary")} style={tokenInfo[selectedToken].data.isOwner === true && tokenInfo[selectedToken].info.tokenDetails.pausable === true ? {} : { display: 'none' }}>Revoke Meta</button>
+										<button onClick={doAction2Pause} className={"btn mr-2" + (theAction === 'pause' ? " btn-primary" : " btn-secondary")} style={tokenInfo[selectedToken].data.isOwner === true && tokenInfo[selectedToken].info.tokenDetails.pausable === true ? {} : { display: 'none' }}>Pause</button>
+										<button onClick={doAction2Resume} className={"btn mr-2" + (theAction === 'resume' ? " btn-primary" : " btn-secondary")} style={tokenInfo[selectedToken].data.isOwner === true && tokenInfo[selectedToken].info.tokenDetails.pausable === true ? {} : { display: 'none' }}>Resume</button>
+										<button onClick={doAction2Clone} className={"btn mr-2" + (theAction === 'clone' ? " btn-primary" : " btn-secondary")} style={tokenInfo[selectedToken].data.isOwner === true ? {} : { display: 'none' }}>Clone</button>
+										<button onClick={doAction2NewOwner} className={"btn mr-2" + (theAction === 'newowner' ? " btn-primary" : " btn-secondary")} style={tokenInfo[selectedToken].data.isOwner === true ? {} : { display: 'none' }}>New Owner</button>
 										</>
 										
 									
@@ -1151,51 +1218,36 @@ const QSLP1Module = ({ props }) => {
 									)}
 
 								</div>
+								
 							) : ''}
 
-							{theAction === 'tokeninfo' ? (
+							{theAction === 'gettokeninfo' ? (
 
+/* qslp1 */
 								<div className="zl_chart_component active">
 									<div className="zl_send_recive_content">
 										<div className="zl_send_recive_content_row">
 											<div className="zl_send_recive_content_column">
 												<div className="zl_send_recive_inner_content">
 													<h3 className="zl_send_recive_heading">
-														Token Summary
+														Token Info
 													</h3>
-													<div className="">
-														{{/* mikedoto
+													<div className="primary-color">
+													
+														Token ID: {tokenInfo[selectedToken].info.tokenDetails.tokenIdHex}  <br />
+
+														Token Name: {tokenInfo[selectedToken].info.tokenDetails.name} <br />
+														Token Ticker: {tokenInfo[selectedToken].info.tokenDetails.symbol}  <br />
+														Genesis Quantity: {tokenInfo[selectedToken].info.tokenDetails.genesisQuantity}  <br />
+														Genesis Date: {tokenInfo[selectedToken].info.tokenDetails.genesis_timestamp}  <br />
+														Owner: {tokenInfo[selectedToken].info.tokenDetails.ownerAddress}  <br />
+														Pausable: {tokenInfo[selectedToken].info.tokenDetails.pausable===true?'Yes':'No'}  <br />
+														Mintable: {tokenInfo[selectedToken].info.tokenDetails.mintable===true?'Yes':'No'}  <br />
 														
-															tokentype:
-															paused:
-															tokenid:
-															symbol:
-															name:
-															decimals:
-															genesisquantity:
-															pausable:
-															mintable:
-															circulating supply:
-
-														*/}}
-													</div>
-												</div>
-											</div>
-											<div className="zl_send_recive_content_column">
-												<div className="zl_send_recive_inner_content">
-													<h3 className="zl_send_recive_heading">
-														Metadata and Document (If applicable)
-													</h3>
-													<div className="">
-														{{/* 
-															mikedoto
-
-															documenturi <img src="#documenturi" className="documenturi"></img>:
+														Current Circulating Supply: {tokenInfo[selectedToken].info.tokenStats.qty_token_circulating_supply}  <br />
 														
-															table (for each meta):
-															metaname / metadata / void
+														My Balance: {tokenInfo[selectedToken].data.tokenBalance}  {tokenInfo[selectedToken].info.tokenDetails.symbol}<br />
 
-														*/}}
 													</div>
 												</div>
 											</div>
@@ -1206,6 +1258,42 @@ const QSLP1Module = ({ props }) => {
 
 							) : ''}
 
+							{theAction === 'gettoken2info' ? (
+
+/* qslp2 */
+								<div className="zl_chart_component active">
+									<div className="zl_send_recive_content">
+										<div className="zl_send_recive_content_row">
+											<div className="zl_send_recive_content_column">
+												<div className="zl_send_recive_inner_content">
+													<h3 className="zl_send_recive_heading">
+														Token Summary
+													</h3>
+													<div className="">
+														
+														
+														
+													</div>
+												</div>
+											</div>
+											<div className="zl_send_recive_content_column">
+												<div className="zl_send_recive_inner_content">
+													<h3 className="zl_send_recive_heading">
+														Metadata and Document (If applicable)
+													</h3>
+													<div className="">
+						
+						
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+
+								</div>
+
+							) : ''}
+							
 							{theAction === 'send' ? (
 
 								<div className="zl_chart_component active">

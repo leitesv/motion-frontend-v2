@@ -517,7 +517,17 @@ console.log(data);
 					store.dispatch( updateStore({ key: 'userImages', value: res.userimages }) );
 					
 					setShowUploadPic(false);
-					
+
+					if (res.userimages && res.userimages.profilebg)
+					{
+						setBackgroundImage('url(' + res.userimages.profilebg + ')');
+					}
+
+					if (res.userimages && res.userimages.profilepic)
+					{
+						setProfileImage('url(' + res.userimages.profilepic + ')');
+					}
+						
 					toast.success(res.message);
 
 				}
@@ -557,6 +567,16 @@ console.log(data);
 					
 					setShowUploadBG(false);
 
+					if (res.userimages && res.userimages.profilebg)
+					{
+						setBackgroundImage('url(' + res.userimages.profilebg + ')');
+					}
+
+					if (res.userimages && res.userimages.profilepic)
+					{
+						setProfileImage('url(' + res.userimages.profilepic + ')');
+					}
+
 					toast.success(res.message);
 
 				}
@@ -583,59 +603,59 @@ console.log(data);
 
 
 				
-				<div className="container-fluid px-0">
-					<div className="card overflow-hidden" style={{background: 'transparent', maxWidth: '1140px', margin: 'auto'}}>
-						<div className="card-body p-0" style={{height:'150px'}}>
-							<div className="background text-center" style={((showUploadBG===true||uploadingBG===true)?{backgroundColor: 'rgba(255,255,255,0.35)'}:{backgroundImage: backgroundImage})} onMouseEnter={() => setShowUploadBG(true)} onMouseLeave={() => setShowUploadBG(false)}>
+					<div className="container-fluid px-0">
+						<div className="card overflow-hidden" style={{background: 'transparent', maxWidth: '1140px', margin: 'auto'}}>
+							<div className="card-body p-0" style={{height:'150px'}}>
+								<div className="background text-center" style={((showUploadBG===true||uploadingBG===true)?{backgroundColor: 'rgba(255,255,255,0.35)'}:{backgroundImage: backgroundImage})} onMouseEnter={() => setShowUploadBG(true)} onMouseLeave={() => setShowUploadBG(false)}>
+									<ImageUploader
+										fileContainerStyle={{boxShadow: 'none', background: 'transparent', display: (showUploadBG===true&&uploadingBG!==true?'inline':'none')}}
+										withIcon={false}
+										withLabel={false}
+										singleImage={true}
+										buttonText={<img style={{height:'30px', width: '30px;'}} src="data:image/svg+xml,%3Csvg aria-hidden='true' focusable='false' data-prefix='fas' data-icon='cloud-upload-alt' class='svg-inline--fa fa-cloud-upload-alt fa-w-20' role='img' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 640 512'%3E%3Cpath fill='white' d='M537.6 226.6c4.1-10.7 6.4-22.4 6.4-34.6 0-53-43-96-96-96-19.7 0-38.1 6-53.3 16.2C367 64.2 315.3 32 256 32c-88.4 0-160 71.6-160 160 0 2.7.1 5.4.2 8.1C40.2 219.8 0 273.2 0 336c0 79.5 64.5 144 144 144h368c70.7 0 128-57.3 128-128 0-61.9-44-113.6-102.4-125.4zM393.4 288H328v112c0 8.8-7.2 16-16 16h-48c-8.8 0-16-7.2-16-16V288h-65.4c-14.3 0-21.4-17.2-11.3-27.3l105.4-105.4c6.2-6.2 16.4-6.2 22.6 0l105.4 105.4c10.1 10.1 2.9 27.3-11.3 27.3z'%3E%3C/path%3E%3C/svg%3E" />}
+										buttonClassName={'btn btn-small'}
+										onChange={onDropBG}
+										errorStyle={{display: 'none'}}
+									/>
+									<Loader
+										type="Puff"
+										color="#000000"
+										visible={uploadingBG === true? true : false}
+									/>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div className="container-fluid text-center mb-4">
+						<div className="avatar rounded-circle mx-auto shadow" style={{height: '140px', width: '140px', marginTop: '-50px'}}>
+							<div className="background" style={((showUploadPic===true||uploadingPic===true)?{backgroundColor: 'rgba(255,255,255,0.35)'}:{backgroundImage: profileImage})} onMouseEnter={() => setShowUploadPic(true)} onMouseLeave={() => setShowUploadPic(false)}>
 								<ImageUploader
-									fileContainerStyle={{boxShadow: 'none', background: 'transparent', display: (showUploadBG===true&&uploadingBG!==true?'inline':'none')}}
+									fileContainerStyle={{boxShadow: 'none', background: 'transparent', display: (showUploadPic===true&&uploadingPic!==true?'inline':'none')}}
 									withIcon={false}
 									withLabel={false}
 									singleImage={true}
 									buttonText={<img style={{height:'30px', width: '30px;'}} src="data:image/svg+xml,%3Csvg aria-hidden='true' focusable='false' data-prefix='fas' data-icon='cloud-upload-alt' class='svg-inline--fa fa-cloud-upload-alt fa-w-20' role='img' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 640 512'%3E%3Cpath fill='white' d='M537.6 226.6c4.1-10.7 6.4-22.4 6.4-34.6 0-53-43-96-96-96-19.7 0-38.1 6-53.3 16.2C367 64.2 315.3 32 256 32c-88.4 0-160 71.6-160 160 0 2.7.1 5.4.2 8.1C40.2 219.8 0 273.2 0 336c0 79.5 64.5 144 144 144h368c70.7 0 128-57.3 128-128 0-61.9-44-113.6-102.4-125.4zM393.4 288H328v112c0 8.8-7.2 16-16 16h-48c-8.8 0-16-7.2-16-16V288h-65.4c-14.3 0-21.4-17.2-11.3-27.3l105.4-105.4c6.2-6.2 16.4-6.2 22.6 0l105.4 105.4c10.1 10.1 2.9 27.3-11.3 27.3z'%3E%3C/path%3E%3C/svg%3E" />}
 									buttonClassName={'btn btn-small'}
-									onChange={onDropBG}
+									onChange={onDrop}
 									errorStyle={{display: 'none'}}
 								/>
 								<Loader
 									type="Puff"
-									color="#FFFFFF"
-									visible={uploadingBG === true? true : false}
+									color="#000000"
+									visible={uploadingPic === true? true : false}
 								/>
 							</div>
 						</div>
 					</div>
-				</div>
-				<div className="container-fluid text-center mb-4">
-					<div className="avatar rounded-circle mx-auto shadow" style={{height: '140px', width: '140px', marginTop: '-50px'}}>
-						<div className="background" style={((showUploadPic===true||uploadingPic===true)?{backgroundColor: 'rgba(255,255,255,0.35)'}:{backgroundImage: profileImage})} onMouseEnter={() => setShowUploadPic(true)} onMouseLeave={() => setShowUploadPic(false)}>
-							<ImageUploader
-								fileContainerStyle={{boxShadow: 'none', background: 'transparent', display: (showUploadPic===true&&uploadingPic!==true?'inline':'none')}}
-								withIcon={false}
-								withLabel={false}
-								singleImage={true}
-								buttonText={<img style={{height:'30px', width: '30px;'}} src="data:image/svg+xml,%3Csvg aria-hidden='true' focusable='false' data-prefix='fas' data-icon='cloud-upload-alt' class='svg-inline--fa fa-cloud-upload-alt fa-w-20' role='img' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 640 512'%3E%3Cpath fill='white' d='M537.6 226.6c4.1-10.7 6.4-22.4 6.4-34.6 0-53-43-96-96-96-19.7 0-38.1 6-53.3 16.2C367 64.2 315.3 32 256 32c-88.4 0-160 71.6-160 160 0 2.7.1 5.4.2 8.1C40.2 219.8 0 273.2 0 336c0 79.5 64.5 144 144 144h368c70.7 0 128-57.3 128-128 0-61.9-44-113.6-102.4-125.4zM393.4 288H328v112c0 8.8-7.2 16-16 16h-48c-8.8 0-16-7.2-16-16V288h-65.4c-14.3 0-21.4-17.2-11.3-27.3l105.4-105.4c6.2-6.2 16.4-6.2 22.6 0l105.4 105.4c10.1 10.1 2.9 27.3-11.3 27.3z'%3E%3C/path%3E%3C/svg%3E" />}
-								buttonClassName={'btn btn-small'}
-								onChange={onDrop}
-								errorStyle={{display: 'none'}}
-							/>
-							<Loader
-								type="Puff"
-								color="#FFFFFF"
-								visible={uploadingPic === true? true : false}
-							/>
-						</div>
-					</div>
-				</div>
 
-				<div className="container mb-4 text-center primary-color">
-					<h6 className="mb-1">{state.user?state.user.givenname:''} {state.user?state.user.familyname:''}</h6>
-					<p>{state.user?state.user.residence_country:''}</p>
-					<p className="mb-1"><strong>UserID:</strong> QM Z 00 0000 0000</p>
-					<p className="mb-1">{state.user?state.user.email:''}</p>
-					<p className="mb-1">{state.user?state.user.phone_number:''}</p>
+					<div className="container mb-4 text-center primary-color">
+						<h6 className="mb-1">{state.user?state.user.givenname:''} {state.user?state.user.familyname:''}</h6>
+						<p>{state.user?state.user.residence_country:''}</p>
+						<p className="mb-1"><strong>UserID:</strong> QM Z 00 0000 0000</p>
+						<p className="mb-1">{state.user?state.user.email:''}</p>
+						<p className="mb-1">{state.user?state.user.phone_number:''}</p>
 					
-				</div>
+					</div>
 
                     <h3 className="zl_bottom_content_heading">Manage your contacts</h3>
 

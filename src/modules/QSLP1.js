@@ -1044,6 +1044,12 @@ const QSLP1Module = ({ props }) => {
 
 	};
 
+	const doActionAddMeta = (e) => {
+
+		setTheAction('addmeta');
+
+	};
+	
 	const setTabQredit = (e) => {
 
 		setTheTab('qredit');
@@ -1122,15 +1128,28 @@ const QSLP1Module = ({ props }) => {
 							{selectedToken !== null ? (
 								<div style={{ textAlign: 'left', marginTop: '3px', marginBottom: '3px' }}>
 
-									<button onClick={doActionGetTokenInfo} className={"btn mr-2" + (theAction === 'gettokeninfo' ? " btn-primary" : " btn-secondary")}>Token Summary</button>
-									<button onClick={doActionSend} className={"btn mr-2" + (theAction === 'send' ? " btn-primary" : " btn-secondary")}>Send / Receive</button>
-									<button onClick={doActionBurn} className={"btn mr-2" + (theAction === 'burn' ? " btn-primary" : " btn-secondary")} style={tokenInfo[selectedToken].data.isOwner === true ? {} : { display: 'none' }}>Burn</button>
-									<button onClick={doActionMint} className={"btn mr-2" + (theAction === 'mint' ? " btn-primary" : " btn-secondary")} style={tokenInfo[selectedToken].data.isOwner === true && tokenInfo[selectedToken].info.tokenDetails.mintable === true ? {} : { display: 'none' }}>Mint</button>
-									<button onClick={doActionPause} className={"btn mr-2" + (theAction === 'pause' ? " btn-primary" : " btn-secondary")} style={tokenInfo[selectedToken].data.isOwner === true && tokenInfo[selectedToken].info.tokenDetails.pausable === true ? {} : { display: 'none' }}>Pause</button>
-									<button onClick={doActionResume} className={"btn mr-2" + (theAction === 'resume' ? " btn-primary" : " btn-secondary")} style={tokenInfo[selectedToken].data.isOwner === true && tokenInfo[selectedToken].info.tokenDetails.pausable === true ? {} : { display: 'none' }}>Resume</button>
-									<button onClick={doActionNewOwner} className={"btn mr-2" + (theAction === 'newowner' ? " btn-primary" : " btn-secondary")} style={tokenInfo[selectedToken].data.isOwner === true ? {} : { display: 'none' }}>New Owner</button>
+									
+									{tokenInfo[selectedToken].data.type === "QSLP2" ? (
+									
+										<>
+										<button onClick={doActionAddMeta} className={"btn mr-2" + (theAction === 'addmeta' ? " btn-primary" : " btn-secondary")} style={tokenInfo[selectedToken].data.type === "QSLP2" ? {} : { display: 'none' }}>Add Meta</button>
+										</>
+										
+									
+									) : (
+									
+										<>
+										<button onClick={doActionGetTokenInfo} className={"btn mr-2" + (theAction === 'gettokeninfo' ? " btn-primary" : " btn-secondary")}>Token Summary</button>
+										<button onClick={doActionSend} className={"btn mr-2" + (theAction === 'send' ? " btn-primary" : " btn-secondary")}>Send / Receive</button>
+										<button onClick={doActionBurn} className={"btn mr-2" + (theAction === 'burn' ? " btn-primary" : " btn-secondary")} style={tokenInfo[selectedToken].data.isOwner === true ? {} : { display: 'none' }}>Burn</button>
+										<button onClick={doActionMint} className={"btn mr-2" + (theAction === 'mint' ? " btn-primary" : " btn-secondary")} style={tokenInfo[selectedToken].data.isOwner === true && tokenInfo[selectedToken].info.tokenDetails.mintable === true ? {} : { display: 'none' }}>Mint</button>
+										<button onClick={doActionPause} className={"btn mr-2" + (theAction === 'pause' ? " btn-primary" : " btn-secondary")} style={tokenInfo[selectedToken].data.isOwner === true && tokenInfo[selectedToken].info.tokenDetails.pausable === true ? {} : { display: 'none' }}>Pause</button>
+										<button onClick={doActionResume} className={"btn mr-2" + (theAction === 'resume' ? " btn-primary" : " btn-secondary")} style={tokenInfo[selectedToken].data.isOwner === true && tokenInfo[selectedToken].info.tokenDetails.pausable === true ? {} : { display: 'none' }}>Resume</button>
+										<button onClick={doActionNewOwner} className={"btn mr-2" + (theAction === 'newowner' ? " btn-primary" : " btn-secondary")} style={tokenInfo[selectedToken].data.isOwner === true ? {} : { display: 'none' }}>New Owner</button>
+										</>
+									
+									)}
 
-									{{/* mikedoto <button onClick={doActionAddMeta} className={"btn mr-2" + (theAction === 'addmeta' ? " btn-primary" : " btn-secondary")} style={tokenInfo[selectedToken].data.type === "QSLP2" ? {} : { display: 'none' }}>Add Meta</button> */ }}
 								</div>
 							) : ''}
 

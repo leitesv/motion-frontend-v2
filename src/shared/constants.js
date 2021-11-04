@@ -35,7 +35,6 @@ export const routes = {
     twofactorauthentication: "/twofactorauthentication",
     referralprogram: "/referralprogram",
     contacts: "/contacts",
-    qreditnft: "/qreditnft",
     qslp1: "/qslp1",
     createtokens: "/createtokens",
     tokenoftrust: "/tokenoftrust",

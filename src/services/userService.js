@@ -5,30 +5,29 @@ const apiUrl = "https://unifiedapi.qredit.cloud/";
 
 
 const kyi = ky.extend({
-	prefixUrl: apiUrl,
-	retry: {
-		limit: 10
-	},
-	hooks: {
-		beforeRequest: [
-			
-			request => {
+    prefixUrl: apiUrl,
+    retry: {
+        limit: 10
+    },
+    hooks: {
+        beforeRequest: [
 
-				let accessToken = localStorage.getItem('accessToken');
-				let token = 'Bearer ' + accessToken;
+            request => {
 
-				if (accessToken)
-				{
+                let accessToken = localStorage.getItem('accessToken');
+                let token = 'Bearer ' + accessToken;
 
-						request.headers.set('Authorization', token);
-						request.headers.set('x-access-token', accessToken);
+                if (accessToken) {
 
-				}
+                    request.headers.set('Authorization', token);
+                    request.headers.set('x-access-token', accessToken);
 
-			}
-			
-		]
-	}
+                }
+
+            }
+
+        ]
+    }
 });
 
 
@@ -38,7 +37,7 @@ var userService = {
         let data = {
             serviceid: "60ead773c06b18e7e103d873"
         };
-        let res = await kyi.post(`api/user`, {json: data}).json();
+        let res = await kyi.post(`api/user`, { json: data }).json();
         return res || [];
     },
 
@@ -46,7 +45,7 @@ var userService = {
         let data = {
             serviceid: "60ead773c06b18e7e103d873"
         };
-        let res = await kyi.post(`api/usertottoken`, {json: data}).json();
+        let res = await kyi.post(`api/usertottoken`, { json: data }).json();
         return res || [];
     },
 
@@ -55,7 +54,7 @@ var userService = {
             serviceid: "60ead773c06b18e7e103d873",
             settings: JSON.stringify(settings)
         };
-        let res = await kyi.post(`api/usersavepersonasettings`, {json: data}).json();
+        let res = await kyi.post(`api/usersavepersonasettings`, { json: data }).json();
         return res || [];
     },
 
@@ -63,7 +62,7 @@ var userService = {
         let data = {
             serviceid: "60ead773c06b18e7e103d873"
         };
-        let res = await kyi.post(`api/userinvalidatesessions`, {json: data}).json();
+        let res = await kyi.post(`api/userinvalidatesessions`, { json: data }).json();
         return res || [];
     },
 
@@ -71,7 +70,7 @@ var userService = {
         let data = {
             serviceid: "60ead773c06b18e7e103d873"
         };
-        let res = await kyi.post(`api/userlogout`, {json: data}).json();
+        let res = await kyi.post(`api/userlogout`, { json: data }).json();
         return res || [];
     },
 
@@ -79,7 +78,7 @@ var userService = {
         let data = {
             serviceid: "60ead773c06b18e7e103d873"
         };
-        let res = await kyi.post(`api/userimages`, {json: data}).json();
+        let res = await kyi.post(`api/userimages`, { json: data }).json();
         return res || [];
     },
 
@@ -89,7 +88,7 @@ var userService = {
             skip: skip,
             limit: limit
         };
-        let res = await kyi.post(`api/usergetloginhistory`, {json: data}).json();
+        let res = await kyi.post(`api/usergetloginhistory`, { json: data }).json();
         return res || [];
     },
 
@@ -99,7 +98,7 @@ var userService = {
             skip: skip,
             limit: limit
         };
-        let res = await kyi.post(`api/usergetcontacts`, {json: data}).json();
+        let res = await kyi.post(`api/usergetcontacts`, { json: data }).json();
         return res || [];
     },
 
@@ -108,7 +107,7 @@ var userService = {
             serviceid: "60ead773c06b18e7e103d873",
             contactid: contactid
         };
-        let res = await kyi.post(`api/usergetcontact`, {json: data}).json();
+        let res = await kyi.post(`api/usergetcontact`, { json: data }).json();
         return res || [];
     },
 
@@ -118,7 +117,7 @@ var userService = {
             skip: skip,
             limit: limit
         };
-        let res = await kyi.post(`api/usergetpendingcontacts`, {json: data}).json();
+        let res = await kyi.post(`api/usergetpendingcontacts`, { json: data }).json();
         return res || [];
     },
 
@@ -127,7 +126,7 @@ var userService = {
             serviceid: "60ead773c06b18e7e103d873",
             email: email,
         };
-        let res = await kyi.post(`api/userfindcontact`, {json: data}).json();
+        let res = await kyi.post(`api/userfindcontact`, { json: data }).json();
         return res || [];
     },
 
@@ -136,7 +135,7 @@ var userService = {
             serviceid: "60ead773c06b18e7e103d873",
             otheruserid: otheruserid,
         };
-        let res = await kyi.post(`api/usernewcontact`, {json: data}).json();
+        let res = await kyi.post(`api/usernewcontact`, { json: data }).json();
         return res || [];
     },
 
@@ -145,7 +144,7 @@ var userService = {
             serviceid: "60ead773c06b18e7e103d873",
             contactid: contactid,
         };
-        let res = await kyi.post(`api/userapprovecontact`, {json: data}).json();
+        let res = await kyi.post(`api/userapprovecontact`, { json: data }).json();
         return res || [];
     },
 
@@ -154,7 +153,7 @@ var userService = {
             serviceid: "60ead773c06b18e7e103d873",
             contactid: contactid,
         };
-        let res = await kyi.post(`api/userdeclinecontact`, {json: data}).json();
+        let res = await kyi.post(`api/userdeclinecontact`, { json: data }).json();
         return res || [];
     },
 
@@ -162,7 +161,7 @@ var userService = {
         let data = {
             serviceid: "60ead773c06b18e7e103d873"
         };
-        let res = await kyi.post(`api/userbip39recorded`, {json: data}).json();
+        let res = await kyi.post(`api/userbip39recorded`, { json: data }).json();
         return res || [];
     },
 
@@ -171,7 +170,7 @@ var userService = {
             serviceid: "60ead773c06b18e7e103d873",
             password: rdata.password
         };
-        let res = await kyi.post(`api/userpassphrase`, {json: data}).json();
+        let res = await kyi.post(`api/userpassphrase`, { json: data }).json();
         return res || [];
     },
 
@@ -181,7 +180,7 @@ var userService = {
             password: rdata.password,
             newpass: rdata.newpass
         };
-        let res = await kyi.post(`api/userchangepassword`, {json: data}).json();
+        let res = await kyi.post(`api/userchangepassword`, { json: data }).json();
         return res || [];
     },
 
@@ -189,7 +188,7 @@ var userService = {
         let data = {
             serviceid: "60ead773c06b18e7e103d873"
         };
-        let res = await kyi.post(`api/usertwofactor`, {json: data}).json();
+        let res = await kyi.post(`api/usertwofactor`, { json: data }).json();
         return res || [];
     },
 
@@ -199,7 +198,7 @@ var userService = {
             password: rdata.password,
             pincode: rdata.pincode
         };
-        let res = await kyi.post(`api/usertwofactorsave`, {json: data}).json();
+        let res = await kyi.post(`api/usertwofactorsave`, { json: data }).json();
         return res || [];
     },
 
@@ -208,7 +207,7 @@ var userService = {
             serviceid: "60ead773c06b18e7e103d873",
             pincode: rdata.pincode
         };
-        let res = await kyi.post(`api/usertwofactordisable`, {json: data}).json();
+        let res = await kyi.post(`api/usertwofactordisable`, { json: data }).json();
         return res || [];
     },
 
@@ -217,7 +216,7 @@ var userService = {
             email: rdata.email,
             serviceid: "60ead773c06b18e7e103d873"
         };
-        let res = await kyi.post(`api/usergetemailauth`, {json: data}).json();
+        let res = await kyi.post(`api/usergetemailauth`, { json: data }).json();
         return res || [];
     },
 
@@ -240,7 +239,7 @@ var userService = {
             password: rdata.password,
             authcode: rdata.authcode
         };
-        let res = await kyi.post(`api/userresetpasspassphrase`, {json: data}).json();
+        let res = await kyi.post(`api/userresetpasspassphrase`, { json: data }).json();
         return res || [];
     },
 
@@ -251,7 +250,7 @@ var userService = {
             password: rdata.password,
             authcode: rdata.authcode
         };
-        let res = await kyi.post(`api/userresetpassnopassphrase`, {json: data}).json();
+        let res = await kyi.post(`api/userresetpassnopassphrase`, { json: data }).json();
         return res || [];
     },
 
@@ -263,7 +262,7 @@ var userService = {
             authcode: rdata.authcode,
             word1: rdata.word1
         };
-        let res = await kyi.post(`api/userresettwofactor`, {json: data}).json();
+        let res = await kyi.post(`api/userresettwofactor`, { json: data }).json();
         return res || [];
     },
 
@@ -279,7 +278,7 @@ var userService = {
             password: rdata.password,
             invitecode: rdata.invitecode
         };
-        let res = await kyi.post(`api/auth/signup`, {json: data}).json();
+        let res = await kyi.post(`api/auth/signup`, { json: data }).json();
         return res || [];
     },
 
@@ -290,7 +289,7 @@ var userService = {
             password: rdata.password,
             tfapin: rdata.tfapin
         };
-        let res = await kyi.post(`api/auth/signin`, {json: data}).json();
+        let res = await kyi.post(`api/auth/signin`, { json: data }).json();
         return res || [];
     },
 
@@ -301,7 +300,7 @@ var userService = {
             period: rdata.period,
             amount: rdata.amount
         };
-        let res = await kyi.post(`api/usercreaterevolutorder`, {json: data}).json();
+        let res = await kyi.post(`api/usercreaterevolutorder`, { json: data }).json();
         return res || [];
     },
 
@@ -315,7 +314,7 @@ var userService = {
             provider: rdata.provider,
             orderid: rdata.orderid
         };
-        let res = await kyi.post(`api/userrevolutpaymentapproved`, {json: data}).json();
+        let res = await kyi.post(`api/userrevolutpaymentapproved`, { json: data }).json();
         return res || [];
     },
 
@@ -327,7 +326,7 @@ var userService = {
             amount: rdata.amount,
             ticker: rdata.ticker
         };
-        let res = await kyi.post(`api/usercreatecoinpaymentsorder`, {json: data}).json();
+        let res = await kyi.post(`api/usercreatecoinpaymentsorder`, { json: data }).json();
         return res || [];
     },
 
@@ -338,7 +337,7 @@ var userService = {
             period: rdata.period,
             amount: rdata.amount
         };
-        let res = await kyi.post(`api/userselectdowngradeplan`, {json: data}).json();
+        let res = await kyi.post(`api/userselectdowngradeplan`, { json: data }).json();
         return res || [];
     },
 
@@ -347,7 +346,7 @@ var userService = {
             serviceid: "60ead773c06b18e7e103d873",
             image: image
         };
-        let res = await kyi.post(`api/userupdateprofilepic`, {json: data}).json();
+        let res = await kyi.post(`api/userupdateprofilepic`, { json: data }).json();
         return res || [];
     },
 
@@ -356,7 +355,7 @@ var userService = {
             serviceid: "60ead773c06b18e7e103d873",
             image: image
         };
-        let res = await kyi.post(`api/userupdateprofilebg`, {json: data}).json();
+        let res = await kyi.post(`api/userupdateprofilebg`, { json: data }).json();
         return res || [];
     },
 
@@ -365,24 +364,24 @@ var userService = {
             serviceid: "60ead773c06b18e7e103d873",
             language: language
         };
-        let res = await kyi.post(`api/usersetlanguage`, {json: data}).json();
+        let res = await kyi.post(`api/usersetlanguage`, { json: data }).json();
         return res || [];
     },
-    
+
     setcurrency: async (currency) => {
         let data = {
             serviceid: "60ead773c06b18e7e103d873",
             currency: currency
         };
-        let res = await kyi.post(`api/usersetcurrency`, {json: data}).json();
+        let res = await kyi.post(`api/usersetcurrency`, { json: data }).json();
         return res || [];
     },
-    
+
     getnotificationcount: async () => {
         let data = {
             serviceid: "60ead773c06b18e7e103d873",
         };
-        let res = await kyi.post(`api/usergetnotificationcount`, {json: data}).json();
+        let res = await kyi.post(`api/usergetnotificationcount`, { json: data }).json();
         return res || [];
     },
 
@@ -391,7 +390,7 @@ var userService = {
             serviceid: "60ead773c06b18e7e103d873",
             id: id
         };
-        let res = await kyi.post(`api/usergetnotification`, {json: data}).json();
+        let res = await kyi.post(`api/usergetnotification`, { json: data }).json();
         return res || [];
     },
 
@@ -401,7 +400,7 @@ var userService = {
             skip: skip,
             limit: limit
         };
-        let res = await kyi.post(`api/usergetnotificationhistory`, {json: data}).json();
+        let res = await kyi.post(`api/usergetnotificationhistory`, { json: data }).json();
         return res || [];
     },
 
@@ -410,7 +409,7 @@ var userService = {
             serviceid: "60ead773c06b18e7e103d873",
             id: id
         };
-        let res = await kyi.post(`api/usergetwalletaddresses`, {json: data}).json();
+        let res = await kyi.post(`api/usergetwalletaddresses`, { json: data }).json();
         return res || [];
     },
 
@@ -419,7 +418,7 @@ var userService = {
             serviceid: "60ead773c06b18e7e103d873",
             id: id
         };
-        let res = await kyi.post(`api/usergetwalletbalance`, {json: data}).json();
+        let res = await kyi.post(`api/usergetwalletbalance`, { json: data }).json();
         return res || [];
     },
 
@@ -430,7 +429,7 @@ var userService = {
             skip: skip,
             limit: limit
         };
-        let res = await kyi.post(`api/usergetwallettransactions`, {json: data}).json();
+        let res = await kyi.post(`api/usergetwallettransactions`, { json: data }).json();
         return res || [];
     },
 
@@ -440,7 +439,7 @@ var userService = {
             walletid: walletid,
             id: id
         };
-        let res = await kyi.post(`api/usergettransaction`, {json: data}).json();
+        let res = await kyi.post(`api/usergettransaction`, { json: data }).json();
         return res || [];
     },
 
@@ -453,9 +452,9 @@ var userService = {
             amount: amount,
             pass: pass,
             vendor: vendor
-            
+
         };
-        let res = await kyi.post(`api/usersendtransaction`, {json: data}).json();
+        let res = await kyi.post(`api/usersendtransaction`, { json: data }).json();
         return res || [];
     },
 
@@ -466,7 +465,7 @@ var userService = {
             tovote: tovote,
             pass: pass
         };
-        let res = await kyi.post(`api/usersendqreditvote`, {json: data}).json();
+        let res = await kyi.post(`api/usersendqreditvote`, { json: data }).json();
         return res || [];
     },
 
@@ -475,7 +474,7 @@ var userService = {
             serviceid: "60ead773c06b18e7e103d873",
             walletid: walletid
         };
-        let res = await kyi.post(`api/usergetdelegatelist`, {json: data}).json();
+        let res = await kyi.post(`api/usergetdelegatelist`, { json: data }).json();
         return res || [];
     },
 
@@ -484,7 +483,7 @@ var userService = {
             serviceid: "60ead773c06b18e7e103d873",
             walletid: walletid
         };
-        let res = await kyi.post(`api/usergetwalletvotes`, {json: data}).json();
+        let res = await kyi.post(`api/usergetwalletvotes`, { json: data }).json();
         return res || [];
     },
 
@@ -493,7 +492,7 @@ var userService = {
             serviceid: "60ead773c06b18e7e103d873",
             passphrase: passphrase
         };
-        let res = await kyi.post(`api/userdoqreditswap`, {json: data}).json();
+        let res = await kyi.post(`api/userdoqreditswap`, { json: data }).json();
         return res || [];
     },
 
@@ -503,7 +502,7 @@ var userService = {
             skip: skip,
             limit: limit
         };
-        let res = await kyi.post(`api/usergetswaptransactions`, {json: data}).json();
+        let res = await kyi.post(`api/usergetswaptransactions`, { json: data }).json();
         return res || [];
     },
 
@@ -513,7 +512,7 @@ var userService = {
             skip: skip,
             limit: limit
         };
-        let res = await kyi.post(`api/usergetalltransactions`, {json: data}).json();
+        let res = await kyi.post(`api/usergetalltransactions`, { json: data }).json();
         return res || [];
     },
 
@@ -522,7 +521,7 @@ var userService = {
             serviceid: "60ead773c06b18e7e103d873",
             emailphone: emailphone
         };
-        let res = await kyi.post(`api/usercreateinvitation`, {json: data}).json();
+        let res = await kyi.post(`api/usercreateinvitation`, { json: data }).json();
         return res || [];
     },
 
@@ -532,7 +531,7 @@ var userService = {
             skip: skip,
             limit: limit
         };
-        let res = await kyi.post(`api/usergetinvitations`, {json: data}).json();
+        let res = await kyi.post(`api/usergetinvitations`, { json: data }).json();
         return res || [];
     },
 
@@ -542,7 +541,7 @@ var userService = {
             skip: skip,
             limit: limit
         };
-        let res = await kyi.post(`api/usergetreferrals`, {json: data}).json();
+        let res = await kyi.post(`api/usergetreferrals`, { json: data }).json();
         return res || [];
     },
 
@@ -550,7 +549,7 @@ var userService = {
         let data = {
             serviceid: "60ead773c06b18e7e103d873"
         };
-        let res = await kyi.post(`api/usergetphones`, {json: data}).json();
+        let res = await kyi.post(`api/usergetphones`, { json: data }).json();
         return res || [];
     },
 
@@ -559,7 +558,7 @@ var userService = {
             serviceid: "60ead773c06b18e7e103d873",
             phone: phone
         };
-        let res = await kyi.post(`api/usergetpincode`, {json: data}).json();
+        let res = await kyi.post(`api/usergetpincode`, { json: data }).json();
         return res || [];
     },
 
@@ -569,7 +568,7 @@ var userService = {
             phone: phone,
             pin: pin
         };
-        let res = await kyi.post(`api/usersubmitpincode`, {json: data}).json();
+        let res = await kyi.post(`api/usersubmitpincode`, { json: data }).json();
         return res || [];
     },
 
@@ -578,7 +577,7 @@ var userService = {
             serviceid: "60ead773c06b18e7e103d873",
             id: id
         };
-        let res = await kyi.post(`api/usersetprimaryphone`, {json: data}).json();
+        let res = await kyi.post(`api/usersetprimaryphone`, { json: data }).json();
         return res || [];
     },
 
@@ -586,7 +585,7 @@ var userService = {
         let data = {
             serviceid: "60ead773c06b18e7e103d873",
         };
-        let res = await kyi.post(`api/usergetaddresses`, {json: data}).json();
+        let res = await kyi.post(`api/usergetaddresses`, { json: data }).json();
         return res || [];
     },
 
@@ -600,7 +599,7 @@ var userService = {
             postalcode: fields.postalcode,
             country: fields.country
         };
-        let res = await kyi.post(`api/useraddnewaddress`, {json: data}).json();
+        let res = await kyi.post(`api/useraddnewaddress`, { json: data }).json();
         return res || [];
     },
 
@@ -609,7 +608,7 @@ var userService = {
             serviceid: "60ead773c06b18e7e103d873",
             id: id
         };
-        let res = await kyi.post(`api/usersetprimaryaddress`, {json: data}).json();
+        let res = await kyi.post(`api/usersetprimaryaddress`, { json: data }).json();
         return res || [];
     },
 
@@ -619,7 +618,7 @@ var userService = {
             item: item,
             value: value
         };
-        let res = await kyi.post(`api/usersetnotification`, {json: data}).json();
+        let res = await kyi.post(`api/usersetnotification`, { json: data }).json();
         return res || [];
     },
 
@@ -628,7 +627,7 @@ var userService = {
             serviceid: "60ead773c06b18e7e103d873",
             plan: plan,
         };
-        let res = await kyi.post(`api/userupgradeplan`, {json: data}).json();
+        let res = await kyi.post(`api/userupgradeplan`, { json: data }).json();
         return res || [];
     },
 
@@ -636,7 +635,7 @@ var userService = {
         let data = {
             serviceid: "60ead773c06b18e7e103d873",
         };
-        let res = await kyi.post(`api/usergetplans`, {json: data}).json();
+        let res = await kyi.post(`api/usergetplans`, { json: data }).json();
         return res || [];
     },
 
@@ -644,7 +643,7 @@ var userService = {
         let data = {
             serviceid: "60ead773c06b18e7e103d873",
         };
-        let res = await kyi.post(`api/usergetavailablecryptocurrencies`, {json: data}).json();
+        let res = await kyi.post(`api/usergetavailablecryptocurrencies`, { json: data }).json();
         return res || [];
     },
 
@@ -654,7 +653,7 @@ var userService = {
             ticker: ticker,
             password: password
         };
-        let res = await kyi.post(`api/usercreatecryptowallet`, {json: data}).json();
+        let res = await kyi.post(`api/usercreatecryptowallet`, { json: data }).json();
         return res || [];
     },
 
@@ -663,7 +662,7 @@ var userService = {
             serviceid: "60ead773c06b18e7e103d873",
             address: addr
         };
-        let res = await kyi.post(`api/usergetqslptokens`, {json: data}).json();
+        let res = await kyi.post(`api/usergetqslptokens`, { json: data }).json();
         return res || [];
     },
 
@@ -672,7 +671,7 @@ var userService = {
             serviceid: "60ead773c06b18e7e103d873",
             address: addr
         };
-        let res = await kyi.post(`api/usergetaslptokens`, {json: data}).json();
+        let res = await kyi.post(`api/usergetaslptokens`, { json: data }).json();
         return res || [];
     },
 
@@ -681,7 +680,7 @@ var userService = {
             serviceid: "60ead773c06b18e7e103d873",
             idHex: id
         };
-        let res = await kyi.post(`api/usergetqslptokeninfo`, {json: data}).json();
+        let res = await kyi.post(`api/usergetqslptokeninfo`, { json: data }).json();
         return res || [];
     },
 
@@ -690,10 +689,30 @@ var userService = {
             serviceid: "60ead773c06b18e7e103d873",
             idHex: id
         };
-        let res = await kyi.post(`api/usergetaslptokeninfo`, {json: data}).json();
+        let res = await kyi.post(`api/usergetaslptokeninfo`, { json: data }).json();
         return res || [];
     },
-    
+
+
+    getqslptokenmeta: async (id) => {
+        let data = {
+            serviceid: "60ead773c06b18e7e103d873",
+            idHex: id
+        };
+        let res = await kyi.post(`api/usergetqslptokenmeta`, { json: data }).json();
+        return res || [];
+    },
+
+    getaslptokenmeta: async (id) => {
+        let data = {
+            serviceid: "60ead773c06b18e7e103d873",
+            idHex: id
+        };
+        let res = await kyi.post(`api/usergetaslptokenmeta`, { json: data }).json();
+        return res || [];
+    },
+
+
 }
 
 export default userService;

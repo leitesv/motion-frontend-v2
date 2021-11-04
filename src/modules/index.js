@@ -26,7 +26,6 @@ import TermsAndConditions from './TermsAndConditions';
 //import TwoFactorAuthentication from './TwoFactorAuthentication';
 import ReferralProgram from './ReferralProgram';
 import Contacts from './Contacts';
-import QreditNFT from './QreditNFT';
 import QSLP1 from './QSLP1';
 import CreateTokens from './CreateTokens';
 import Tokenoftrust from './Tokenoftrust';
@@ -66,7 +65,6 @@ export default {
 	[routes.placeholder]: Placeholder,
 	[routes.referralprogram]: ReferralProgram,
 	[routes.contacts]: Contacts,
-	[routes.qreditnft]: QreditNFT,
 	[routes.qslp1]: QSLP1,
 	[routes.createtokens]: CreateTokens,
 	[routes.tokenoftrust]: Tokenoftrust,

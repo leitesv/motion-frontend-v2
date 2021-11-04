@@ -90,7 +90,7 @@ const QSLP1Module = ({ props }) => {
 
 
 				var colourOptions2 = [];
-				
+
 				var tokenData = {};
 
 				let tokens2 = await userService.getqslptokens(res.user.master_qredit_address);
@@ -110,47 +110,47 @@ const QSLP1Module = ({ props }) => {
 						let cdetails = { value: cvalue, label: clabel };
 
 						colourOptions2.push(cdetails);
-						
+
 						tokenData[cvalue] = {
 							data: thistoken,
 							info: tokeninfo.tokeninfo
 						}
-						
+
 					}
 
 				}
-				
+
 				setTokenInfo(tokenData);
 
 				var colourOptions3 = [];
 
-/*
-
-still working on ark tokens
-
-				let tokens3 = await userService.getaslptokens(res.user.master_ark_address);
-
-				if (tokens3.status === true) {
-
-
-					for (let i = 0; i < tokens3.tokens.length; i++) {
-
-						let thistoken = tokens3.tokens[i];
-
-						let cvalue = thistoken.tokenIdHex;
-
-						let tokeninfo = await userService.getaslptokeninfo(cvalue);
-
-						let clabel = tokeninfo.tokeninfo.tokenDetails.name + " (" + thistoken.tokenBalance + " " + tokeninfo.tokeninfo.tokenDetails.symbol + ")";
-
-						let cdetails = { value: cvalue, label: clabel };
-
-						colourOptions3.push(cdetails);
-
-					}
-
-				}
-*/
+				/*
+				
+				still working on ark tokens
+				
+								let tokens3 = await userService.getaslptokens(res.user.master_ark_address);
+				
+								if (tokens3.status === true) {
+				
+				
+									for (let i = 0; i < tokens3.tokens.length; i++) {
+				
+										let thistoken = tokens3.tokens[i];
+				
+										let cvalue = thistoken.tokenIdHex;
+				
+										let tokeninfo = await userService.getaslptokeninfo(cvalue);
+				
+										let clabel = tokeninfo.tokeninfo.tokenDetails.name + " (" + thistoken.tokenBalance + " " + tokeninfo.tokeninfo.tokenDetails.symbol + ")";
+				
+										let cdetails = { value: cvalue, label: clabel };
+				
+										colourOptions3.push(cdetails);
+				
+									}
+				
+								}
+				*/
 
 				var colourOptions = [];
 
@@ -277,21 +277,21 @@ still working on ark tokens
 
 	}
 
-    const handleSendFormChange = event => {
+	const handleSendFormChange = event => {
 
-        if (event.target.type === 'checkbox') {
-            event.target.value = event.target.checked;
-        }
-        
-        var currentSendForm = {};
-            
-        Object.assign(currentSendForm, sendForm);
-            
-        currentSendForm[event.target.id] = event.target.value;
+		if (event.target.type === 'checkbox') {
+			event.target.value = event.target.checked;
+		}
 
-        setSendForm(currentSendForm);
+		var currentSendForm = {};
 
-    };
+		Object.assign(currentSendForm, sendForm);
+
+		currentSendForm[event.target.id] = event.target.value;
+
+		setSendForm(currentSendForm);
+
+	};
 
 	const handleReset = () => {
 		//Array.from(document.querySelectorAll("input")).forEach(
@@ -317,7 +317,7 @@ still working on ark tokens
 		var address = sendForm.send_address || null;
 		var amount = sendForm.send_amount || null;
 		var pass = sendForm.send_password || null;
-		
+
 		var notes = '';
 
 		var error = false;
@@ -336,11 +336,11 @@ still working on ark tokens
 		if (parseFloat(sendamount) > balance) {
 			error = true;
 		}
-		
+
 		if (isNaN(parseFloat(amount))) {
 			error = true;
 		}
-		
+
 		if (!isFinite(amount)) {
 			error = true;
 		}
@@ -357,7 +357,7 @@ still working on ark tokens
 		else {
 
 			(async () => {
-			
+
 				var tobject = {
 					qslp1: {
 						tp: 'SEND',
@@ -407,7 +407,7 @@ still working on ark tokens
 		var address = "XQRJgWWdxrUqn7hnrtMWbVh7wgz2tP6hnh"; // QslpMasterAddress
 		var amount = sendForm.burn_amount || null;
 		var pass = sendForm.send_password || null;
-		
+
 		var notes = '';
 
 		var error = false;
@@ -426,11 +426,11 @@ still working on ark tokens
 		if (parseFloat(burnamount) > balance) {
 			error = true;
 		}
-		
+
 		if (isNaN(parseFloat(amount))) {
 			error = true;
 		}
-		
+
 		if (!isFinite(amount)) {
 			error = true;
 		}
@@ -443,7 +443,7 @@ still working on ark tokens
 		else {
 
 			(async () => {
-			
+
 				var tobject = {
 					qslp1: {
 						tp: 'BURN',
@@ -474,7 +474,7 @@ still working on ark tokens
 			})();
 
 		}
-		
+
 	}
 
 	const doMint = (e) => {
@@ -493,7 +493,7 @@ still working on ark tokens
 		var address = "XQRJgWWdxrUqn7hnrtMWbVh7wgz2tP6hnh"; // QslpMasterAddress
 		var amount = sendForm.mint_amount || null;
 		var pass = sendForm.send_password || null;
-		
+
 		var notes = '';
 
 		var error = false;
@@ -503,16 +503,15 @@ still working on ark tokens
 		}
 
 		var mintamount = parseFloat(amount).toFixed(tokenInfo[selectedToken].data.tokenDecimals);
-		
-		if (tokenInfo[selectedToken].info.tokenDetails.mintable === false)
-		{	
+
+		if (tokenInfo[selectedToken].info.tokenDetails.mintable === false) {
 			error = true;
 		}
-		
+
 		if (isNaN(parseFloat(amount))) {
 			error = true;
 		}
-		
+
 		if (!isFinite(amount)) {
 			error = true;
 		}
@@ -525,7 +524,7 @@ still working on ark tokens
 		else {
 
 			(async () => {
-			
+
 				var tobject = {
 					qslp1: {
 						tp: 'MINT',
@@ -556,7 +555,7 @@ still working on ark tokens
 			})();
 
 		}
-		
+
 	}
 
 	const doPause = (e) => {
@@ -574,13 +573,12 @@ still working on ark tokens
 
 		var address = "XQRJgWWdxrUqn7hnrtMWbVh7wgz2tP6hnh"; // QslpMasterAddress
 		var pass = sendForm.send_password || null;
-		
+
 		var notes = '';
 
 		var error = false;
 
-		if (tokenInfo[selectedToken].info.tokenDetails.pausable === false)
-		{	
+		if (tokenInfo[selectedToken].info.tokenDetails.pausable === false) {
 			error = true;
 		}
 
@@ -592,7 +590,7 @@ still working on ark tokens
 		else {
 
 			(async () => {
-			
+
 				var tobject = {
 					qslp1: {
 						tp: 'PAUSE',
@@ -622,7 +620,7 @@ still working on ark tokens
 			})();
 
 		}
-		
+
 	}
 
 	const doResume = (e) => {
@@ -640,13 +638,12 @@ still working on ark tokens
 
 		var address = "XQRJgWWdxrUqn7hnrtMWbVh7wgz2tP6hnh"; // QslpMasterAddress
 		var pass = sendForm.send_password || null;
-		
+
 		var notes = '';
 
 		var error = false;
 
-		if (tokenInfo[selectedToken].info.tokenDetails.pausable === false)
-		{	
+		if (tokenInfo[selectedToken].info.tokenDetails.pausable === false) {
 			error = true;
 		}
 
@@ -658,7 +655,7 @@ still working on ark tokens
 		else {
 
 			(async () => {
-			
+
 				var tobject = {
 					qslp1: {
 						tp: 'RESUME',
@@ -688,7 +685,7 @@ still working on ark tokens
 			})();
 
 		}
-		
+
 	}
 
 	const doNewOwner = (e) => {
@@ -707,13 +704,12 @@ still working on ark tokens
 		var contactid = sendForm.send_contactid || null;
 		var address = sendForm.newowner_address || null;
 		var pass = sendForm.send_password || null;
-		
+
 		var notes = '';
 
 		var error = false;
 
-		if (tokenInfo[selectedToken].info.tokenDetails.pausable === false)
-		{	
+		if (tokenInfo[selectedToken].info.tokenDetails.pausable === false) {
 			error = true;
 		}
 
@@ -725,7 +721,7 @@ still working on ark tokens
 		else {
 
 			(async () => {
-			
+
 				var tobject = {
 					qslp1: {
 						tp: 'NEWOWNER',
@@ -755,7 +751,7 @@ still working on ark tokens
 			})();
 
 		}
-		
+
 	}
 
 	const doCopyAddress = (e, address) => {
@@ -1005,7 +1001,13 @@ still working on ark tokens
 		setSendForm(currentSendForm);
 
 	};
-	
+
+	const doActionGetTokenInfo = (e) => {
+
+		setTheAction('gettokeninfo');
+
+	};
+
 	const doActionSend = (e) => {
 
 		setTheAction('send');
@@ -1075,7 +1077,7 @@ still working on ark tokens
 										<div className="zl_add_currency_left_price">
 											<h3 className="fixcolor">
 												<img style={{ width: '20px', height: '20px' }} src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBzdGFuZGFsb25lPSJubyI/Pgo8IURPQ1RZUEUgc3ZnIFBVQkxJQyAiLS8vVzNDLy9EVEQgU1ZHIDIwMDEwOTA0Ly9FTiIKICJodHRwOi8vd3d3LnczLm9yZy9UUi8yMDAxL1JFQy1TVkctMjAwMTA5MDQvRFREL3N2ZzEwLmR0ZCI+CjxzdmcgdmVyc2lvbj0iMS4wIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciCiB3aWR0aD0iMjUwLjAwMDAwMHB0IiBoZWlnaHQ9IjI1MC4wMDAwMDBwdCIgdmlld0JveD0iMCAwIDI1MC4wMDAwMDAgMjUwLjAwMDAwMCIKIHByZXNlcnZlQXNwZWN0UmF0aW89InhNaWRZTWlkIG1lZXQiPgoKPGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMC4wMDAwMDAsMjUwLjAwMDAwMCkgc2NhbGUoMC4xMDAwMDAsLTAuMTAwMDAwKSIKZmlsbD0iI0VFRUVFRSIgc3Ryb2tlPSJub25lIj4KPHBhdGggZD0iTTExNSAyMTMzIGMxMSAtMTEgNTIgLTQ4IDkwIC04MyAxNzMgLTE1NiAzMDkgLTI5NiAzMjggLTM0MCAyNyAtNjEKMjYgLTEzOCAtNCAtMjMwIC0yMSAtNjcgLTI0IC05MyAtMjQgLTIzNSAwIC0xODggMTEgLTIzOSA4NSAtMzkwIDExMiAtMjMwCjMxOCAtMzk4IDU2OCAtNDYxIDEyOCAtMzMgMjkyIC0zNCA0MTkgLTQgMTAzIDI0IDI2OSAxMDMgMzMxIDE1NyBsNDMgMzggLTgzCjYzIC04MyA2NCAtNSAtMzQgYy00IC0yNyAtMTYgLTQwIC02OCAtNzQgLTIyMCAtMTQ1IC01MzMgLTExNiAtNzc5IDcyIC0xOTcKMTUxIC0zMDYgNDEyIC0yNzMgNjU0IDEyIDkxIDQ4IDIwMSA4NyAyNjkgMjEgMzYgMjMgNDUgMTIgNTYgLTE0IDEyIC01NTAgNDE2Ci02MjQgNDY5IC0yMiAxNiAtMzEgMjAgLTIwIDl6Ii8+CjxwYXRoIGQ9Ik0xMTkwIDIxMDEgYy0xMDcgLTIzIC0yMTIgLTY4IC0zMDQgLTEyOCAtNzQgLTQ5IC0yMDYgLTE3NiAtMjA2Ci0xOTggMCAtNyAzMyAtMzcgNzMgLTY4IDcwIC01MyA3MyAtNTQgNjkgLTI4IC04IDU3IDE3NyAxOTQgMzMzIDI0NyAxMDggMzYKMjY4IDQ0IDM3OSAyMCAyMDAgLTQ1IDM4NyAtMTkxIDQ3OCAtMzczIDY0IC0xMjcgODIgLTIxMyA3NiAtMzY2IC02IC0xMzcgLTMwCi0yMjIgLTk1IC0zMzAgLTE5IC0zMiAtMzIgLTY0IC0zMCAtNzEgMyAtOCA1MCAtNDcgMTA0IC04NyA1NCAtNDAgMTYxIC0xMjAKMjM4IC0xNzggMTUzIC0xMTUgMTUzIC0xMTggMSA1OSAtMTIxIDE0MCAtMTQyIDIzMCAtOTEgMzk1IDM5IDEyOCA0NSAyOTEgMTYKNDMwIC01NSAyNjcgLTIzOSA0OTcgLTQ5MyA2MTQgLTExOCA1NSAtMTk0IDcyIC0zMzggNzcgLTk3IDMgLTE0NCAwIC0yMTAgLTE1eiIvPgo8cGF0aCBkPSJNODgyIDE2MzggYy0xMCAtMTQgLTMyIDMgNTE4IC00MTIgMTY4IC0xMjcgMzU1IC0yNjggNDE1IC0zMTQgMTAwCi03NyAxMTAgLTgyIDExMyAtNjIgNiAzNyAtNyA4NiAtMjkgMTE0IC0xMiAxNSAtMTI3IDEwNiAtMjU4IDIwMyAtMTMwIDk3Ci0zMjEgMjQwIC00MjYgMzE4IC0xMDQgNzggLTIwMCAxNDcgLTIxMiAxNTQgLTI5IDE1IC0xMDggMTQgLTEyMSAtMXoiLz4KPHBhdGggZD0iTTE0NTAgMTA5NCBjMCAtNzQgMzEgLTEwOCAyNDYgLTI2OSAzMjUgLTI0NCA1NzYgLTQyOSA1OTggLTQ0MiAyNQotMTUgMTA1IC0xNyAxMjYgLTMgOCA1IDEyIDExIDEwIDEzIC0zIDMgLTM0IDI3IC03MCA1NCAtMzYgMjcgLTEzOSAxMDUgLTIzMAoxNzQgLTkxIDY5IC0yNzUgMjA4IC00MTAgMzA5IC0xMzUgMTAxIC0yNTEgMTg3IC0yNTcgMTkzIC0xMCA3IC0xMyAwIC0xMyAtMjl6Ii8+CjwvZz4KPC9zdmc+Cg==" alt="currency-icon" />
-												&nbsp;Qredit QSLP-1 (Fungible)
+												&nbsp;Qredit Blockchain
 											</h3>
 										</div>
 									</div>
@@ -1087,7 +1089,7 @@ still working on ark tokens
 										<div className="zl_add_currency_left_price">
 											<h3 className="fixcolor">
 												<img style={{ width: '20px', height: '20px' }} src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMjAwIiBoZWlnaHQ9IjEyMDAiPjxyZWN0IHdpZHRoPSIxMjAwIiBoZWlnaHQ9IjEyMDAiIGZpbGw9IiNjOTI5MmMiIGRhdGEtbmFtZT0i0J/RgNGP0LzQvtGD0LPQvtC70YzQvdC40LosINGB0LrRgNGD0LPQuy4g0YPQs9C70YsgMSIgcng9IjkwIiByeT0iOTAiLz48cGF0aCBmaWxsPSIjZmZmIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik0xMDY1LjU1IDk3NC41bC00NjQuMy00OTEuMTNMMTMzLjU1MyA5NzQuNWw0NjcuNy03NTQuOTd6TTUxOC41ODIgNjgzLjI0OGgxNjQuMmwtODEuNTMyLTg0LjUyMXpNODEwLjc1MSA4MTYuODhsLTc0Ljc0LTc4LjgwOUg0NjUuMzU3bC03NC43NCA3OC44MDloNDIwLjEzNHoiIGRhdGEtbmFtZT0i0KTQuNCz0YPRgNCwIDMg0LrQvtC/0LjRjyIvPjwvc3ZnPg==" alt="currency-icon" />
-												&nbsp;Ark ASLP-1 (Fungible)
+												&nbsp;ARK Blockchain
 											</h3>
 										</div>
 									</div>
@@ -1100,7 +1102,7 @@ still working on ark tokens
 						<Tab.Pane eventKey="tab1">
 
 							<div className='primary-color' style={{ textAlign: 'left' }}>
-								Network: Qredit QSLP-1
+								Network: Qredit Blockchain
 							</div>
 
 							<div style={{ textAlign: 'left' }}>
@@ -1120,14 +1122,69 @@ still working on ark tokens
 							{selectedToken !== null ? (
 								<div style={{ textAlign: 'left', marginTop: '3px', marginBottom: '3px' }}>
 
+									<button onClick={doActionGetTokenInfo} className={"btn mr-2" + (theAction === 'gettokeninfo' ? " btn-primary" : " btn-secondary")}>Token Summary</button>
 									<button onClick={doActionSend} className={"btn mr-2" + (theAction === 'send' ? " btn-primary" : " btn-secondary")}>Send / Receive</button>
-									<button onClick={doActionBurn} className={"btn mr-2" + (theAction === 'burn' ? " btn-primary" : " btn-secondary")} style={tokenInfo[selectedToken].data.isOwner===true?{}:{display:'none'}}>Burn</button>
-									<button onClick={doActionMint} className={"btn mr-2" + (theAction === 'mint' ? " btn-primary" : " btn-secondary")} style={tokenInfo[selectedToken].data.isOwner===true&&tokenInfo[selectedToken].info.tokenDetails.mintable===true?{}:{display:'none'}}>Mint</button>
-									<button onClick={doActionPause} className={"btn mr-2" + (theAction === 'pause' ? " btn-primary" : " btn-secondary")} style={tokenInfo[selectedToken].data.isOwner===true&&tokenInfo[selectedToken].info.tokenDetails.pausable===true?{}:{display:'none'}}>Pause</button>
-									<button onClick={doActionResume} className={"btn mr-2" + (theAction === 'resume' ? " btn-primary" : " btn-secondary")} style={tokenInfo[selectedToken].data.isOwner===true&&tokenInfo[selectedToken].info.tokenDetails.pausable===true?{}:{display:'none'}}>Resume</button>
-									<button onClick={doActionNewOwner} className={"btn mr-2" + (theAction === 'newowner' ? " btn-primary" : " btn-secondary")} style={tokenInfo[selectedToken].data.isOwner===true?{}:{display:'none'}}>New Owner</button>
+									<button onClick={doActionBurn} className={"btn mr-2" + (theAction === 'burn' ? " btn-primary" : " btn-secondary")} style={tokenInfo[selectedToken].data.isOwner === true ? {} : { display: 'none' }}>Burn</button>
+									<button onClick={doActionMint} className={"btn mr-2" + (theAction === 'mint' ? " btn-primary" : " btn-secondary")} style={tokenInfo[selectedToken].data.isOwner === true && tokenInfo[selectedToken].info.tokenDetails.mintable === true ? {} : { display: 'none' }}>Mint</button>
+									<button onClick={doActionPause} className={"btn mr-2" + (theAction === 'pause' ? " btn-primary" : " btn-secondary")} style={tokenInfo[selectedToken].data.isOwner === true && tokenInfo[selectedToken].info.tokenDetails.pausable === true ? {} : { display: 'none' }}>Pause</button>
+									<button onClick={doActionResume} className={"btn mr-2" + (theAction === 'resume' ? " btn-primary" : " btn-secondary")} style={tokenInfo[selectedToken].data.isOwner === true && tokenInfo[selectedToken].info.tokenDetails.pausable === true ? {} : { display: 'none' }}>Resume</button>
+									<button onClick={doActionNewOwner} className={"btn mr-2" + (theAction === 'newowner' ? " btn-primary" : " btn-secondary")} style={tokenInfo[selectedToken].data.isOwner === true ? {} : { display: 'none' }}>New Owner</button>
+
+									{{/* mikedoto <button onClick={doActionAddMeta} className={"btn mr-2" + (theAction === 'addmeta' ? " btn-primary" : " btn-secondary")} style={tokenInfo[selectedToken].data.type === "QSLP2" ? {} : { display: 'none' }}>Add Meta</button> */ }}
+								</div>
+							) : ''}
+
+							{theAction === 'tokeninfo' ? (
+
+								<div className="zl_chart_component active">
+									<div className="zl_send_recive_content">
+										<div className="zl_send_recive_content_row">
+											<div className="zl_send_recive_content_column">
+												<div className="zl_send_recive_inner_content">
+													<h3 className="zl_send_recive_heading">
+														Token Summary
+													</h3>
+													<div className="">
+														{{/* mikedoto
+														
+															tokentype:
+															paused:
+															tokenid:
+															symbol:
+															name:
+															decimals:
+															genesisquantity:
+															pausable:
+															mintable:
+															circulating supply:
+
+														*/}}
+													</div>
+												</div>
+											</div>
+											<div className="zl_send_recive_content_column">
+												<div className="zl_send_recive_inner_content">
+													<h3 className="zl_send_recive_heading">
+														Metadata and Document (If applicable)
+													</h3>
+													<div className="">
+														{{/* 
+															mikedoto
+
+															documenturi <img src="#documenturi" className="documenturi"></img>:
+														
+															table (for each meta):
+															metaname / metadata / void
+
+														*/}}
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
 
 								</div>
+
 							) : ''}
 
 							{theAction === 'send' ? (
@@ -1273,9 +1330,6 @@ still working on ark tokens
 													</div>
 												</div>
 											</div>
-
-
-
 										</div>
 									</div>
 
@@ -1326,7 +1380,7 @@ still working on ark tokens
 														onChange={handleSendFormChange}
 													/>
 												</div>
-												
+
 												<div className="zl_send_currency_btn_text">
 													<Button onClick={doBurn} className="btn">
 														Burn Tokens
@@ -1378,7 +1432,7 @@ still working on ark tokens
 														onChange={handleSendFormChange}
 													/>
 												</div>
-												
+
 												<div className="zl_send_currency_btn_text">
 													<Button onClick={doMint} className="btn">
 														Mint New Tokens
@@ -1409,7 +1463,7 @@ still working on ark tokens
 												<div className="zl_send_currency_input_content">
 													<div className="zl_send_currency_btn_text">
 														<div className="zl_send_currency_text">
-															<p><span>Current Status: {tokenInfo[selectedToken].info.paused===true?"Paused":"Active"}</span></p>
+															<p><span>Current Status: {tokenInfo[selectedToken].info.paused === true ? "Paused" : "Active"}</span></p>
 														</div>
 													</div>
 												</div>
@@ -1422,7 +1476,7 @@ still working on ark tokens
 														onChange={handleSendFormChange}
 													/>
 												</div>
-												
+
 												<div className="zl_send_currency_btn_text">
 													<Button onClick={doPause} className="btn">
 														Pause Token
@@ -1453,7 +1507,7 @@ still working on ark tokens
 												<div className="zl_send_currency_input_content">
 													<div className="zl_send_currency_btn_text">
 														<div className="zl_send_currency_text">
-															<p><span>Current Status: {tokenInfo[selectedToken].info.paused===true?"Paused":"Active"}</span></p>
+															<p><span>Current Status: {tokenInfo[selectedToken].info.paused === true ? "Paused" : "Active"}</span></p>
 														</div>
 													</div>
 												</div>
@@ -1466,7 +1520,7 @@ still working on ark tokens
 														onChange={handleSendFormChange}
 													/>
 												</div>
-												
+
 												<div className="zl_send_currency_btn_text">
 													<Button onClick={doResume} className="btn">
 														Resume Token
@@ -1566,7 +1620,7 @@ still working on ark tokens
 						<Tab.Pane eventKey="tab2">
 
 							<div className='primary-color' style={{ textAlign: 'left' }}>
-								Network: Ark ASLP-1
+								Network: ARK Blockchain
 							</div>
 
 
@@ -1588,11 +1642,11 @@ still working on ark tokens
 								<div style={{ textAlign: 'left', marginTop: '3px', marginBottom: '3px' }}>
 
 									<button onClick={doActionSend} className={"btn mr-2" + (theAction === 'send' ? " btn-primary" : " btn-secondary")}>Send / Receive</button>
-									<button onClick={doActionBurn} className={"btn mr-2" + (theAction === 'burn' ? " btn-primary" : " btn-secondary")} style={tokenInfo[selectedToken].data.isOwner===true?{}:{display:'none'}}>Burn</button>
-									<button onClick={doActionMint} className={"btn mr-2" + (theAction === 'mint' ? " btn-primary" : " btn-secondary")} style={tokenInfo[selectedToken].data.isOwner===true&&tokenInfo[selectedToken].info.tokenDetails.mintable===true?{}:{display:'none'}}>Mint</button>
-									<button onClick={doActionPause} className={"btn mr-2" + (theAction === 'pause' ? " btn-primary" : " btn-secondary")} style={tokenInfo[selectedToken].data.isOwner===true&&tokenInfo[selectedToken].info.tokenDetails.pausable===true?{}:{display:'none'}}>Pause</button>
-									<button onClick={doActionResume} className={"btn mr-2" + (theAction === 'resume' ? " btn-primary" : " btn-secondary")} style={tokenInfo[selectedToken].data.isOwner===true&&tokenInfo[selectedToken].info.tokenDetails.pausable===true?{}:{display:'none'}}>Resume</button>
-									<button onClick={doActionNewOwner} className={"btn mr-2" + (theAction === 'newowner' ? " btn-primary" : " btn-secondary")} style={tokenInfo[selectedToken].data.isOwner===true?{}:{display:'none'}}>New Owner</button>
+									<button onClick={doActionBurn} className={"btn mr-2" + (theAction === 'burn' ? " btn-primary" : " btn-secondary")} style={tokenInfo[selectedToken].data.isOwner === true ? {} : { display: 'none' }}>Burn</button>
+									<button onClick={doActionMint} className={"btn mr-2" + (theAction === 'mint' ? " btn-primary" : " btn-secondary")} style={tokenInfo[selectedToken].data.isOwner === true && tokenInfo[selectedToken].info.tokenDetails.mintable === true ? {} : { display: 'none' }}>Mint</button>
+									<button onClick={doActionPause} className={"btn mr-2" + (theAction === 'pause' ? " btn-primary" : " btn-secondary")} style={tokenInfo[selectedToken].data.isOwner === true && tokenInfo[selectedToken].info.tokenDetails.pausable === true ? {} : { display: 'none' }}>Pause</button>
+									<button onClick={doActionResume} className={"btn mr-2" + (theAction === 'resume' ? " btn-primary" : " btn-secondary")} style={tokenInfo[selectedToken].data.isOwner === true && tokenInfo[selectedToken].info.tokenDetails.pausable === true ? {} : { display: 'none' }}>Resume</button>
+									<button onClick={doActionNewOwner} className={"btn mr-2" + (theAction === 'newowner' ? " btn-primary" : " btn-secondary")} style={tokenInfo[selectedToken].data.isOwner === true ? {} : { display: 'none' }}>New Owner</button>
 
 								</div>
 							) : ''}
@@ -1793,7 +1847,7 @@ still working on ark tokens
 														onChange={handleSendFormChange}
 													/>
 												</div>
-												
+
 												<div className="zl_send_currency_btn_text">
 													<Button onClick={doBurn} className="btn">
 														Burn Tokens
@@ -1845,7 +1899,7 @@ still working on ark tokens
 														onChange={handleSendFormChange}
 													/>
 												</div>
-												
+
 												<div className="zl_send_currency_btn_text">
 													<Button onClick={doMint} className="btn">
 														Mint New Tokens
@@ -1876,7 +1930,7 @@ still working on ark tokens
 												<div className="zl_send_currency_input_content">
 													<div className="zl_send_currency_btn_text">
 														<div className="zl_send_currency_text">
-															<p><span>Current Status: {tokenInfo[selectedToken].info.paused===true?"Paused":"Active"}</span></p>
+															<p><span>Current Status: {tokenInfo[selectedToken].info.paused === true ? "Paused" : "Active"}</span></p>
 														</div>
 													</div>
 												</div>
@@ -1889,7 +1943,7 @@ still working on ark tokens
 														onChange={handleSendFormChange}
 													/>
 												</div>
-												
+
 												<div className="zl_send_currency_btn_text">
 													<Button onClick={doPause} className="btn">
 														Pause Token
@@ -1920,7 +1974,7 @@ still working on ark tokens
 												<div className="zl_send_currency_input_content">
 													<div className="zl_send_currency_btn_text">
 														<div className="zl_send_currency_text">
-															<p><span>Current Status: {tokenInfo[selectedToken].info.paused===true?"Paused":"Active"}</span></p>
+															<p><span>Current Status: {tokenInfo[selectedToken].info.paused === true ? "Paused" : "Active"}</span></p>
 														</div>
 													</div>
 												</div>
@@ -1933,7 +1987,7 @@ still working on ark tokens
 														onChange={handleSendFormChange}
 													/>
 												</div>
-												
+
 												<div className="zl_send_currency_btn_text">
 													<Button onClick={doResume} className="btn">
 														Resume Token

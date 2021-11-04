@@ -21,15 +21,15 @@ const Header = (props) => {
     };
 
     const handleToggleMobile = () => {
-    	if (window.innerWidth <= 760)
-        	setSend(false);
+        if (window.innerWidth <= 760)
+            setSend(false);
     };
-    
+
     //const [state, setState] = React.useState({ user: {} });
     const [state, setState] = React.useState(store.getState());
 
     let history = useHistory()
-    
+
     const handleLogOut = (event) => {
 
         localStorage.removeItem("accessToken");
@@ -43,29 +43,27 @@ const Header = (props) => {
         // listen for state change on images and user info
 
         var unsubscribe = store.subscribe(() => {
-        
+
             setState(store.getState());
-            
-			if (state.user.notifications > 0)
-			{
-			
-				var ncount = state.user.notifications;
-				
-				if (parseInt(state.user.notifications) > 99) ncount = 99;
-			
-				setNotificationFill('red');
-				setNotificationCount(state.user.notifications);
-			}
-			else
-			{
-				setNotificationFill('#53b9ea');
-				setNotificationCount('0');
-			}
-            
+
+            if (state.user.notifications > 0) {
+
+                var ncount = state.user.notifications;
+
+                if (parseInt(state.user.notifications) > 99) ncount = 99;
+
+                setNotificationFill('red');
+                setNotificationCount(state.user.notifications);
+            }
+            else {
+                setNotificationFill('#53b9ea');
+                setNotificationCount('0');
+            }
+
         });
 
     }, []) // <-- here put the parameter to listen
-    
+
 
 
     return (
@@ -108,16 +106,16 @@ const Header = (props) => {
 
 
                     <ul className="zl_page_sidebar_nav">
-                    
+
                         <li className="zl_page_sidebar_items" title="notificationsettings">
                             <Link to={'/notificationsettings'} onClick={handleToggleMobile} className="zl_page_sidebar_link position-relative">
-                            	<div style={{textAlign: 'center', marginRight: '15px', width:'20px', height: '20px'}}>
-                            		<span style={{fontSize: '16px', color: notificationFill}}>{notificationCount}</span>
-                            	</div>
+                                <div style={{ textAlign: 'center', marginRight: '15px', width: '20px', height: '20px' }}>
+                                    <span style={{ fontSize: '16px', color: notificationFill }}>{notificationCount}</span>
+                                </div>
                                 <span className="zl_pagesidebar_text">Notifications</span>
                             </Link>
                         </li>
-                        
+
                         <li className="zl_page_sidebar_items" title="dashboard">
                             <Link to={'/dashboard'} onClick={handleToggleMobile} className="zl_page_sidebar_link position-relative">
                                 <img src="/assets/svg-icons/064-home.svg" className="mr-15" width="20" height="20"></img>
@@ -154,12 +152,6 @@ const Header = (props) => {
                             <Link to={'/qslp1'} onClick={handleToggleMobile} className="zl_page_sidebar_link position-relative">
                                 <img src="/assets/svg-icons/081-crown.svg" className="mr-15" width="20" height="20"></img>
                                 <span className="zl_pagesidebar_text">Tokens Wallet</span>
-                            </Link>
-                        </li>
-                        <li className="zl_page_sidebar_items" title="qreditnft">
-                            <Link to={'/qreditnft'} onClick={handleToggleMobile} className="zl_page_sidebar_link position-relative">
-                                <img src="/assets/svg-icons/007-star.svg" className="mr-15" width="20" height="20"></img>
-                                <span className="zl_pagesidebar_text">NFT's</span>
                             </Link>
                         </li>
 

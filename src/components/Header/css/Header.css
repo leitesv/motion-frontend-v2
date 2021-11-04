@@ -97,11 +97,6 @@
   .zl_page_sidebar_nav
   .zl_page_sidebar_items[title="qslp1"]
   .zl_page_sidebar_link::before,
-.zl_page_sidebar[title="qreditnft"]
-  .zl_page_sidebar_content
-  .zl_page_sidebar_nav
-  .zl_page_sidebar_items[title="qreditnft"]
-  .zl_page_sidebar_link::before,
 .zl_page_sidebar[title="createtokens"]
   .zl_page_sidebar_content
   .zl_page_sidebar_nav
@@ -168,11 +163,6 @@
   .zl_page_sidebar_content
   .zl_page_sidebar_nav
   .zl_page_sidebar_items[title="qslp1"]
-  .zl_page_sidebar_link::after,
-.zl_page_sidebar[title="qreditnft"]
-  .zl_page_sidebar_content
-  .zl_page_sidebar_nav
-  .zl_page_sidebar_items[title="qreditnft"]
   .zl_page_sidebar_link::after,
 .zl_page_sidebar[title="createtokens"]
   .zl_page_sidebar_content
@@ -245,11 +235,6 @@
   .zl_page_sidebar_nav
   .zl_page_sidebar_items[title="qslp1"]
   .zl_page_sidebar_link,
-.zl_page_sidebar[title="qreditnft"]
-  .zl_page_sidebar_content
-  .zl_page_sidebar_nav
-  .zl_page_sidebar_items[title="qreditnft"]
-  .zl_page_sidebar_link,
 .zl_page_sidebar[title="createtokens"]
   .zl_page_sidebar_content
   .zl_page_sidebar_nav
@@ -317,13 +302,6 @@
   .zl_page_sidebar_content
   .zl_page_sidebar_nav
   .zl_page_sidebar_items[title="qslp1"]
-  .zl_page_sidebar_link
-  svg
-  path,
-.zl_page_sidebar[title="qreditnft"]
-  .zl_page_sidebar_content
-  .zl_page_sidebar_nav
-  .zl_page_sidebar_items[title="qreditnft"]
   .zl_page_sidebar_link
   svg
   path,

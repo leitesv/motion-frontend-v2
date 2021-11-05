@@ -61,6 +61,8 @@ const MainComponent = (props) => {
 	const [colorOptionsVote, setColorOptionsVote] = useState([]);
     const [colorStyles2, setColorStyles2] = useState({});
 
+	const [isFormSubmitting, setIsFormSubmitting] = useState(false);
+
     React.useEffect(() => {
         // Runs after the first render() lifecycle
 
@@ -332,6 +334,8 @@ const MainComponent = (props) => {
     const doSend = (e) => {
 
         let walletid = props._id;
+        
+        setIsFormSubmitting(true);
 
         var contactid = sendForm.send_contactid || null;
         var address = sendForm.send_address || null;
@@ -355,6 +359,8 @@ const MainComponent = (props) => {
         if (error === true) {
 
             toast.error('Form error');
+            
+            setIsFormSubmitting(false);
 
         }
         else {
@@ -376,6 +382,8 @@ const MainComponent = (props) => {
                     toast.error(res.message);
 
                 }
+                
+                setIsFormSubmitting(false);
 
             })();
 
@@ -387,6 +395,7 @@ const MainComponent = (props) => {
 	
 		e.preventDefault();
 
+		setIsFormSubmitting(true);
 		
 		var tovote = sendForm.send_vote;
 		var pass = sendForm.send_password;
@@ -416,6 +425,8 @@ const MainComponent = (props) => {
 				toast.error(res.message);
 
 			}
+			
+			setIsFormSubmitting(false);
 
 		})();
 		
@@ -721,9 +732,11 @@ const MainComponent = (props) => {
                                     <h3 className="zl_send_currency_type">EUR</h3>
                                 </div>
                                 <div className="zl_send_currency_btn_text">
-                                    <Button onClick={doSend} className="zl_send_currency_btn">
-                                        Send
-                                    </Button>
+                                    
+									<Button onClick={doSend} disabled={isFormSubmitting} className="zl_send_currency_btn">
+										{isFormSubmitting ? 'Submitting...' : 'Send'}
+									</Button>
+                                    
                                     <div className="zl_send_currency_text">
                                         <p>Network Fee<span>0.00 {props.currencyid.ticker}</span></p>
                                     </div>
@@ -791,9 +804,11 @@ const MainComponent = (props) => {
 											<label className="form-control-label primary-color" style={{marginTop:'-8px', fontSize:'10px'}}>Your Password</label>
 										</div>
 										<div className="zl_send_currency_btn_text">
-											<Button onClick={doVote} className="zl_send_currency_btn">
-												Vote
+
+											<Button onClick={doVote} disabled={isFormSubmitting} className="zl_send_currency_btn">
+												{isFormSubmitting ? 'Submitting...' : 'Vote'}
 											</Button>
+											
 										</div>
 									</>)
 								}

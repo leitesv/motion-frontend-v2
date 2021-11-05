@@ -59,6 +59,8 @@ const QSLP1Module = ({ props }) => {
 
 	const [theTab, setTheTab] = useState(null);
 
+	const [isFormSubmitting, setIsFormSubmitting] = useState(false);
+
 	let history = useHistory()
 
 	React.useEffect(() => {
@@ -105,7 +107,7 @@ const QSLP1Module = ({ props }) => {
 
 						let tokeninfo = await userService.getqslptokeninfo(cvalue);
 
-						if (thistoken.tokenBalance)
+						if (tokeninfo.tokeninfo.type === "QSLP1")
 							var clabel = tokeninfo.tokeninfo.tokenDetails.name + " (" + thistoken.tokenBalance + " " + tokeninfo.tokeninfo.tokenDetails.symbol + ")";
 						else
 							var clabel = tokeninfo.tokeninfo.tokenDetails.name + " (QSLP2)";
@@ -123,8 +125,8 @@ const QSLP1Module = ({ props }) => {
 					}
 
 				}
-
-console.log(tokenData);
+// @nayiem ucomment this to view all token data information
+//console.log(tokenData);
 
 
 				setTokenInfo(tokenData);
@@ -309,6 +311,8 @@ console.log(tokenData);
 
 	const doSend = (e) => {
 
+		setIsFormSubmitting(true);
+		
 		var walletid;
 
 		for (let i = 0; i < state.user.wallets.length; i++) {
@@ -359,6 +363,8 @@ console.log(tokenData);
 		if (error === true) {
 
 			toast.error('Form error');
+			
+			setIsFormSubmitting(false);
 
 		}
 		else {
@@ -391,6 +397,8 @@ console.log(tokenData);
 					toast.error(res.message);
 
 				}
+				
+				setIsFormSubmitting(false);
 
 			})();
 
@@ -401,6 +409,8 @@ console.log(tokenData);
 	const doBurn = (e) => {
 
 		var walletid;
+		
+		setIsFormSubmitting(true);
 
 		for (let i = 0; i < state.user.wallets.length; i++) {
 
@@ -445,6 +455,8 @@ console.log(tokenData);
 		if (error === true) {
 
 			toast.error('Form error');
+			
+			setIsFormSubmitting(false);
 
 		}
 		else {
@@ -477,6 +489,8 @@ console.log(tokenData);
 					toast.error(res.message);
 
 				}
+				
+				setIsFormSubmitting(false);
 
 			})();
 
@@ -487,6 +501,8 @@ console.log(tokenData);
 	const doMint = (e) => {
 
 		var walletid;
+		
+		setIsFormSubmitting(true);
 
 		for (let i = 0; i < state.user.wallets.length; i++) {
 
@@ -526,6 +542,8 @@ console.log(tokenData);
 		if (error === true) {
 
 			toast.error('Form error');
+			
+			setIsFormSubmitting(false);
 
 		}
 		else {
@@ -558,6 +576,8 @@ console.log(tokenData);
 					toast.error(res.message);
 
 				}
+				
+				setIsFormSubmitting(false);
 
 			})();
 
@@ -568,6 +588,8 @@ console.log(tokenData);
 	const doPause = (e) => {
 
 		var walletid;
+		
+		setIsFormSubmitting(true);
 
 		for (let i = 0; i < state.user.wallets.length; i++) {
 
@@ -592,6 +614,8 @@ console.log(tokenData);
 		if (error === true) {
 
 			toast.error('Form error');
+			
+			setIsFormSubmitting(false);
 
 		}
 		else {
@@ -623,6 +647,8 @@ console.log(tokenData);
 					toast.error(res.message);
 
 				}
+				
+				setIsFormSubmitting(false);
 
 			})();
 
@@ -633,6 +659,8 @@ console.log(tokenData);
 	const doResume = (e) => {
 
 		var walletid;
+		
+		setIsFormSubmitting(true);
 
 		for (let i = 0; i < state.user.wallets.length; i++) {
 
@@ -657,6 +685,8 @@ console.log(tokenData);
 		if (error === true) {
 
 			toast.error('Form error');
+			
+			setIsFormSubmitting(false);
 
 		}
 		else {
@@ -688,6 +718,8 @@ console.log(tokenData);
 					toast.error(res.message);
 
 				}
+				
+				setIsFormSubmitting(false);
 
 			})();
 
@@ -698,6 +730,8 @@ console.log(tokenData);
 	const doNewOwner = (e) => {
 
 		var walletid;
+		
+		setIsFormSubmitting(true);
 
 		for (let i = 0; i < state.user.wallets.length; i++) {
 
@@ -723,6 +757,8 @@ console.log(tokenData);
 		if (error === true) {
 
 			toast.error('Form error');
+			
+			setIsFormSubmitting(false);
 
 		}
 		else {
@@ -754,6 +790,8 @@ console.log(tokenData);
 					toast.error(res.message);
 
 				}
+				
+				setIsFormSubmitting(false);
 
 			})();
 
@@ -761,6 +799,364 @@ console.log(tokenData);
 
 	}
 
+	const doAddMeta = (e) => {
+
+		var walletid;
+		
+		setIsFormSubmitting(true);
+
+		for (let i = 0; i < state.user.wallets.length; i++) {
+
+			let tw = state.user.wallets[i];
+
+			if (tw.currencyid.ticker === "XQR" && theTab === 'qredit') walletid = state.user.wallets[i]._id;
+			if (tw.currencyid.ticker === "ARK" && theTab === 'ark') walletid = state.user.wallets[i]._id;
+
+		}
+
+		var address = "XQRJgWWdxrUqn7hnrtMWbVh7wgz2tP6hnh"; // QslpMasterAddress
+		
+		var chunk = sendForm.send_chunk || null;
+		var name = sendForm.send_name || null;
+		var data = sendForm.send_data || null;
+		
+		var pass = sendForm.send_password || null;
+
+		var notes = '';
+
+		var error = false;
+
+		if (chunk === null || chunk === '') chunk = 0;
+		
+		if (name === null || name === '') error = true;
+		if (data === null || data === '') error = true;
+
+		if (error === true) {
+
+			toast.error('Form error');
+			
+			setIsFormSubmitting(false);
+
+		}
+		else {
+
+			(async () => {
+
+				var tobject = {
+					qslp1: {
+						tp: 'ADDMETA',
+						id: selectedToken,
+						ch: chunk || 0,
+						na: name,
+						dt: data
+					}
+				};
+
+				var vendor = JSON.stringify(tobject);
+
+				let res = await userService.sendtransaction(walletid, null, address, 0.00000001, pass, vendor);
+
+				if (res.status === true) {
+
+					toast.success(res.message);
+
+					handleReset();
+
+
+				}
+				else {
+
+					toast.error(res.message);
+
+				}
+				
+				setIsFormSubmitting(false);
+
+			})();
+
+		}
+
+	}
+
+	const doVoidMeta = (e) => {
+
+		var walletid;
+		
+		setIsFormSubmitting(true);
+
+		for (let i = 0; i < state.user.wallets.length; i++) {
+
+			let tw = state.user.wallets[i];
+
+			if (tw.currencyid.ticker === "XQR" && theTab === 'qredit') walletid = state.user.wallets[i]._id;
+			if (tw.currencyid.ticker === "ARK" && theTab === 'ark') walletid = state.user.wallets[i]._id;
+
+		}
+
+		var txid = sendForm.send_txid || null;
+		
+		var address = "XQRJgWWdxrUqn7hnrtMWbVh7wgz2tP6hnh"; // QslpMasterAddress
+
+		var pass = sendForm.send_password || null;
+
+		var notes = '';
+
+		var error = false;
+
+
+
+		if (error === true) {
+
+			toast.error('Form error');
+			
+			setIsFormSubmitting(false);
+
+		}
+		else {
+
+			(async () => {
+
+				var tobject = {
+					qslp1: {
+						tp: 'VOIDMETA',
+						id: selectedToken,
+						tx: txid
+					}
+				};
+
+				var vendor = JSON.stringify(tobject);
+
+				let res = await userService.sendtransaction(walletid, null, address, 0.00000001, pass, vendor);
+
+				if (res.status === true) {
+
+					toast.success(res.message);
+
+					handleReset();
+
+
+				}
+				else {
+
+					toast.error(res.message);
+
+				}
+				
+				setIsFormSubmitting(false);
+
+			})();
+
+		}
+
+	}
+
+	const doAuthMeta = (e) => {
+
+		var walletid;
+		
+		setIsFormSubmitting(true);
+
+		for (let i = 0; i < state.user.wallets.length; i++) {
+
+			let tw = state.user.wallets[i];
+
+			if (tw.currencyid.ticker === "XQR" && theTab === 'qredit') walletid = state.user.wallets[i]._id;
+			if (tw.currencyid.ticker === "ARK" && theTab === 'ark') walletid = state.user.wallets[i]._id;
+
+		}
+
+		var contactid = sendForm.send_contactid || null;
+		var address = sendForm.newowner_address || null;
+		var pass = sendForm.send_password || null;
+
+		var notes = '';
+
+		var error = false;
+
+
+
+		if (error === true) {
+
+			toast.error('Form error');
+			
+			setIsFormSubmitting(false);
+
+		}
+		else {
+
+			(async () => {
+
+				var tobject = {
+					qslp1: {
+						tp: 'AUTHMETA',
+						id: selectedToken,
+						no: notes
+					}
+				};
+
+				var vendor = JSON.stringify(tobject);
+
+				let res = await userService.sendtransaction(walletid, null, address, 0.00000001, pass, vendor);
+
+				if (res.status === true) {
+
+					toast.success(res.message);
+
+					handleReset();
+
+
+				}
+				else {
+
+					toast.error(res.message);
+
+				}
+				
+				setIsFormSubmitting(false);
+
+			})();
+
+		}
+
+	}
+	
+	const doRevokeMeta = (e) => {
+
+		var walletid;
+		
+		setIsFormSubmitting(true);
+
+		for (let i = 0; i < state.user.wallets.length; i++) {
+
+			let tw = state.user.wallets[i];
+
+			if (tw.currencyid.ticker === "XQR" && theTab === 'qredit') walletid = state.user.wallets[i]._id;
+			if (tw.currencyid.ticker === "ARK" && theTab === 'ark') walletid = state.user.wallets[i]._id;
+
+		}
+
+		var contactid = sendForm.send_contactid || null;
+		var address = sendForm.newowner_address || null;
+		var pass = sendForm.send_password || null;
+
+		var notes = '';
+
+		var error = false;
+
+
+
+		if (error === true) {
+
+			toast.error('Form error');
+			
+			setIsFormSubmitting(false);
+
+		}
+		else {
+
+			(async () => {
+
+				var tobject = {
+					qslp1: {
+						tp: 'REVOKEMETA',
+						id: selectedToken,
+						no: notes
+					}
+				};
+
+				var vendor = JSON.stringify(tobject);
+
+				let res = await userService.sendtransaction(walletid, null, address, 0.00000001, pass, vendor);
+
+				if (res.status === true) {
+
+					toast.success(res.message);
+
+					handleReset();
+
+
+				}
+				else {
+
+					toast.error(res.message);
+
+				}
+				
+				setIsFormSubmitting(false);
+
+			})();
+
+		}
+
+	}
+	
+	const doClone = (e) => {
+
+		var walletid;
+		
+		setIsFormSubmitting(true);
+
+		for (let i = 0; i < state.user.wallets.length; i++) {
+
+			let tw = state.user.wallets[i];
+
+			if (tw.currencyid.ticker === "XQR" && theTab === 'qredit') walletid = state.user.wallets[i]._id;
+			if (tw.currencyid.ticker === "ARK" && theTab === 'ark') walletid = state.user.wallets[i]._id;
+
+		}
+
+		var address = "XQRJgWWdxrUqn7hnrtMWbVh7wgz2tP6hnh"; // QslpMasterAddress
+		var pass = sendForm.send_password || null;
+
+		var notes = '';
+
+		var error = false;
+
+		if (error === true) {
+
+			toast.error('Form error');
+			
+			setIsFormSubmitting(false);
+
+		}
+		else {
+
+			(async () => {
+
+				var tobject = {
+					qslp1: {
+						tp: 'CLONE',
+						id: selectedToken,
+						no: notes
+					}
+				};
+
+				var vendor = JSON.stringify(tobject);
+
+				let res = await userService.sendtransaction(walletid, null, address, 0.00000001, pass, vendor);
+
+				if (res.status === true) {
+
+					toast.success(res.message);
+
+					handleReset();
+
+
+				}
+				else {
+
+					toast.error(res.message);
+
+				}
+				
+				setIsFormSubmitting(false);
+
+			})();
+
+		}
+
+	}
+	
 	const doCopyAddress = (e, address) => {
 
 		e.preventDefault();
@@ -1014,42 +1410,56 @@ console.log(tokenData);
 	const doActionGetTokenInfo = (e) => {
 
 		setTheAction('gettokeninfo');
+		
+		setIsFormSubmitting(false);
 
 	};
 
 	const doActionSend = (e) => {
 
 		setTheAction('send');
+		
+		setIsFormSubmitting(false);
 
 	};
 
 	const doActionBurn = (e) => {
 
 		setTheAction('burn');
+		
+		setIsFormSubmitting(false);
 
 	};
 
 	const doActionMint = (e) => {
 
 		setTheAction('mint');
+		
+		setIsFormSubmitting(false);
 
 	};
 
 	const doActionPause = (e) => {
 
 		setTheAction('pause');
+		
+		setIsFormSubmitting(false);
 
 	};
 
 	const doActionResume = (e) => {
 
 		setTheAction('resume');
+		
+		setIsFormSubmitting(false);
 
 	};
 
 	const doActionNewOwner = (e) => {
 
 		setTheAction('newowner');
+		
+		setIsFormSubmitting(false);
 
 	};
 	
@@ -1058,54 +1468,72 @@ console.log(tokenData);
 	const doAction2GetTokenInfo = (e) => {
 
 		setTheAction('gettoken2info');
+		
+		setIsFormSubmitting(false);
 
 	};
 
 	const doAction2Pause = (e) => {
 
 		setTheAction('pause');
+		
+		setIsFormSubmitting(false);
 
 	};
 
 	const doAction2Resume = (e) => {
 
 		setTheAction('resume');
+		
+		setIsFormSubmitting(false);
 
 	};
 
 	const doAction2NewOwner = (e) => {
 
 		setTheAction('newowner');
+		
+		setIsFormSubmitting(false);
 
 	};
 	
 	const doAction2AddMeta = (e) => {
 
 		setTheAction('addmeta');
+		
+		setIsFormSubmitting(false);
 
 	};
 	
 	const doAction2VoidMeta = (e) => {
 
 		setTheAction('voidmeta');
+		
+		setIsFormSubmitting(false);
 
 	};
 	
 	const doAction2AuthMeta = (e) => {
 
 		setTheAction('authmeta');
+		
+		setIsFormSubmitting(false);
 
 	};
 
 	const doAction2RevokeMeta = (e) => {
 
 		setTheAction('revokemeta');
+		
+		setIsFormSubmitting(false);
 
 	};
 
 	const doAction2Clone = (e) => {
 
 		setTheAction('clone');
+		
+		setIsFormSubmitting(false);
 
 	};
 	
@@ -1116,6 +1544,8 @@ console.log(tokenData);
 		setSendForm({});
 		setSelectedToken(null);
 
+		setIsFormSubmitting(false);
+		
 	};
 
 	const setTabArk = (e) => {
@@ -1125,6 +1555,8 @@ console.log(tokenData);
 		setSendForm({});
 		setSelectedToken(null);
 
+		setIsFormSubmitting(false);
+		
 	};
 
 	return (
@@ -1194,8 +1626,8 @@ console.log(tokenData);
 										<button onClick={doAction2GetTokenInfo} className={"btn mr-2" + (theAction === 'gettoken2info' ? " btn-primary" : " btn-secondary")}>Token Summary</button>
 										<button onClick={doAction2AddMeta} className={"btn mr-2" + (theAction === 'addmeta' ? " btn-primary" : " btn-secondary")} style={tokenInfo[selectedToken].data.isMetaAuth === true ? {} : { display: 'none' }}>Add Meta</button>
 										<button onClick={doAction2VoidMeta} className={"btn mr-2" + (theAction === 'voidmeta' ? " btn-primary" : " btn-secondary")} style={tokenInfo[selectedToken].data.isMetaAuth === true ? {} : { display: 'none' }}>Void Meta</button>
-										<button onClick={doAction2AuthMeta} className={"btn mr-2" + (theAction === 'authmeta' ? " btn-primary" : " btn-secondary")} style={tokenInfo[selectedToken].data.isOwner === true && tokenInfo[selectedToken].info.tokenDetails.pausable === true ? {} : { display: 'none' }}>Auth Meta</button>
-										<button onClick={doAction2RevokeMeta} className={"btn mr-2" + (theAction === 'revokemeta' ? " btn-primary" : " btn-secondary")} style={tokenInfo[selectedToken].data.isOwner === true && tokenInfo[selectedToken].info.tokenDetails.pausable === true ? {} : { display: 'none' }}>Revoke Meta</button>
+										<button onClick={doAction2AuthMeta} className={"btn mr-2" + (theAction === 'authmeta' ? " btn-primary" : " btn-secondary")} style={tokenInfo[selectedToken].data.isOwner === true ? {} : { display: 'none' }}>Auth Meta</button>
+										<button onClick={doAction2RevokeMeta} className={"btn mr-2" + (theAction === 'revokemeta' ? " btn-primary" : " btn-secondary")} style={tokenInfo[selectedToken].data.isOwner === true ? {} : { display: 'none' }}>Revoke Meta</button>
 										<button onClick={doAction2Pause} className={"btn mr-2" + (theAction === 'pause' ? " btn-primary" : " btn-secondary")} style={tokenInfo[selectedToken].data.isOwner === true && tokenInfo[selectedToken].info.tokenDetails.pausable === true ? {} : { display: 'none' }}>Pause</button>
 										<button onClick={doAction2Resume} className={"btn mr-2" + (theAction === 'resume' ? " btn-primary" : " btn-secondary")} style={tokenInfo[selectedToken].data.isOwner === true && tokenInfo[selectedToken].info.tokenDetails.pausable === true ? {} : { display: 'none' }}>Resume</button>
 										<button onClick={doAction2Clone} className={"btn mr-2" + (theAction === 'clone' ? " btn-primary" : " btn-secondary")} style={tokenInfo[selectedToken].data.isOwner === true ? {} : { display: 'none' }}>Clone</button>
@@ -1221,9 +1653,10 @@ console.log(tokenData);
 								
 							) : ''}
 
+{/* Qredit actions - copy and paste this section to ark whenever making changes */}
+
 							{theAction === 'gettokeninfo' ? (
 
-/* qslp1 */
 								<div className="zl_chart_component active">
 									<div className="zl_send_recive_content">
 										<div className="zl_send_recive_content_row">
@@ -1260,7 +1693,6 @@ console.log(tokenData);
 
 							{theAction === 'gettoken2info' ? (
 
-/* qslp2 */
 								<div className="zl_chart_component active">
 									<div className="zl_send_recive_content">
 										<div className="zl_send_recive_content_row">
@@ -1388,8 +1820,8 @@ console.log(tokenData);
 														<h3 className="zl_send_currency_type">EUR</h3>
 													</div>
 													<div className="zl_send_currency_btn_text">
-														<Button onClick={doSend} className="zl_send_currency_btn">
-															Send
+														<Button onClick={doSend} disabled={isFormSubmitting} className="zl_send_currency_btn">
+															{isFormSubmitting ? 'Submitting...' : 'Send'}
 														</Button>
 														<div className="zl_send_currency_text">
 															<p>Network Fee<span>0.02 XQR (+1 satoshi)</span></p>
@@ -1489,10 +1921,9 @@ console.log(tokenData);
 												</div>
 
 												<div className="zl_send_currency_btn_text">
-													<Button onClick={doBurn} className="btn">
-														Burn Tokens
+													<Button onClick={doBurn} disabled={isFormSubmitting} className="btn">
+														{isFormSubmitting ? 'Submitting...' : 'Burn Tokens'}
 													</Button>
-
 												</div>
 
 											</div>
@@ -1541,10 +1972,9 @@ console.log(tokenData);
 												</div>
 
 												<div className="zl_send_currency_btn_text">
-													<Button onClick={doMint} className="btn">
-														Mint New Tokens
+													<Button onClick={doMint} disabled={isFormSubmitting} className="btn">
+														{isFormSubmitting ? 'Submitting...' : 'Mint New Tokens'}
 													</Button>
-
 												</div>
 
 											</div>
@@ -1585,10 +2015,9 @@ console.log(tokenData);
 												</div>
 
 												<div className="zl_send_currency_btn_text">
-													<Button onClick={doPause} className="btn">
-														Pause Token
+													<Button onClick={doPause} disabled={isFormSubmitting} className="btn">
+														{isFormSubmitting ? 'Submitting...' : 'Pause Token'}
 													</Button>
-
 												</div>
 
 											</div>
@@ -1629,10 +2058,9 @@ console.log(tokenData);
 												</div>
 
 												<div className="zl_send_currency_btn_text">
-													<Button onClick={doResume} className="btn">
-														Resume Token
+													<Button onClick={doResume} disabled={isFormSubmitting} className="btn">
+														{isFormSubmitting ? 'Submitting...' : 'Resume Token'}
 													</Button>
-
 												</div>
 
 											</div>
@@ -1709,10 +2137,9 @@ console.log(tokenData);
 												</div>
 
 												<div className="zl_send_currency_btn_text">
-													<Button onClick={doNewOwner} className="btn">
-														Set New Ownership
+													<Button onClick={doNewOwner} disabled={isFormSubmitting} className="btn">
+														{isFormSubmitting ? 'Submitting...' : 'Set New Ownership'}
 													</Button>
-
 												</div>
 
 
@@ -1722,6 +2149,320 @@ console.log(tokenData);
 								</div>
 
 							) : ''}
+
+{/* v2 stuff */}
+
+							{theAction === 'authmeta' ? (
+
+								<div className="zl_send_recive_content">
+									<div className="zl_send_recive_content_row">
+										<div className="zl_send_recive_content_column">
+											<div className="zl_send_recive_inner_content">
+												<h3 className="zl_send_recive_heading">
+													<svg width="15" height="15" viewBox="0 0 6 6" fill="none" xmlns="http://www.w3.org/2000/svg">
+														<path d="M3.60609 3.60609L2.69695 4.51523C2.36222 4.84996 1.81951 4.84996 1.48477 4.51523C1.15004 4.18049 1.15004 3.63778 1.48477 3.30305L2.39391 2.39391L0 0H6V6L3.60609 3.60609Z" fill="#53B9EA" />
+													</svg>
+													Auth Meta for {tokenInfo[selectedToken].info.tokenDetails.name} ({tokenInfo[selectedToken].info.tokenDetails.symbol})
+												</h3>
+
+												<div className="zl_send_currency_input_content" style={{ borderBottom: '0px' }}>
+
+													<FormControl
+														placeholder="Auth Meta Address"
+														style={{ width: "calc(100% - 36px)", marginRight: "2px" }}
+														id="send_address"
+														value={sendForm.send_address || ''}
+														onChange={handleSendFormChange}
+													/>
+													<QRCode
+														onClick={e => scanQR(e)}
+														value="EYdNhC7hGgHuL2sF20p2dLv"
+														bgColor={"#3D476A"}
+														fgColor={"#CAD3F2"}
+														size={32}
+														className="zl_dark_theme_qrcode"
+													/>
+													<QRCode
+														onClick={e => scanQR(e)}
+														value="EYdNhC7hGgHuL2sF20p2dLv"
+														bgColor={"#EFF0F2"}
+														fgColor={"#3D476A"}
+														size={32}
+														className="zl_light_theme_qrcode"
+													/>
+
+												</div>
+
+												<div className="zl_send_currency_input_content">
+
+													<div style={{ width: '100%' }}>
+														<Select
+															placeholder={'Select Auth Meta Contact...'}
+															options={colorOptions}
+															styles={colorStyles}
+															isClearable={true}
+															isSearchable={true}
+															id="send_contact"
+															onChange={handleContactSendFormChange}
+														/>
+													</div>
+
+												</div>
+
+												<div className="zl_send_currency_input_content">
+													<FormControl
+														type="password"
+														placeholder="Your Password"
+														id="send_password"
+														onChange={handleSendFormChange}
+													/>
+												</div>
+
+												<div className="zl_send_currency_btn_text">
+
+													<Button onClick={doAuthMeta} disabled={isFormSubmitting} className="btn">
+														{isFormSubmitting ? 'Submitting...' : 'Auth Meta for Token'}
+													</Button>
+													
+												</div>
+
+											</div>
+										</div>
+									</div>
+								</div>
+
+							) : ''}
+
+							{theAction === 'revokemeta' ? (
+
+								<div className="zl_send_recive_content">
+									<div className="zl_send_recive_content_row">
+										<div className="zl_send_recive_content_column">
+											<div className="zl_send_recive_inner_content">
+												<h3 className="zl_send_recive_heading">
+													<svg width="15" height="15" viewBox="0 0 6 6" fill="none" xmlns="http://www.w3.org/2000/svg">
+														<path d="M3.60609 3.60609L2.69695 4.51523C2.36222 4.84996 1.81951 4.84996 1.48477 4.51523C1.15004 4.18049 1.15004 3.63778 1.48477 3.30305L2.39391 2.39391L0 0H6V6L3.60609 3.60609Z" fill="#53B9EA" />
+													</svg>
+													Revoke Meta for {tokenInfo[selectedToken].info.tokenDetails.name} ({tokenInfo[selectedToken].info.tokenDetails.symbol})
+												</h3>
+
+												<div className="zl_send_currency_input_content" style={{ borderBottom: '0px' }}>
+
+													<FormControl
+														placeholder="Revoke Meta Address"
+														style={{ width: "calc(100% - 36px)", marginRight: "2px" }}
+														id="send_address"
+														value={sendForm.send_address || ''}
+														onChange={handleSendFormChange}
+													/>
+													<QRCode
+														onClick={e => scanQR(e)}
+														value="EYdNhC7hGgHuL2sF20p2dLv"
+														bgColor={"#3D476A"}
+														fgColor={"#CAD3F2"}
+														size={32}
+														className="zl_dark_theme_qrcode"
+													/>
+													<QRCode
+														onClick={e => scanQR(e)}
+														value="EYdNhC7hGgHuL2sF20p2dLv"
+														bgColor={"#EFF0F2"}
+														fgColor={"#3D476A"}
+														size={32}
+														className="zl_light_theme_qrcode"
+													/>
+
+												</div>
+
+												<div className="zl_send_currency_input_content">
+
+													<div style={{ width: '100%' }}>
+														<Select
+															placeholder={'Select Revoke Meta Contact...'}
+															options={colorOptions}
+															styles={colorStyles}
+															isClearable={true}
+															isSearchable={true}
+															id="send_contact"
+															onChange={handleContactSendFormChange}
+														/>
+													</div>
+
+												</div>
+
+												<div className="zl_send_currency_input_content">
+													<FormControl
+														type="password"
+														placeholder="Your Password"
+														id="send_password"
+														onChange={handleSendFormChange}
+													/>
+												</div>
+
+												<div className="zl_send_currency_btn_text">
+
+													<Button onClick={doRevokeMeta} disabled={isFormSubmitting} className="btn">
+														{isFormSubmitting ? 'Submitting...' : 'Revoke Meta for Token'}
+													</Button>
+													
+												</div>
+
+											</div>
+										</div>
+									</div>
+								</div>
+
+							) : ''}
+							
+							{theAction === 'clone' ? (
+
+								<div className="zl_send_recive_content">
+									<div className="zl_send_recive_content_row">
+										<div className="zl_send_recive_content_column">
+											<div className="zl_send_recive_inner_content">
+												<h3 className="zl_send_recive_heading">
+													<svg width="15" height="15" viewBox="0 0 6 6" fill="none" xmlns="http://www.w3.org/2000/svg">
+														<path d="M3.60609 3.60609L2.69695 4.51523C2.36222 4.84996 1.81951 4.84996 1.48477 4.51523C1.15004 4.18049 1.15004 3.63778 1.48477 3.30305L2.39391 2.39391L0 0H6V6L3.60609 3.60609Z" fill="#53B9EA" />
+													</svg>
+													Clone {tokenInfo[selectedToken].info.tokenDetails.name} ({tokenInfo[selectedToken].info.tokenDetails.symbol})
+												</h3>
+
+												<div className="zl_send_currency_input_content">
+													<FormControl
+														type="password"
+														placeholder="Your Password"
+														id="send_password"
+														onChange={handleSendFormChange}
+													/>
+												</div>
+
+												<div className="zl_send_currency_btn_text">
+
+													<Button onClick={doClone} disabled={isFormSubmitting} className="btn">
+														{isFormSubmitting ? 'Submitting...' : 'Clone Token'}
+													</Button>
+													
+												</div>
+
+											</div>
+										</div>
+									</div>
+								</div>
+
+							) : ''}
+
+							{theAction === 'addmeta' ? (
+
+								<div className="zl_send_recive_content">
+									<div className="zl_send_recive_content_row">
+										<div className="zl_send_recive_content_column">
+											<div className="zl_send_recive_inner_content">
+												<h3 className="zl_send_recive_heading">
+													<svg width="15" height="15" viewBox="0 0 6 6" fill="none" xmlns="http://www.w3.org/2000/svg">
+														<path d="M3.60609 3.60609L2.69695 4.51523C2.36222 4.84996 1.81951 4.84996 1.48477 4.51523C1.15004 4.18049 1.15004 3.63778 1.48477 3.30305L2.39391 2.39391L0 0H6V6L3.60609 3.60609Z" fill="#53B9EA" />
+													</svg>
+													Add Meta for {tokenInfo[selectedToken].info.tokenDetails.name} ({tokenInfo[selectedToken].info.tokenDetails.symbol})
+												</h3>
+
+												<div className="zl_send_currency_input_content">
+													<FormControl
+														type="number"
+														placeholder="Chunk Number"
+														id="send_chunk"
+														default="0"
+														onChange={handleSendFormChange}
+													/>
+												</div>
+
+												<div className="zl_send_currency_input_content">
+													<FormControl
+														type="text"
+														placeholder="Data Name"
+														id="send_dataname"
+														onChange={handleSendFormChange}
+													/>
+												</div>
+
+												<div className="zl_send_currency_input_content">
+													<FormControl
+														type="text"
+														placeholder="Data Value"
+														id="send_datavalue"
+														onChange={handleSendFormChange}
+													/>
+												</div>
+												
+												<div className="zl_send_currency_input_content">
+													<FormControl
+														type="password"
+														placeholder="Your Password"
+														id="send_password"
+														onChange={handleSendFormChange}
+													/>
+												</div>
+
+												<div className="zl_send_currency_btn_text">
+
+													<Button onClick={doAddMeta} disabled={isFormSubmitting} className="btn">
+														{isFormSubmitting ? 'Submitting...' : 'Add Meta to Token'}
+													</Button>
+													
+												</div>
+
+											</div>
+										</div>
+									</div>
+								</div>
+
+							) : ''}
+
+							{theAction === 'voidmeta' ? (
+
+								<div className="zl_send_recive_content">
+									<div className="zl_send_recive_content_row">
+										<div className="zl_send_recive_content_column">
+											<div className="zl_send_recive_inner_content">
+												<h3 className="zl_send_recive_heading">
+													<svg width="15" height="15" viewBox="0 0 6 6" fill="none" xmlns="http://www.w3.org/2000/svg">
+														<path d="M3.60609 3.60609L2.69695 4.51523C2.36222 4.84996 1.81951 4.84996 1.48477 4.51523C1.15004 4.18049 1.15004 3.63778 1.48477 3.30305L2.39391 2.39391L0 0H6V6L3.60609 3.60609Z" fill="#53B9EA" />
+													</svg>
+													Void Meta for {tokenInfo[selectedToken].info.tokenDetails.name} ({tokenInfo[selectedToken].info.tokenDetails.symbol})
+												</h3>
+
+												<div className="zl_send_currency_input_content">
+													<FormControl
+														type="text"
+														placeholder="Original Transaction ID"
+														id="send_txid"
+														onChange={handleSendFormChange}
+													/>
+												</div>
+
+												<div className="zl_send_currency_input_content">
+													<FormControl
+														type="password"
+														placeholder="Your Password"
+														id="send_password"
+														onChange={handleSendFormChange}
+													/>
+												</div>
+
+												<div className="zl_send_currency_btn_text">
+
+													<Button onClick={doVoidMeta} disabled={isFormSubmitting} className="btn">
+														{isFormSubmitting ? 'Submitting...' : 'Void Meta for Token'}
+													</Button>
+													
+												</div>
+
+											</div>
+										</div>
+									</div>
+								</div>
+
+							) : ''}
+
+{/* End of Qredit actions */}
 
 						</Tab.Pane>
 						<Tab.Pane eventKey="tab2">
@@ -1745,19 +2486,119 @@ console.log(tokenData);
 
 							</div>
 
+
+
 							{selectedToken !== null ? (
 								<div style={{ textAlign: 'left', marginTop: '3px', marginBottom: '3px' }}>
 
-									<button onClick={doActionSend} className={"btn mr-2" + (theAction === 'send' ? " btn-primary" : " btn-secondary")}>Send / Receive</button>
-									<button onClick={doActionBurn} className={"btn mr-2" + (theAction === 'burn' ? " btn-primary" : " btn-secondary")} style={tokenInfo[selectedToken].data.isOwner === true ? {} : { display: 'none' }}>Burn</button>
-									<button onClick={doActionMint} className={"btn mr-2" + (theAction === 'mint' ? " btn-primary" : " btn-secondary")} style={tokenInfo[selectedToken].data.isOwner === true && tokenInfo[selectedToken].info.tokenDetails.mintable === true ? {} : { display: 'none' }}>Mint</button>
-									<button onClick={doActionPause} className={"btn mr-2" + (theAction === 'pause' ? " btn-primary" : " btn-secondary")} style={tokenInfo[selectedToken].data.isOwner === true && tokenInfo[selectedToken].info.tokenDetails.pausable === true ? {} : { display: 'none' }}>Pause</button>
-									<button onClick={doActionResume} className={"btn mr-2" + (theAction === 'resume' ? " btn-primary" : " btn-secondary")} style={tokenInfo[selectedToken].data.isOwner === true && tokenInfo[selectedToken].info.tokenDetails.pausable === true ? {} : { display: 'none' }}>Resume</button>
-									<button onClick={doActionNewOwner} className={"btn mr-2" + (theAction === 'newowner' ? " btn-primary" : " btn-secondary")} style={tokenInfo[selectedToken].data.isOwner === true ? {} : { display: 'none' }}>New Owner</button>
+									
+									{tokenInfo[selectedToken].info.type === 'ASLP2' ? (
+									
+										<>
+										<button onClick={doAction2GetTokenInfo} className={"btn mr-2" + (theAction === 'gettoken2info' ? " btn-primary" : " btn-secondary")}>Token Summary</button>
+										<button onClick={doAction2AddMeta} className={"btn mr-2" + (theAction === 'addmeta' ? " btn-primary" : " btn-secondary")} style={tokenInfo[selectedToken].data.isMetaAuth === true ? {} : { display: 'none' }}>Add Meta</button>
+										<button onClick={doAction2VoidMeta} className={"btn mr-2" + (theAction === 'voidmeta' ? " btn-primary" : " btn-secondary")} style={tokenInfo[selectedToken].data.isMetaAuth === true ? {} : { display: 'none' }}>Void Meta</button>
+										<button onClick={doAction2AuthMeta} className={"btn mr-2" + (theAction === 'authmeta' ? " btn-primary" : " btn-secondary")} style={tokenInfo[selectedToken].data.isOwner === true ? {} : { display: 'none' }}>Auth Meta</button>
+										<button onClick={doAction2RevokeMeta} className={"btn mr-2" + (theAction === 'revokemeta' ? " btn-primary" : " btn-secondary")} style={tokenInfo[selectedToken].data.isOwner === true ? {} : { display: 'none' }}>Revoke Meta</button>
+										<button onClick={doAction2Pause} className={"btn mr-2" + (theAction === 'pause' ? " btn-primary" : " btn-secondary")} style={tokenInfo[selectedToken].data.isOwner === true && tokenInfo[selectedToken].info.tokenDetails.pausable === true ? {} : { display: 'none' }}>Pause</button>
+										<button onClick={doAction2Resume} className={"btn mr-2" + (theAction === 'resume' ? " btn-primary" : " btn-secondary")} style={tokenInfo[selectedToken].data.isOwner === true && tokenInfo[selectedToken].info.tokenDetails.pausable === true ? {} : { display: 'none' }}>Resume</button>
+										<button onClick={doAction2Clone} className={"btn mr-2" + (theAction === 'clone' ? " btn-primary" : " btn-secondary")} style={tokenInfo[selectedToken].data.isOwner === true ? {} : { display: 'none' }}>Clone</button>
+										<button onClick={doAction2NewOwner} className={"btn mr-2" + (theAction === 'newowner' ? " btn-primary" : " btn-secondary")} style={tokenInfo[selectedToken].data.isOwner === true ? {} : { display: 'none' }}>New Owner</button>
+										</>
+										
+									
+									) : (
+									
+										<>
+										<button onClick={doActionGetTokenInfo} className={"btn mr-2" + (theAction === 'gettokeninfo' ? " btn-primary" : " btn-secondary")}>Token Summary</button>
+										<button onClick={doActionSend} className={"btn mr-2" + (theAction === 'send' ? " btn-primary" : " btn-secondary")}>Send / Receive</button>
+										<button onClick={doActionBurn} className={"btn mr-2" + (theAction === 'burn' ? " btn-primary" : " btn-secondary")} style={tokenInfo[selectedToken].data.isOwner === true ? {} : { display: 'none' }}>Burn</button>
+										<button onClick={doActionMint} className={"btn mr-2" + (theAction === 'mint' ? " btn-primary" : " btn-secondary")} style={tokenInfo[selectedToken].data.isOwner === true && tokenInfo[selectedToken].info.tokenDetails.mintable === true ? {} : { display: 'none' }}>Mint</button>
+										<button onClick={doActionPause} className={"btn mr-2" + (theAction === 'pause' ? " btn-primary" : " btn-secondary")} style={tokenInfo[selectedToken].data.isOwner === true && tokenInfo[selectedToken].info.tokenDetails.pausable === true ? {} : { display: 'none' }}>Pause</button>
+										<button onClick={doActionResume} className={"btn mr-2" + (theAction === 'resume' ? " btn-primary" : " btn-secondary")} style={tokenInfo[selectedToken].data.isOwner === true && tokenInfo[selectedToken].info.tokenDetails.pausable === true ? {} : { display: 'none' }}>Resume</button>
+										<button onClick={doActionNewOwner} className={"btn mr-2" + (theAction === 'newowner' ? " btn-primary" : " btn-secondary")} style={tokenInfo[selectedToken].data.isOwner === true ? {} : { display: 'none' }}>New Owner</button>
+										</>
+									
+									)}
 
 								</div>
+								
 							) : ''}
 
+
+{/* Ark actions.  this is just a copy of the qredit stuff above... so change qredit stuff, then just copy paste same thing here */ }
+
+							{theAction === 'gettokeninfo' ? (
+
+								<div className="zl_chart_component active">
+									<div className="zl_send_recive_content">
+										<div className="zl_send_recive_content_row">
+											<div className="zl_send_recive_content_column">
+												<div className="zl_send_recive_inner_content">
+													<h3 className="zl_send_recive_heading">
+														Token Info
+													</h3>
+													<div className="primary-color">
+													
+														Token ID: {tokenInfo[selectedToken].info.tokenDetails.tokenIdHex}  <br />
+
+														Token Name: {tokenInfo[selectedToken].info.tokenDetails.name} <br />
+														Token Ticker: {tokenInfo[selectedToken].info.tokenDetails.symbol}  <br />
+														Genesis Quantity: {tokenInfo[selectedToken].info.tokenDetails.genesisQuantity}  <br />
+														Genesis Date: {tokenInfo[selectedToken].info.tokenDetails.genesis_timestamp}  <br />
+														Owner: {tokenInfo[selectedToken].info.tokenDetails.ownerAddress}  <br />
+														Pausable: {tokenInfo[selectedToken].info.tokenDetails.pausable===true?'Yes':'No'}  <br />
+														Mintable: {tokenInfo[selectedToken].info.tokenDetails.mintable===true?'Yes':'No'}  <br />
+														
+														Current Circulating Supply: {tokenInfo[selectedToken].info.tokenStats.qty_token_circulating_supply}  <br />
+														
+														My Balance: {tokenInfo[selectedToken].data.tokenBalance}  {tokenInfo[selectedToken].info.tokenDetails.symbol}<br />
+
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+
+								</div>
+
+							) : ''}
+
+							{theAction === 'gettoken2info' ? (
+
+								<div className="zl_chart_component active">
+									<div className="zl_send_recive_content">
+										<div className="zl_send_recive_content_row">
+											<div className="zl_send_recive_content_column">
+												<div className="zl_send_recive_inner_content">
+													<h3 className="zl_send_recive_heading">
+														Token Summary
+													</h3>
+													<div className="">
+														
+														
+														
+													</div>
+												</div>
+											</div>
+											<div className="zl_send_recive_content_column">
+												<div className="zl_send_recive_inner_content">
+													<h3 className="zl_send_recive_heading">
+														Metadata and Document (If applicable)
+													</h3>
+													<div className="">
+						
+						
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+
+								</div>
+
+							) : ''}
+							
 							{theAction === 'send' ? (
 
 								<div className="zl_chart_component active">
@@ -1852,11 +2693,11 @@ console.log(tokenData);
 														<h3 className="zl_send_currency_type">EUR</h3>
 													</div>
 													<div className="zl_send_currency_btn_text">
-														<Button onClick={doSend} className="zl_send_currency_btn">
-															Send
+														<Button onClick={doSend} disabled={isFormSubmitting} className="zl_send_currency_btn">
+															{isFormSubmitting ? 'Submitting...' : 'Send'}
 														</Button>
 														<div className="zl_send_currency_text">
-															<p>Network Fee<span>0.04 ARK (+1 satoshi)</span></p>
+															<p>Network Fee<span>0.02 XQR (+1 satoshi)</span></p>
 														</div>
 													</div>
 												</div>
@@ -1901,9 +2742,6 @@ console.log(tokenData);
 													</div>
 												</div>
 											</div>
-
-
-
 										</div>
 									</div>
 
@@ -1956,10 +2794,9 @@ console.log(tokenData);
 												</div>
 
 												<div className="zl_send_currency_btn_text">
-													<Button onClick={doBurn} className="btn">
-														Burn Tokens
+													<Button onClick={doBurn} disabled={isFormSubmitting} className="btn">
+														{isFormSubmitting ? 'Submitting...' : 'Burn Tokens'}
 													</Button>
-
 												</div>
 
 											</div>
@@ -2008,10 +2845,9 @@ console.log(tokenData);
 												</div>
 
 												<div className="zl_send_currency_btn_text">
-													<Button onClick={doMint} className="btn">
-														Mint New Tokens
+													<Button onClick={doMint} disabled={isFormSubmitting} className="btn">
+														{isFormSubmitting ? 'Submitting...' : 'Mint New Tokens'}
 													</Button>
-
 												</div>
 
 											</div>
@@ -2052,10 +2888,9 @@ console.log(tokenData);
 												</div>
 
 												<div className="zl_send_currency_btn_text">
-													<Button onClick={doPause} className="btn">
-														Pause Token
+													<Button onClick={doPause} disabled={isFormSubmitting} className="btn">
+														{isFormSubmitting ? 'Submitting...' : 'Pause Token'}
 													</Button>
-
 												</div>
 
 											</div>
@@ -2096,10 +2931,9 @@ console.log(tokenData);
 												</div>
 
 												<div className="zl_send_currency_btn_text">
-													<Button onClick={doResume} className="btn">
-														Resume Token
+													<Button onClick={doResume} disabled={isFormSubmitting} className="btn">
+														{isFormSubmitting ? 'Submitting...' : 'Resume Token'}
 													</Button>
-
 												</div>
 
 											</div>
@@ -2176,10 +3010,9 @@ console.log(tokenData);
 												</div>
 
 												<div className="zl_send_currency_btn_text">
-													<Button onClick={doNewOwner} className="btn">
-														Set New Ownership
+													<Button onClick={doNewOwner} disabled={isFormSubmitting} className="btn">
+														{isFormSubmitting ? 'Submitting...' : 'Set New Ownership'}
 													</Button>
-
 												</div>
 
 
@@ -2190,7 +3023,319 @@ console.log(tokenData);
 
 							) : ''}
 
+{/* v2 stuff */}
 
+							{theAction === 'authmeta' ? (
+
+								<div className="zl_send_recive_content">
+									<div className="zl_send_recive_content_row">
+										<div className="zl_send_recive_content_column">
+											<div className="zl_send_recive_inner_content">
+												<h3 className="zl_send_recive_heading">
+													<svg width="15" height="15" viewBox="0 0 6 6" fill="none" xmlns="http://www.w3.org/2000/svg">
+														<path d="M3.60609 3.60609L2.69695 4.51523C2.36222 4.84996 1.81951 4.84996 1.48477 4.51523C1.15004 4.18049 1.15004 3.63778 1.48477 3.30305L2.39391 2.39391L0 0H6V6L3.60609 3.60609Z" fill="#53B9EA" />
+													</svg>
+													Auth Meta for {tokenInfo[selectedToken].info.tokenDetails.name} ({tokenInfo[selectedToken].info.tokenDetails.symbol})
+												</h3>
+
+												<div className="zl_send_currency_input_content" style={{ borderBottom: '0px' }}>
+
+													<FormControl
+														placeholder="Auth Meta Address"
+														style={{ width: "calc(100% - 36px)", marginRight: "2px" }}
+														id="send_address"
+														value={sendForm.send_address || ''}
+														onChange={handleSendFormChange}
+													/>
+													<QRCode
+														onClick={e => scanQR(e)}
+														value="EYdNhC7hGgHuL2sF20p2dLv"
+														bgColor={"#3D476A"}
+														fgColor={"#CAD3F2"}
+														size={32}
+														className="zl_dark_theme_qrcode"
+													/>
+													<QRCode
+														onClick={e => scanQR(e)}
+														value="EYdNhC7hGgHuL2sF20p2dLv"
+														bgColor={"#EFF0F2"}
+														fgColor={"#3D476A"}
+														size={32}
+														className="zl_light_theme_qrcode"
+													/>
+
+												</div>
+
+												<div className="zl_send_currency_input_content">
+
+													<div style={{ width: '100%' }}>
+														<Select
+															placeholder={'Select Auth Meta Contact...'}
+															options={colorOptions}
+															styles={colorStyles}
+															isClearable={true}
+															isSearchable={true}
+															id="send_contact"
+															onChange={handleContactSendFormChange}
+														/>
+													</div>
+
+												</div>
+
+												<div className="zl_send_currency_input_content">
+													<FormControl
+														type="password"
+														placeholder="Your Password"
+														id="send_password"
+														onChange={handleSendFormChange}
+													/>
+												</div>
+
+												<div className="zl_send_currency_btn_text">
+
+													<Button onClick={doAuthMeta} disabled={isFormSubmitting} className="btn">
+														{isFormSubmitting ? 'Submitting...' : 'Auth Meta for Token'}
+													</Button>
+													
+												</div>
+
+											</div>
+										</div>
+									</div>
+								</div>
+
+							) : ''}
+
+							{theAction === 'revokemeta' ? (
+
+								<div className="zl_send_recive_content">
+									<div className="zl_send_recive_content_row">
+										<div className="zl_send_recive_content_column">
+											<div className="zl_send_recive_inner_content">
+												<h3 className="zl_send_recive_heading">
+													<svg width="15" height="15" viewBox="0 0 6 6" fill="none" xmlns="http://www.w3.org/2000/svg">
+														<path d="M3.60609 3.60609L2.69695 4.51523C2.36222 4.84996 1.81951 4.84996 1.48477 4.51523C1.15004 4.18049 1.15004 3.63778 1.48477 3.30305L2.39391 2.39391L0 0H6V6L3.60609 3.60609Z" fill="#53B9EA" />
+													</svg>
+													Revoke Meta for {tokenInfo[selectedToken].info.tokenDetails.name} ({tokenInfo[selectedToken].info.tokenDetails.symbol})
+												</h3>
+
+												<div className="zl_send_currency_input_content" style={{ borderBottom: '0px' }}>
+
+													<FormControl
+														placeholder="Revoke Meta Address"
+														style={{ width: "calc(100% - 36px)", marginRight: "2px" }}
+														id="send_address"
+														value={sendForm.send_address || ''}
+														onChange={handleSendFormChange}
+													/>
+													<QRCode
+														onClick={e => scanQR(e)}
+														value="EYdNhC7hGgHuL2sF20p2dLv"
+														bgColor={"#3D476A"}
+														fgColor={"#CAD3F2"}
+														size={32}
+														className="zl_dark_theme_qrcode"
+													/>
+													<QRCode
+														onClick={e => scanQR(e)}
+														value="EYdNhC7hGgHuL2sF20p2dLv"
+														bgColor={"#EFF0F2"}
+														fgColor={"#3D476A"}
+														size={32}
+														className="zl_light_theme_qrcode"
+													/>
+
+												</div>
+
+												<div className="zl_send_currency_input_content">
+
+													<div style={{ width: '100%' }}>
+														<Select
+															placeholder={'Select Revoke Meta Contact...'}
+															options={colorOptions}
+															styles={colorStyles}
+															isClearable={true}
+															isSearchable={true}
+															id="send_contact"
+															onChange={handleContactSendFormChange}
+														/>
+													</div>
+
+												</div>
+
+												<div className="zl_send_currency_input_content">
+													<FormControl
+														type="password"
+														placeholder="Your Password"
+														id="send_password"
+														onChange={handleSendFormChange}
+													/>
+												</div>
+
+												<div className="zl_send_currency_btn_text">
+
+													<Button onClick={doRevokeMeta} disabled={isFormSubmitting} className="btn">
+														{isFormSubmitting ? 'Submitting...' : 'Revoke Meta for Token'}
+													</Button>
+													
+												</div>
+
+											</div>
+										</div>
+									</div>
+								</div>
+
+							) : ''}
+							
+							{theAction === 'clone' ? (
+
+								<div className="zl_send_recive_content">
+									<div className="zl_send_recive_content_row">
+										<div className="zl_send_recive_content_column">
+											<div className="zl_send_recive_inner_content">
+												<h3 className="zl_send_recive_heading">
+													<svg width="15" height="15" viewBox="0 0 6 6" fill="none" xmlns="http://www.w3.org/2000/svg">
+														<path d="M3.60609 3.60609L2.69695 4.51523C2.36222 4.84996 1.81951 4.84996 1.48477 4.51523C1.15004 4.18049 1.15004 3.63778 1.48477 3.30305L2.39391 2.39391L0 0H6V6L3.60609 3.60609Z" fill="#53B9EA" />
+													</svg>
+													Clone {tokenInfo[selectedToken].info.tokenDetails.name} ({tokenInfo[selectedToken].info.tokenDetails.symbol})
+												</h3>
+
+												<div className="zl_send_currency_input_content">
+													<FormControl
+														type="password"
+														placeholder="Your Password"
+														id="send_password"
+														onChange={handleSendFormChange}
+													/>
+												</div>
+
+												<div className="zl_send_currency_btn_text">
+
+													<Button onClick={doClone} disabled={isFormSubmitting} className="btn">
+														{isFormSubmitting ? 'Submitting...' : 'Clone Token'}
+													</Button>
+													
+												</div>
+
+											</div>
+										</div>
+									</div>
+								</div>
+
+							) : ''}
+
+							{theAction === 'addmeta' ? (
+
+								<div className="zl_send_recive_content">
+									<div className="zl_send_recive_content_row">
+										<div className="zl_send_recive_content_column">
+											<div className="zl_send_recive_inner_content">
+												<h3 className="zl_send_recive_heading">
+													<svg width="15" height="15" viewBox="0 0 6 6" fill="none" xmlns="http://www.w3.org/2000/svg">
+														<path d="M3.60609 3.60609L2.69695 4.51523C2.36222 4.84996 1.81951 4.84996 1.48477 4.51523C1.15004 4.18049 1.15004 3.63778 1.48477 3.30305L2.39391 2.39391L0 0H6V6L3.60609 3.60609Z" fill="#53B9EA" />
+													</svg>
+													Add Meta for {tokenInfo[selectedToken].info.tokenDetails.name} ({tokenInfo[selectedToken].info.tokenDetails.symbol})
+												</h3>
+
+												<div className="zl_send_currency_input_content">
+													<FormControl
+														type="number"
+														placeholder="Chunk Number"
+														id="send_chunk"
+														default="0"
+														onChange={handleSendFormChange}
+													/>
+												</div>
+
+												<div className="zl_send_currency_input_content">
+													<FormControl
+														type="text"
+														placeholder="Data Name"
+														id="send_dataname"
+														onChange={handleSendFormChange}
+													/>
+												</div>
+
+												<div className="zl_send_currency_input_content">
+													<FormControl
+														type="text"
+														placeholder="Data Value"
+														id="send_datavalue"
+														onChange={handleSendFormChange}
+													/>
+												</div>
+												
+												<div className="zl_send_currency_input_content">
+													<FormControl
+														type="password"
+														placeholder="Your Password"
+														id="send_password"
+														onChange={handleSendFormChange}
+													/>
+												</div>
+
+												<div className="zl_send_currency_btn_text">
+
+													<Button onClick={doAddMeta} disabled={isFormSubmitting} className="btn">
+														{isFormSubmitting ? 'Submitting...' : 'Add Meta to Token'}
+													</Button>
+													
+												</div>
+
+											</div>
+										</div>
+									</div>
+								</div>
+
+							) : ''}
+
+							{theAction === 'voidmeta' ? (
+
+								<div className="zl_send_recive_content">
+									<div className="zl_send_recive_content_row">
+										<div className="zl_send_recive_content_column">
+											<div className="zl_send_recive_inner_content">
+												<h3 className="zl_send_recive_heading">
+													<svg width="15" height="15" viewBox="0 0 6 6" fill="none" xmlns="http://www.w3.org/2000/svg">
+														<path d="M3.60609 3.60609L2.69695 4.51523C2.36222 4.84996 1.81951 4.84996 1.48477 4.51523C1.15004 4.18049 1.15004 3.63778 1.48477 3.30305L2.39391 2.39391L0 0H6V6L3.60609 3.60609Z" fill="#53B9EA" />
+													</svg>
+													Void Meta for {tokenInfo[selectedToken].info.tokenDetails.name} ({tokenInfo[selectedToken].info.tokenDetails.symbol})
+												</h3>
+
+												<div className="zl_send_currency_input_content">
+													<FormControl
+														type="text"
+														placeholder="Original Transaction ID"
+														id="send_txid"
+														onChange={handleSendFormChange}
+													/>
+												</div>
+
+												<div className="zl_send_currency_input_content">
+													<FormControl
+														type="password"
+														placeholder="Your Password"
+														id="send_password"
+														onChange={handleSendFormChange}
+													/>
+												</div>
+
+												<div className="zl_send_currency_btn_text">
+
+													<Button onClick={doVoidMeta} disabled={isFormSubmitting} className="btn">
+														{isFormSubmitting ? 'Submitting...' : 'Void Meta for Token'}
+													</Button>
+													
+												</div>
+
+											</div>
+										</div>
+									</div>
+								</div>
+
+							) : ''}
+							
+{/* End of Action Area (paste) */}
 
 						</Tab.Pane>
 					</Tab.Content>

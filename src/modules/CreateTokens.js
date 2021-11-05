@@ -83,8 +83,8 @@ const CreateTokenModule = ({ props }) => {
 		var tokenticker = tokenForm.token_ticker || null;
 		var tokenquantity = tokenForm.token_quantity || null;
 		var tokendecimals = tokenForm.token_decimals || null;
-		var tokendocumenturi = tokenForm.token_documenturi || null;
-		var tokennotes = tokenForm.token_notes || null;
+		var tokendocumenturi = tokenForm.token_documenturi || '';
+		var tokennotes = tokenForm.token_notes || '';
 		var tokenpausable = tokenForm.token_pausable || false;
 		var tokenmintable = tokenForm.token_mintable || false;
 
@@ -95,10 +95,10 @@ const CreateTokenModule = ({ props }) => {
 		var address = 'XQRJgWWdxrUqn7hnrtMWbVh7wgz2tP6hnh';
 		var amount = 1;
 
-		if (!tokenname || !tokenticker || !tokenquantity || !tokendecimals || !pass) error = true;
+		if (tokenname === null || tokenticker === null || tokenquantity === null || tokendecimals === null || !pass) error = true;
 
 		if (!parseInt(tokendecimals)) error = true
-		if (!parseFloat(tokendecimals)) error = true
+		if (!parseFloat(tokenquantity)) error = true
 
 
 		if (error === true) {
@@ -163,8 +163,8 @@ const CreateTokenModule = ({ props }) => {
 
 		var tokenname = tokenForm.token_name || null;
 		var tokenticker = tokenForm.token_ticker || null;
-		var tokendocumenturi = tokenForm.token_documenturi || null;
-		var tokennotes = tokenForm.token_notes || null;
+		var tokendocumenturi = tokenForm.token_documenturi || '';
+		var tokennotes = tokenForm.token_notes || '';
 		var tokenpausable = tokenForm.token_pausable || false;
 
 		var pass = tokenForm.token_password || null;
@@ -236,8 +236,8 @@ const CreateTokenModule = ({ props }) => {
 		var tokenticker = tokenForm.token_ticker || null;
 		var tokenquantity = tokenForm.token_quantity || null;
 		var tokendecimals = tokenForm.token_decimals || null;
-		var tokendocumenturi = tokenForm.token_documenturi || null;
-		var tokennotes = tokenForm.token_notes || null;
+		var tokendocumenturi = tokenForm.token_documenturi || '';
+		var tokennotes = tokenForm.token_notes || '';
 		var tokenpausable = tokenForm.token_pausable || false;
 		var tokenmintable = tokenForm.token_mintable || false;
 
@@ -314,8 +314,8 @@ const CreateTokenModule = ({ props }) => {
 
 		var tokenname = tokenForm.token_name || null;
 		var tokenticker = tokenForm.token_ticker || null;
-		var tokendocumenturi = tokenForm.token_documenturi || null;
-		var tokennotes = tokenForm.token_notes || null;
+		var tokendocumenturi = tokenForm.token_documenturi || '';
+		var tokennotes = tokenForm.token_notes || '';
 		var tokenpausable = tokenForm.token_pausable || false;
 
 		var pass = tokenForm.token_password || null;

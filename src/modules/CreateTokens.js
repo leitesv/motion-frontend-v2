@@ -97,7 +97,7 @@ const CreateTokenModule = ({ props }) => {
 
 		if (tokenname === null || tokenticker === null || tokenquantity === null || tokendecimals === null || !pass) error = true;
 
-		if (!parseInt(tokendecimals)) error = true
+		if (!Number.isInteger(tokendecimals)) error = true
 		if (!parseFloat(tokenquantity)) error = true
 
 
@@ -250,7 +250,7 @@ const CreateTokenModule = ({ props }) => {
 
 		if (!tokenname || !tokenticker || !tokenquantity || !tokendecimals || !pass) error = true;
 
-		if (!parseInt(tokendecimals)) error = true
+		if (!Number.isInteger(tokendecimals)) error = true
 		if (!parseFloat(tokendecimals)) error = true
 
 

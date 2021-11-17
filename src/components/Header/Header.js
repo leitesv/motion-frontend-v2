@@ -8,7 +8,8 @@ import { useHistory } from "react-router-dom"
 
 import "./css/Header.css";
 
-const Header = (props) => {
+       
+const Header = (ref,props) => {
 
     // hide show header
     const [send, setSend] = useState(false);
@@ -40,6 +41,20 @@ const Header = (props) => {
 
     React.useEffect(() => {
 
+        function handleClickOutside(event) {
+
+          if (ref.current && !ref.current.contains(event.target)) {
+            setSend(true);
+          } else {
+            if (!document.getElementsByClassName("zl_page_sidebar")[0].contains(event.target)) {
+                setSend(false);
+            }
+
+          }
+        }
+
+        document.addEventListener("mousedown", handleClickOutside);
+       
         // listen for state change on images and user info
 
         var unsubscribe = store.subscribe(() => {

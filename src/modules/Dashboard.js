@@ -171,10 +171,12 @@ const DashboardModule = (props) => {
                                     <Nav.Item className="zl_add_currency_column col">
                                         <Nav.Link to={'/wallets'} className="zl_add_currency_inner_content">
                                             <div className="zl_add_currency_price text-center cardblock">
-                                                <div className="text-center">
-                                                    <h3 className="cardtitle fixcolor">Total Crypto Value</h3>
-                                                    <p className="cardsub">€{state.user ? parseInt(state.user.crypto_balance) : ''}</p>
-                                                </div>
+                                                <Link to={'/wallets'} className="nund">
+                                                    <div className="text-center">
+                                                        <h3 className="cardtitle fixcolor">Total Crypto Value</h3>
+                                                        <p className="cardsub">€{state.user ? parseInt(state.user.crypto_balance) : ''}</p>
+                                                    </div>
+                                                </Link>
                                             </div>
                                         </Nav.Link>
                                     </Nav.Item>

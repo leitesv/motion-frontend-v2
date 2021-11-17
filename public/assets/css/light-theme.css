@@ -5,6 +5,7 @@
 .zl_light_theme_active .zl_dark_theme_slide_img {
   display: none;
 }
+.nund,a:hover {text-decoration-line: none !important;}
 .zl_light_theme_active
   .zl_welcome_slide_section
   .zl_welcome_slide_content

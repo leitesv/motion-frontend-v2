@@ -4,6 +4,7 @@ import HeadingModule from '../components/Layout/HeadingComponent/Heading';
 import { toast } from 'react-toastify';
 
 import InfiniteScroll from "react-infinite-scroll-component";
+import ScrollToTop from "../components/scrolltotop";
 import copy from "copy-to-clipboard";
 
 
@@ -174,15 +175,17 @@ const ReferralProgramModule = ({ props }) => {
 
     return (
         <section className="placeholder">
+        <ScrollToTop />
             <HeadingModule name={'Referral Program'} />
             <div className="zl_SecureBackup_heading">
                 <h3>Referral Program</h3>
             </div>
             <div className="main-container">
 
-                <div className="container mb-4">
-                    <div className="card border-0 mb-3">
-                        <div className="card-body">
+                <div className="container mb-4 ">
+                <br/><br/>
+                    <div className="card border-1 mb-3 ">
+                        <div className="card-body" style={{ background: '#2c3652', color: 'white' }}>
                             <div className="row align-items-center">
                                 <div className="col-md-1 pr-0">
                                     <div className="avatar avatar-50 border-0 bg-danger-light rounded-circle text-danger mb-3">
@@ -215,7 +218,7 @@ const ReferralProgramModule = ({ props }) => {
                             </div>
 
                         </div>
-                        <div className="col-md-12 align-self-center text-center">
+                        <div className="col-md-12 align-self-center text-center " style={{ background: '#2c3652', color: 'white' }}>
                             <h6>For every referral that succesfully subscribes to a year subscription you will receive 2500 XQR within 24 hours.</h6>
                         </div>
                     </div>

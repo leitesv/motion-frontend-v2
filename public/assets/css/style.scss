@@ -14,6 +14,12 @@ body {
   background: $gradian-color1;
   min-height: 100vh;
 }
+
+.dark_mode {
+  background: $gradian-color1;
+  min-height: 100vh;
+}
+
 a {
   &:-webkit-any-link {
     &:focus-visible {
